@@ -51,7 +51,7 @@ public class Grafico {
 
 	}
 	
-	public void preçoMaximoDoGrafico() {
+	public void precoMaximoDoGrafico() {
 		double auxiliar = 0;
 		
 		for(int i=0; i<grafico.size(); i++) {
