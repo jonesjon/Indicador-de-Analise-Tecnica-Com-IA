@@ -8,6 +8,7 @@ public class Main {
 		
 		//gitbash
 		
+		ConexaoBancoDeDados conexao = new ConexaoBancoDeDados();
 		Grafico grafico = new Grafico();
 		RedeNeural redeNeural = new RedeNeural();
 		TreinamentoRedeNeural treinamento = new TreinamentoRedeNeural();
@@ -18,11 +19,13 @@ public class Main {
 		
 		String papel = "ABYA3 ";
 		
-		for(int i=0; i<36; i++) {
+		/*for(int i=0; i<36; i++) {
 			InterpretadorDeDados dados = new InterpretadorDeDados("C:\\COTAHIST_A2010.TXT", papeis[i]);
 			grafico.ordenaGrafico();
 			treinamento.realizaTreinamento();
-		}
+		}*/
+		
+		System.out.println(conexao.getConexaoMySQL());
 		
 		treinamento.imprimeOperacoes();
 		treinamento.percentualFinal();

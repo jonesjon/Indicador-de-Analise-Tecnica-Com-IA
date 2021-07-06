@@ -30,7 +30,7 @@ public class InterpretadorDeDados {
 			Grafico.grafico.clear();
 			Grafico.listaDeMedias.clear();
 			FileReader arquivo = new FileReader(nome);
-			BufferedReader leitura = new BufferedReader(arquivo);  																	//Leitura do Arquivo da Série Histórica
+			BufferedReader leitura = new BufferedReader(arquivo);  																	//Leitura do Arquivo da Sï¿½rie Histï¿½rica
 			
 			String linha = leitura.readLine();																						//Le linha por linha 
 			
@@ -40,18 +40,18 @@ public class InterpretadorDeDados {
 				
 				for(int i=0; i<linha.length(); i++) {
 					caracteres.add(i, ""+linha.charAt(i));																			//Adiciona todos os caracteres da linha em um ArrayList, 
-				}																													//para fazer a interpretação do arquivo.
+				}																													//para fazer a interpretaï¿½ï¿½o do arquivo.
 				
 				if(Integer.parseInt(caracteres.get(1)) == 0) {																		//Header
 					
 					data = LocalDate.parse(caracteres.get(29)+caracteres.get(30)+ "/" +caracteres.get(27)+caracteres.get(28) +"/"+
-							caracteres.get(23)+caracteres.get(24)+caracteres.get(25)+caracteres.get(26), formato);		//Data de geração do Arquivo no formato 
+							caracteres.get(23)+caracteres.get(24)+caracteres.get(25)+caracteres.get(26), formato);		//Data de geraï¿½ï¿½o do Arquivo no formato 
 																																	// de datas
 						
-					//System.out.println("Data da geração do Arquivo: " + formato.format(data));
+					System.out.println("Data da geraï¿½ï¿½o do Arquivo: " + formato.format(data));
 				}
 				
-				if(Integer.parseInt(caracteres.get(1)) == 1) {																		//Informações referentes aos papeis
+				if(Integer.parseInt(caracteres.get(1)) == 1) {																		//Informaï¿½ï¿½es referentes aos papeis
 					
 					String papelDaLinha = "";
 					String abertura = "";
@@ -69,30 +69,30 @@ public class InterpretadorDeDados {
 						papelDaLinha += caracteres.get(i);
 					}
 					
-					if(papelDaLinha.equals(papel)) {																				//Compara o nome do papel e se for o que está observando, entra no if
+					if(papelDaLinha.equals(papel)) {																				//Compara o nome do papel e se for o que estï¿½ observando, entra no if
 						
-						for(int i=8; i<=9; i++) {																					//dia de negociação 
+						for(int i=8; i<=9; i++) {																					//dia de negociaï¿½ï¿½o 
 							dia += caracteres.get(i);
 						}
-						for(int i=6; i<=7; i++) {																					//mes de negociação
+						for(int i=6; i<=7; i++) {																					//mes de negociaï¿½ï¿½o
 							mes += caracteres.get(i);
 						}
-						for(int i=2; i<=5; i++) {																					//ano de negociação
+						for(int i=2; i<=5; i++) {																					//ano de negociaï¿½ï¿½o
 							ano += caracteres.get(i);
 						}
-						for(int i=56; i<=68; i++) {																					//Preço de abertura do ativo
+						for(int i=56; i<=68; i++) {																					//Preï¿½o de abertura do ativo
 							abertura += caracteres.get(i);
 						}
-						for(int i=69; i<=81; i++) {																					//Preço maximo do ativo
+						for(int i=69; i<=81; i++) {																					//Preï¿½o maximo do ativo
 							maxima += caracteres.get(i);
 						}
-						for(int i=82; i<=94; i++) {																					//Preço minimo do ativo
+						for(int i=82; i<=94; i++) {																					//Preï¿½o minimo do ativo
 							minima += caracteres.get(i);
 						}
-						for(int i=108; i<=120; i++) {																				//Preço de fechamento do ativo
+						for(int i=108; i<=120; i++) {																				//Preï¿½o de fechamento do ativo
 							fechamento += caracteres.get(i);
 						}
-						for(int i=170; i<=187; i++) {																				//Volume de negociação 
+						for(int i=170; i<=187; i++) {																				//Volume de negociaï¿½ï¿½o 
 							volume += caracteres.get(i);
 						} 
 						
@@ -111,7 +111,7 @@ public class InterpretadorDeDados {
 		      }
 			
 		} catch (IOException e) {
-	        System.err.printf("Não foi possivel abrir o arquivo: %s.\n",
+	        System.err.printf("Nï¿½o foi possivel abrir o arquivo: %s.\n",
 	                e.getMessage());
 	    }
 		

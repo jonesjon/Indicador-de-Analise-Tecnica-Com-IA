@@ -1,11 +1,11 @@
 package br.iesb.indicador_analise_grafica;
 
-import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 public class Grafico {
 	
+	private String nomeDoPapel;
 	static ArrayList<Candle> grafico = new ArrayList<Candle>();
 	ArrayList<Candle> auxiliar = new ArrayList<Candle>();
 	Indicador indicador = new Indicador();
@@ -27,13 +27,13 @@ public class Grafico {
 				System.out.println("Data: "+ formato.format(list.get(i).data));
 				System.out.println("Abertura: " + list.get(i).abertura);
 				System.out.println("Fechamento: " + list.get(i).fechamento);
-				System.out.println("Máxima: "+ list.get(i).maxima);
-				System.out.println("Mínima: "+ list.get(i).minima);
+				System.out.println("Maxima: "+ list.get(i).maxima);
+				System.out.println("Manima: "+ list.get(i).minima);
 				System.out.println("Volume: "+ list.get(i).volume);
 				System.out.println("");
 			}
 		}else {
-			System.out.println("Gráfico está vazio.");
+			System.out.println("Grafico esta vazio.");
 		}
 	}
 	
