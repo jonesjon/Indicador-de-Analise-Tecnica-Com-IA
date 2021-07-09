@@ -8,9 +8,6 @@ public class Main {
 		
 		//gitbash
 		
-		ConexaoBancoDeDados conexao = new ConexaoBancoDeDados();
-		Grafico grafico = new Grafico();
-		RedeNeural redeNeural = new RedeNeural();
 		TreinamentoRedeNeural treinamento = new TreinamentoRedeNeural();
 		
 		String papeis[] = {"ABCB4 ","ABNB3 ", "AELP3 ", "AGRO3 ","AMBV3 ", "AMBV4 ", "AMIL3 ","BALM4 ", "BBAS3 ","BBDC3 ", "BBDC4 ", "BGIP4 ", "BICB4 ",

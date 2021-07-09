@@ -1,35 +1,26 @@
 package br.iesb.indicador_analise_grafica;
 
-
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name="infodiario_candle")
+
 public class Candle {
 	
-	@Column(name="data")
 	LocalDate data;
 	DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy"); 
 	
-	@Column(name="nomeDoPapel")
 	private String papel;
 	
-	@Column(name="abertura")
 	double abertura; 
 	
-	@Column(name="fechamento")
 	double fechamento; 
 	
-	@Column(name="maxima")
 	double maxima; 
 	
-	@Column(name="minima")
 	double minima; 
 	
-	@Column(name="volume")
 	double volume;
 	
 		
