@@ -25,8 +25,9 @@ public class Main {
 			treinamento.realizaTreinamento();
 		}*/
 		
-		System.out.println(conexao.getConexaoMySQL());
+		//System.out.println(conexao.getConexaoMySQL());
 		
+		InterpretadorDeDados dados = new InterpretadorDeDados("C:\\COTAHIST_A2010.TXT", papel);
 		treinamento.imprimeOperacoes();
 		treinamento.percentualFinal();
 		treinamento.percentualFinalMarteloSemPavioSuperior();

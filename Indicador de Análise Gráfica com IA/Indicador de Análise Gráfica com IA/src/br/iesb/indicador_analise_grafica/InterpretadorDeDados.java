@@ -98,6 +98,8 @@ public class InterpretadorDeDados {
 						
 						candle = new Candle(dia, mes, ano, abertura, maxima, minima, fechamento, volume, papel);
 						grafico.adicionaCandle(candle);
+						PopularBanco.adicionaCandle(candle);
+			
 						grafico.adicionaMediaMovelNaLista(candle, 8);
 						grafico.adicionaMediaMovelNaLista(candle, 20);
 						grafico.adicionaMediaMovelNaLista(candle, 200);
