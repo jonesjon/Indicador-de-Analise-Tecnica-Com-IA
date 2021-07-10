@@ -2,13 +2,15 @@ package br.iesb.indicador_analise_grafica;
 
 import java.io.IOException;
 
+
 public class Main {
 
 	public static void main(String[] args) throws IOException {
-		System.out.println("oioioioioi");
 		long start =  System.currentTimeMillis();   
 	
 		//gitbash
+		String fileName = "COTAHIST_A2010.txt";
+		
 		
 	
 		Grafico grafico = new Grafico();
@@ -31,7 +33,7 @@ public class Main {
 		
 		//System.out.println(conexao.getConexaoMySQL());
 		
-		InterpretadorDeDados dados = new InterpretadorDeDados("C:\\COTAHIST_A2010.TXT", papel);
+		InterpretadorDeDados dados = new InterpretadorDeDados(fileName, papel);
 		treinamento.imprimeOperacoes();
 		treinamento.percentualFinal();
 		treinamento.percentualFinalMarteloSemPavioSuperior();
@@ -39,7 +41,7 @@ public class Main {
 		treinamento.percentualGainLossMarteloSemPavioSuperiorPavioInferiorMax();
 		
 		long elapsedTime = (System.currentTimeMillis()-start);
-		System.out.println(elapsedTime / 1000F );
+		System.out.println("Tempo gasto parar rodar: (segundos) " + elapsedTime / 1000F );
 		
 	}
 

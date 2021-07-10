@@ -1,6 +1,7 @@
 package br.iesb.indicador_analise_grafica;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 import java.time.LocalDate;
@@ -29,7 +30,11 @@ public class InterpretadorDeDados {
 			
 			Grafico.grafico.clear();
 			Grafico.listaDeMedias.clear();
-			FileReader arquivo = new FileReader(nome);
+			ClassLoader classLoader = getClass().getClassLoader();
+			File file = new File(classLoader.getResource(nome).getFile());
+			
+			
+			FileReader arquivo = new FileReader(file);
 			BufferedReader leitura = new BufferedReader(arquivo);  																	//Leitura do Arquivo da S�rie Hist�rica
 			
 			String linha = leitura.readLine();																						//Le linha por linha 
