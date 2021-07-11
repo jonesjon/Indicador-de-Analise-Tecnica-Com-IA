@@ -1,8 +1,13 @@
 package br.iesb.indicador_analise_grafica;
 
 import java.time.LocalDate;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
+import java.util.Date;
+
 import javax.persistence.*;
+
+import com.sun.istack.NotNull;
 
 @Entity
 @Table(name="CANDLE", schema="indicadordeanalisetecnicacomia")
@@ -12,12 +17,13 @@ public class Candle {
 	@GeneratedValue(strategy=GenerationType.AUTO)
     @Id
 	private Long ID;
+
 	
-	@OneToOne
+	@OneToOne(mappedBy = "candle")
 	private InfoCandle infoCandle;
 	
 	LocalDate data;
-	DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy"); 
+	//DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy"); 
 	
 	
 	private String papel;
@@ -37,18 +43,26 @@ public class Candle {
 	@Column(name="volume")
 	double volume;
 	
+	public Candle() {
 		
-	public Candle(String dia, String mes, String ano, String abertura, String maxima,
-																			String minima, String fechamento, String volume, String papel) {
+	}
+	
+		
+	public Candle(Date date, String abertura, String maxima,
+				String minima, String fechamento, String volume, String papel) {
 		
 		this.abertura = Double.parseDouble(abertura)/100;
 		this.fechamento = Double.parseDouble(fechamento)/100;
 		this.maxima = Double.parseDouble(maxima)/100;
 		this.minima = Double.parseDouble(minima)/100;
 		this.volume = Double.parseDouble(volume)/100;
-		this.data = LocalDate.parse(dia + "/" + mes + "/" + ano, formato);
+		this.data = date.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
 		this.papel = papel;
 		
+	}
+	
+	public LocalDate getDate() {
+		return data;
 	}
 
 	public String getPapel() {

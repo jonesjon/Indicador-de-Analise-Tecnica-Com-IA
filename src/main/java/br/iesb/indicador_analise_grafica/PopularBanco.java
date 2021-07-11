@@ -8,7 +8,7 @@ public class PopularBanco {
 	
 	private static EntityManager getEntityManager() {
 		
-		if(emf==null) {
+		if(emf==null || !emf.isOpen()) {
 			emf = Persistence.createEntityManagerFactory("indicador");
 		}
 		return emf.createEntityManager();
@@ -16,7 +16,7 @@ public class PopularBanco {
 	
 	public static void adicionaCandle(InfoCandle infoCandle){
 		EntityManager em = getEntityManager();
-		
+	
 		em.getTransaction().begin();
 		em.persist(infoCandle);
 		em.getTransaction().commit();

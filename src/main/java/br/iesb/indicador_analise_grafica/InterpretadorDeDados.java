@@ -4,9 +4,12 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Scanner;
 
 
@@ -102,12 +105,22 @@ public class InterpretadorDeDados {
 							volume += caracteres.get(i);
 						} 
 						
-						candle = new Candle(dia, mes, ano, abertura, maxima, minima, fechamento, volume, papel);
+						String sDate = dia + "/" + mes + "/" + ano;
+						Date date = null;
+						try {
+							date = new SimpleDateFormat("dd/MM/yyyy").parse(sDate);
+						} catch (ParseException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}  
+						
+						candle = new Candle(date, abertura, maxima, minima, fechamento, volume, papel);
 						grafico.adicionaCandle(candle);
 						
-						InfoCandlePK pk = new InfoCandlePK(candle.data, papel);
+			
 						infoCandle = new InfoCandle(candle, Indicador.mediaMovel(8, Grafico.grafico), Indicador.mediaMovel(8, Grafico.grafico), 
-											Indicador.mediaMovel(8, Grafico.grafico), Indicador.mediaMovelVolume(20, Grafico.grafico), pk);
+											Indicador.mediaMovel(8, Grafico.grafico), Indicador.mediaMovelVolume(20, Grafico.grafico), 
+											candle.getDate(), papel);
 						PopularBanco.adicionaCandle(infoCandle);
 			
 						grafico.adicionaMediaMovelNaLista(candle, 8);

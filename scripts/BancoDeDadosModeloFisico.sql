@@ -49,7 +49,7 @@ CREATE TABLE INFO_CANDLE (
     volumeMedia20 BIGINT,
     nomeDoPapel VARCHAR(10),
     ID_candle BIGINT,
-    dat TIMESTAMP,
+    dat TIMESTAMP not null,
     PRIMARY KEY (nomeDoPapel , dat),
     CONSTRAINT fk_ID_candle_info FOREIGN KEY (ID_candle)
         REFERENCES CANDLE (ID)

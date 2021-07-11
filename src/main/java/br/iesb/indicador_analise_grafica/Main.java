@@ -2,10 +2,6 @@ package br.iesb.indicador_analise_grafica;
 
 import java.io.IOException;
 
-import org.springframework.beans.factory.annotation.Autowired;
-
-import br.iesb.indicador_analise_grafica.model.Teste;
-import br.iesb.indicador_analise_grafica.repository.TesteRepository;
 
 
 public class Main {

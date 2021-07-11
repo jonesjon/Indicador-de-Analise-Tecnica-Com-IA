@@ -1,19 +1,24 @@
 package br.iesb.indicador_analise_grafica;
 
+import java.io.Serializable;
 import java.time.LocalDate;
 
 import javax.persistence.*;
 
+import com.sun.istack.NotNull;
+
 @Entity
 @Table(name="INFO_CANDLE")
-public class InfoCandle {
-	
-	
-	@OneToOne
-	private Candle candle;
+public class InfoCandle implements Serializable {
 	
 	@EmbeddedId
-	private InfoCandlePK infoCandlePK;
+    InfoCandlePK infoCandlePK;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "ID", referencedColumnName = "ID")
+	private Candle candle;
+	
+	
 	
 	@Column(name="precoMedia8")
 	private Double precoMedia8;
@@ -26,18 +31,29 @@ public class InfoCandle {
 	
 	@Column(name="volumeMedia20")
 	private Double volumeMedia20;
+	
+	public InfoCandle() {
+		
+	}
 
 	
 	public InfoCandle(Candle candle, Double precoMedia8, Double precoMedia20, Double precoMedia200,
-			Double volumeMedia20, InfoCandlePK pk) {
+			Double volumeMedia20, LocalDate data, String nomeDoPapel ) {
 		
 		this.candle = candle;
 		this.precoMedia8 = precoMedia8;
 		this.precoMedia20 = precoMedia20;
 		this.precoMedia200 = precoMedia200;
 		this.volumeMedia20 = volumeMedia20;
-		this.infoCandlePK = pk;
 	}
+	
+	/*public void setInfoCandlePK(InfoCandlePK infoCandlePK) {
+		this.infoCandlePK = infoCandlePK;
+	}
+	
+	public InfoCandlePK getInfoCandlePK() {
+		return infoCandlePK;
+	}*/
 
 	public void setPrecoMedia8(Double precoMedia8) {
 		this.precoMedia8 = precoMedia8;

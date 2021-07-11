@@ -26,7 +26,7 @@ public class Grafico {
 		
 		if(!list.isEmpty()) {
 			for(int i=0; i<list.size(); i++) {
-				System.out.println("Data: "+ formato.format(list.get(i).data));
+				System.out.println("Data: "+ formato.format(list.get(i).getDate()));
 				System.out.println("Abertura: " + list.get(i).abertura);
 				System.out.println("Fechamento: " + list.get(i).fechamento);
 				System.out.println("Máxima: "+ list.get(i).maxima);
@@ -42,7 +42,7 @@ public class Grafico {
 	public void ordenaGrafico() {
 		for(int i=0; i<grafico.size(); i++) {
 			for(int j=i+1; j<grafico.size(); j++) {
-				if(grafico.get(i).data.getDayOfYear() > grafico.get(j).data.getDayOfYear()) {
+				if(grafico.get(i).getDate().getDayOfYear() > grafico.get(j).getDate().getDayOfYear()) {
 					auxiliar.set(0, grafico.get(i));
 					grafico.set(i, grafico.get(j));
 					grafico.set(j, auxiliar.get(0));
@@ -100,7 +100,7 @@ public class Grafico {
 		if(mediaMovel(media)!= null) {
 			
 			
-			MediaMovel mediaMovel = new MediaMovel(candle.data, candle.getPapel(), media, mediaMovel(media), mediaMovelVolume(media));
+			MediaMovel mediaMovel = new MediaMovel(candle.getDate(), candle.getPapel(), media, mediaMovel(media), mediaMovelVolume(media));
 			listaDeMedias.add(mediaMovel);
 			
 		}
