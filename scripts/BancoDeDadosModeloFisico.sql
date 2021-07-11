@@ -6,12 +6,12 @@ CREATE TABLE INFO_CANDLE
    precoMedia200 long,
    precoMedia20Volume long,
    nomeDoPapel VARCHAR (10),
-   data TIMESTAMP,
+   dat TIMESTAMP,
    PRIMARY KEY
    (
       nomeDoPapel,
-      data
-   ),
+      dat
+   )
 );
 CREATE TABLE CANDLE
 (
@@ -19,26 +19,26 @@ CREATE TABLE CANDLE
    fechamento long,
    maxima long,
    minima long,
-   volume long,
+   volume long
 );
 CREATE TABLE OPERACAO
 (
-   start BOOLEAN,
+   ID long,
+   iniciou BOOLEAN,
    precoGainMax long,
-   precoLoss long,
-   precoGain long,
-   porcentagemOperacaoFinal long,
-   precoCancelarEntrada long,
-   lucroMax BOOLEAN,
-   percentualGain long,
-   percentualLoss long,
-   data TIMESTAMP,
-   percentualGainMax long,
-   lucro BOOLEAN,
-   ID INTEGER PRIMARY KEY,
-   precoEntrada long,
-   nomeDoPapel VARCHAR (10),
-   ID long PRIMARY KEY
+ precoLoss long,
+  precoGain long,
+ porcentagemOperacaoFinal long,
+ precoCancelarEntrada long,
+  lucroMax BOOLEAN,
+ percentualGain long,
+ percentualLoss long,
+ dat datetime,
+ percentualGainMax long,
+ lucro BOOLEAN,
+ precoEntrada long,
+ nomeDoPapel VARCHAR(10),
+ primary key (ID)
 );
 CREATE TABLE PADROES
 (
@@ -47,30 +47,28 @@ CREATE TABLE PADROES
 CREATE TABLE MARTELO
 (
    ID long PRIMARY KEY,
-   ID_Operacao long foreign key references OPERACAO (ID),
-   ID_pavioSuperior long foreign key references PAVIO_SUPERIOR(ID),
-   ID_pavioInferior long foreign key references PAVIO_INFERIOR(ID),
-   ID_tipoCandle long foreign key references TIPO_CANDLE(ID),
-   volumeAcimaMedia20 BOOLEAN
+   ID_Operacao long,
+   ID_pavioSuperior long ,
+   ID_pavioInferior long ,
+   ID_tipoCandle long ,
+   volumeAcimaMedia20 BOOLEAN,
+   constraint fk_ID_operacaoMartelo foreign key (ID_Operacao) references OPERACAO (ID),
+   constraint fk_ID_pavioSuperiorMartelo foreign key (ID_pavioSuperior) references PAVIO_SUPERIOR (ID),
+   constraint fk_ID_pavioInferior foreign key (ID_PavioInferior) references PAVIO_INFERIOR (ID),
+   constraint fk_ID_tipoCandle foreign key (ID_TipoCandle) references TIPO_CANDLE (ID)
 );
-
 CREATE TABLE PAVIO_SUPERIOR
 (
    ID long PRIMARY KEY,
-   descricao VARCHAR (100),
+   descricao VARCHAR (100)
 );
-
 CREATE TABLE PAVIO_INFERIOR
 (
    ID long PRIMARY KEY,
-   descricao VARCHAR (100),
+   descricao VARCHAR (100)
 );
-
 CREATE TABLE TIPO_CANDLE
 (
    ID long PRIMARY KEY,
-   descricao VARCHAR (10),
+   descricao VARCHAR (10)
 );
-
-ALTER TABLE InfoDiario_Candle ADD CONSTRAINT FK_InfoDiario_Candle_1 FOREIGN KEY (fk_Grafico_nomeDoPapel) REFERENCES Grafico (nomeDoPapel) ON DELETE CASCADE;
-ALTER TABLE Operacao ADD CONSTRAINT FK_Operacao_2 FOREIGN KEY (fk_Grafico_nomeDoPapel) REFERENCES Grafico (nomeDoPapel) ON DELETE SET NULL;
