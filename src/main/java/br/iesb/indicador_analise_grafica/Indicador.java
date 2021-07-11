@@ -4,10 +4,10 @@ import java.util.ArrayList;
 
 public class Indicador {
 
-	private double mediaMovel;
-	private double soma;
+	private static double mediaMovel;
+	private static double soma;
 	
-	public Double mediaMovel(int parametro, ArrayList<Candle> grafico) {
+	public static Double mediaMovel(int parametro, ArrayList<Candle> grafico) {
 		
 		
 		if(grafico.size() >= parametro) {
@@ -27,7 +27,7 @@ public class Indicador {
 		return null;
 	}
 	
-	public Double mediaMovelVolume(int parametro, ArrayList<Candle> grafico) {
+	public static Double mediaMovelVolume(int parametro, ArrayList<Candle> grafico) {
 			
 		if(grafico.size()>=parametro) {
 		

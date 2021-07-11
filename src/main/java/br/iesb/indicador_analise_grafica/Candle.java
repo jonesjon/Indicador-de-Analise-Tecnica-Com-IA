@@ -2,26 +2,39 @@ package br.iesb.indicador_analise_grafica;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-
-
 import javax.persistence.*;
 
-
+@Entity
+@Table(name="CANDLE", schema="indicadordeanalisetecnicacomia")
 public class Candle {
+	
+	@Column(name="ID")
+	@GeneratedValue(strategy=GenerationType.AUTO)
+    @Id
+	private Long ID;
+	
+	@OneToOne
+	private InfoCandle infoCandle;
 	
 	LocalDate data;
 	DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy"); 
 	
+	
 	private String papel;
 	
+	@Column(name="abertura")
 	double abertura; 
 	
+	@Column(name="fechamento")
 	double fechamento; 
 	
+	@Column(name="maxima")
 	double maxima; 
 	
+	@Column(name="minima")
 	double minima; 
 	
+	@Column(name="volume")
 	double volume;
 	
 		
@@ -40,6 +53,10 @@ public class Candle {
 
 	public String getPapel() {
 		return papel;
+	}
+
+	public Long getID() {
+		return ID;
 	}
 
 	

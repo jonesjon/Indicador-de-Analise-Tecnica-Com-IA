@@ -16,6 +16,7 @@ public class InterpretadorDeDados {
 	ArrayList<String> caracteres = new ArrayList<String>();
 	Grafico grafico = new Grafico();
 	Candle candle;
+	InfoCandle infoCandle;
 	DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy"); 
 	LocalDate data;
 	Scanner scanner = new Scanner(System.in);
@@ -103,7 +104,10 @@ public class InterpretadorDeDados {
 						
 						candle = new Candle(dia, mes, ano, abertura, maxima, minima, fechamento, volume, papel);
 						grafico.adicionaCandle(candle);
-						PopularBanco.adicionaCandle(candle);
+						
+						infoCandle = new InfoCandle(candle, Indicador.mediaMovel(8, Grafico.grafico), Indicador.mediaMovel(8, Grafico.grafico), 
+											Indicador.mediaMovel(8, Grafico.grafico), Indicador.mediaMovelVolume(20, Grafico.grafico), papel, candle.data);
+						PopularBanco.adicionaCandle(infoCandle);
 			
 						grafico.adicionaMediaMovelNaLista(candle, 8);
 						grafico.adicionaMediaMovelNaLista(candle, 20);

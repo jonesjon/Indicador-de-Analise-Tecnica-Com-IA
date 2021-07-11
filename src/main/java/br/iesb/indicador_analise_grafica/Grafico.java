@@ -1,17 +1,11 @@
 package br.iesb.indicador_analise_grafica;
 
 import java.time.format.DateTimeFormatter;
-import javax.persistence.*;
 import java.util.ArrayList;
 
-import javax.persistence.Entity;
 
-@Entity 
-@Table(name="Grafico")
 public class Grafico {
 	
-	@Id
-	@Column(name="nomeDoPapel")
 	private static String nomeDoPapel;
 	static ArrayList<Candle> grafico = new ArrayList<Candle>();
 	ArrayList<Candle> auxiliar = new ArrayList<Candle>();

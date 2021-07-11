@@ -2,11 +2,26 @@ package br.iesb.indicador_analise_grafica;
 
 import java.io.IOException;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
+import br.iesb.indicador_analise_grafica.model.Teste;
+import br.iesb.indicador_analise_grafica.repository.TesteRepository;
+
 
 public class Main {
+	
+	/*
+	@Autowired
+	static TesteRepository repository; */
 
 	public static void main(String[] args) throws IOException {
 		long start =  System.currentTimeMillis();   
+		
+		/*
+		Teste t = new Teste();
+		t.setId(23l);
+		t.setDescricao("aqui vai uma descrição");
+		repository.save(t); */
 	
 		//gitbash
 		String fileName = "COTAHIST_A2010.txt";
@@ -17,7 +32,7 @@ public class Main {
 								"BNCA3 ", "BPNM4 ", "BRAP3 ", "BRAP4 ", "BRFS3 ", "BRKM3 ", "BRKM5 ", "BRML3 ","BRSR3 ","BRSR6 ","BRTO3 ", "BRTO4 ", "BTOW3 ",
 									"BVMF3 ","BVMF3 ","CCRO3 ", "CEBR6 ", "CIEL3 ", "CLAN4 ", "CMIG3 ", "CMIG4 ", "COCE3 ","CPFE3 "};
 		
-		String papel = "ABYA3 ";
+		String papel = "ABCB4 ";
 		
 		/*for(int i=0; i<36; i++) {
 			

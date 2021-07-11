@@ -1,13 +1,4 @@
 use indicadordeanalisetecnicacomia;
-CREATE TABLE INFO_CANDLE (
-    precoMedia8 BIGINT,
-    precoMedia20 BIGINT,
-    precoMedia200 BIGINT,
-    precoMedia20Volume BIGINT,
-    nomeDoPapel VARCHAR(10),
-    dat TIMESTAMP,
-    PRIMARY KEY (nomeDoPapel , dat)
-);
 CREATE TABLE CANDLE (
     ID BIGINT,
     abertura BIGINT,
@@ -38,6 +29,32 @@ CREATE TABLE OPERACAO (
 CREATE TABLE PADROES (
     Nome VARCHAR(20)
 );
+CREATE TABLE PAVIO_SUPERIOR (
+    ID BIGINT PRIMARY KEY,
+    descricao VARCHAR(100)
+);
+CREATE TABLE PAVIO_INFERIOR (
+    ID BIGINT PRIMARY KEY,
+    descricao VARCHAR(100)
+);
+CREATE TABLE TIPO_CANDLE (
+    ID BIGINT PRIMARY KEY,
+    descricao VARCHAR(10)
+);
+
+CREATE TABLE INFO_CANDLE (
+    precoMedia8 BIGINT,
+    precoMedia20 BIGINT,
+    precoMedia200 BIGINT,
+    volumeMedia20 BIGINT,
+    nomeDoPapel VARCHAR(10),
+    ID_candle BIGINT,
+    dat TIMESTAMP,
+    PRIMARY KEY (nomeDoPapel , dat),
+    CONSTRAINT fk_ID_candle_info FOREIGN KEY (ID_candle)
+        REFERENCES CANDLE (ID)
+);
+
 CREATE TABLE MARTELO (
     ID BIGINT PRIMARY KEY,
     ID_Operacao BIGINT,
@@ -54,15 +71,4 @@ CREATE TABLE MARTELO (
     CONSTRAINT fk_ID_tipoCandle FOREIGN KEY (ID_TipoCandle)
         REFERENCES TIPO_CANDLE (ID)
 );
-CREATE TABLE PAVIO_SUPERIOR (
-    ID BIGINT PRIMARY KEY,
-    descricao VARCHAR(100)
-);
-CREATE TABLE PAVIO_INFERIOR (
-    ID BIGINT PRIMARY KEY,
-    descricao VARCHAR(100)
-);
-CREATE TABLE TIPO_CANDLE (
-    ID BIGINT PRIMARY KEY,
-    descricao VARCHAR(10)
-);
+
