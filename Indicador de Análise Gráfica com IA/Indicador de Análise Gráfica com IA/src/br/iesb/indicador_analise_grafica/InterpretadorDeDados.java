@@ -100,8 +100,9 @@ public class InterpretadorDeDados {
 						candle = new Candle(dia, mes, ano, abertura, maxima, minima, fechamento, volume, papel);
 						grafico.adicionaCandle(candle);
 						
+						InfoCandlePK pk = new InfoCandlePK(candle.data, papel);
 						infoCandle = new InfoCandle(candle, Indicador.mediaMovel(8, Grafico.grafico), Indicador.mediaMovel(8, Grafico.grafico), 
-											Indicador.mediaMovel(8, Grafico.grafico), Indicador.mediaMovelVolume(20, Grafico.grafico), papel, candle.data);
+											Indicador.mediaMovel(8, Grafico.grafico), Indicador.mediaMovelVolume(20, Grafico.grafico), pk);
 						PopularBanco.adicionaCandle(infoCandle);
 			
 						grafico.adicionaMediaMovelNaLista(candle, 8);

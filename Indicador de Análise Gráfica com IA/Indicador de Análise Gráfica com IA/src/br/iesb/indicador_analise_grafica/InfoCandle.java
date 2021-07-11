@@ -8,8 +8,12 @@ import javax.persistence.*;
 @Table(name="INFO_CANDLE")
 public class InfoCandle {
 	
+	
 	@OneToOne
 	private Candle candle;
+	
+	@EmbeddedId
+	private InfoCandlePK infoCandlePK;
 	
 	@Column(name="precoMedia8")
 	private Double precoMedia8;
@@ -22,23 +26,17 @@ public class InfoCandle {
 	
 	@Column(name="volumeMedia20")
 	private Double volumeMedia20;
-	
-	@Column(name="nomeDoPapel")
-	private String nomeDoPapel;
-	
-	@Column(name="dat")
-	private LocalDate data;
+
 	
 	public InfoCandle(Candle candle, Double precoMedia8, Double precoMedia20, Double precoMedia200,
-			Double volumeMedia20, String nomeDoPapel, LocalDate data) {
+			Double volumeMedia20, InfoCandlePK pk) {
 		
 		this.candle = candle;
 		this.precoMedia8 = precoMedia8;
 		this.precoMedia20 = precoMedia20;
 		this.precoMedia200 = precoMedia200;
 		this.volumeMedia20 = volumeMedia20;
-		this.nomeDoPapel = nomeDoPapel;
-		this.data = data;
+		this.infoCandlePK = pk;
 	}
 
 	public void setPrecoMedia8(Double precoMedia8) {
@@ -55,14 +53,6 @@ public class InfoCandle {
 	
 	public void setVolumeMedia20(Double volumeMedia20) {
 		this.volumeMedia20 = volumeMedia20;
-	}
-	
-	public void setNomeDoPapel(String nomeDoPapel) {
-		this.nomeDoPapel = nomeDoPapel;
-	}
-	
-	public void setData(LocalDate data) {
-		this.data = data;
 	}
 
 	public Candle getCandle() {
@@ -83,14 +73,6 @@ public class InfoCandle {
 
 	public Double getVolumeMedia20() {
 		return volumeMedia20;
-	}
-
-	public String getNomeDoPapel() {
-		return nomeDoPapel;
-	}
-
-	public LocalDate getData() {
-		return data;
 	}
 	
 	
