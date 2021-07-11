@@ -1,74 +1,68 @@
 use indicadordeanalisetecnicacomia;
-CREATE TABLE INFO_CANDLE
-(
-   precoMedia8 long,
-   precoMedia20 long,
-   precoMedia200 long,
-   precoMedia20Volume long,
-   nomeDoPapel VARCHAR (10),
-   dat TIMESTAMP,
-   PRIMARY KEY
-   (
-      nomeDoPapel,
-      dat
-   )
+CREATE TABLE INFO_CANDLE (
+    precoMedia8 BIGINT,
+    precoMedia20 BIGINT,
+    precoMedia200 BIGINT,
+    precoMedia20Volume BIGINT,
+    nomeDoPapel VARCHAR(10),
+    dat TIMESTAMP,
+    PRIMARY KEY (nomeDoPapel , dat)
 );
-CREATE TABLE CANDLE
-(
-   abertura long,
-   fechamento long,
-   maxima long,
-   minima long,
-   volume long
+CREATE TABLE CANDLE (
+    ID BIGINT,
+    abertura BIGINT,
+    fechamento BIGINT,
+    maxima BIGINT,
+    minima BIGINT,
+    volume BIGINT,
+    PRIMARY KEY (ID)
 );
-CREATE TABLE OPERACAO
-(
-   ID long,
-   iniciou BOOLEAN,
-   precoGainMax long,
- precoLoss long,
-  precoGain long,
- porcentagemOperacaoFinal long,
- precoCancelarEntrada long,
-  lucroMax BOOLEAN,
- percentualGain long,
- percentualLoss long,
- dat datetime,
- percentualGainMax long,
- lucro BOOLEAN,
- precoEntrada long,
- nomeDoPapel VARCHAR(10),
- primary key (ID)
+CREATE TABLE OPERACAO (
+    ID BIGINT,
+    iniciou BOOLEAN,
+    precoGainMax BIGINT,
+    precoLoss BIGINT,
+    precoGain BIGINT,
+    porcentagemOperacaoFinal BIGINT,
+    precoCancelarEntrada BIGINT,
+    lucroMax BOOLEAN,
+    percentualGain BIGINT,
+    percentualLoss BIGINT,
+    dat DATETIME,
+    percentualGainMax BIGINT,
+    lucro BOOLEAN,
+    precoEntrada BIGINT,
+    nomeDoPapel VARCHAR(10),
+    PRIMARY KEY (ID)
 );
-CREATE TABLE PADROES
-(
-   Nome VARCHAR (20)
+CREATE TABLE PADROES (
+    Nome VARCHAR(20)
 );
-CREATE TABLE MARTELO
-(
-   ID long PRIMARY KEY,
-   ID_Operacao long,
-   ID_pavioSuperior long ,
-   ID_pavioInferior long ,
-   ID_tipoCandle long ,
-   volumeAcimaMedia20 BOOLEAN,
-   constraint fk_ID_operacaoMartelo foreign key (ID_Operacao) references OPERACAO (ID),
-   constraint fk_ID_pavioSuperiorMartelo foreign key (ID_pavioSuperior) references PAVIO_SUPERIOR (ID),
-   constraint fk_ID_pavioInferior foreign key (ID_PavioInferior) references PAVIO_INFERIOR (ID),
-   constraint fk_ID_tipoCandle foreign key (ID_TipoCandle) references TIPO_CANDLE (ID)
+CREATE TABLE MARTELO (
+    ID BIGINT PRIMARY KEY,
+    ID_Operacao BIGINT,
+    ID_pavioSuperior BIGINT,
+    ID_pavioInferior BIGINT,
+    ID_tipoCandle BIGINT,
+    volumeAcimaMedia20 BOOLEAN,
+    CONSTRAINT fk_ID_operacaoMartelo FOREIGN KEY (ID_Operacao)
+        REFERENCES OPERACAO (ID),
+    CONSTRAINT fk_ID_pavioSuperiorMartelo FOREIGN KEY (ID_pavioSuperior)
+        REFERENCES PAVIO_SUPERIOR (ID),
+    CONSTRAINT fk_ID_pavioInferior FOREIGN KEY (ID_PavioInferior)
+        REFERENCES PAVIO_INFERIOR (ID),
+    CONSTRAINT fk_ID_tipoCandle FOREIGN KEY (ID_TipoCandle)
+        REFERENCES TIPO_CANDLE (ID)
 );
-CREATE TABLE PAVIO_SUPERIOR
-(
-   ID long PRIMARY KEY,
-   descricao VARCHAR (100)
+CREATE TABLE PAVIO_SUPERIOR (
+    ID BIGINT PRIMARY KEY,
+    descricao VARCHAR(100)
 );
-CREATE TABLE PAVIO_INFERIOR
-(
-   ID long PRIMARY KEY,
-   descricao VARCHAR (100)
+CREATE TABLE PAVIO_INFERIOR (
+    ID BIGINT PRIMARY KEY,
+    descricao VARCHAR(100)
 );
-CREATE TABLE TIPO_CANDLE
-(
-   ID long PRIMARY KEY,
-   descricao VARCHAR (10)
+CREATE TABLE TIPO_CANDLE (
+    ID BIGINT PRIMARY KEY,
+    descricao VARCHAR(10)
 );
