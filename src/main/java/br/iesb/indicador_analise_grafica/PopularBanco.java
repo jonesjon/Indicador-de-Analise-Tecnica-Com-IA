@@ -2,7 +2,6 @@ package br.iesb.indicador_analise_grafica;
 
 import javax.persistence.*;
 
-
 public class PopularBanco {
 	
 	private static EntityManagerFactory emf;
