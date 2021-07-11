@@ -14,11 +14,11 @@ public class PopularBanco {
 		return emf.createEntityManager();
 	}
 	
-	public static void adicionaCandle(Candle candle){
+	public static void adicionaCandle(InfoCandle infoCandle){
 		EntityManager em = getEntityManager();
 		
 		em.getTransaction().begin();
-		em.persist(candle);
+		em.persist(infoCandle);
 		em.getTransaction().commit();
 		
 		em.close();

@@ -9,7 +9,9 @@
 
     <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
+	<class>br.iesb.indicador_analise_grafica.InfoCandle</class>
     <class>br.iesb.indicador_analise_grafica.Candle</class>
+    
 
     <properties>
        <!-- Driver JDBC para conexão com o MySQL -->
