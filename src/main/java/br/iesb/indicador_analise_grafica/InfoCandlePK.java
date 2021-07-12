@@ -4,15 +4,16 @@ import java.time.LocalDate;
 
 import javax.persistence.*;
 
-@Embeddable
+
 public class InfoCandlePK implements Serializable{
 	
-
-	@Column(name = "dat")
 	private LocalDate data;
-	
-	@Column(name = "nomeDoPapel")
 	private String nomeDoPapel;
+	
+
+	public InfoCandlePK() {
+		
+	}
 	
 	public InfoCandlePK(LocalDate data, String nome) {
 		this.data = data;
@@ -33,10 +34,6 @@ public class InfoCandlePK implements Serializable{
 	
 	public void setNomeDoPapel(String nomeDoPapel) {
 		this.nomeDoPapel = nomeDoPapel;
-	}
-	
-	public InfoCandlePK() {
-		
 	}
 
 	@Override

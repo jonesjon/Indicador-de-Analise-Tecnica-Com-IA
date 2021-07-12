@@ -1,13 +1,4 @@
 use indicadordeanalisetecnicacomia;
-CREATE TABLE CANDLE (
-    ID BIGINT,
-    abertura BIGINT,
-    fechamento BIGINT,
-    maxima BIGINT,
-    minima BIGINT,
-    volume BIGINT,
-    PRIMARY KEY (ID)
-);
 CREATE TABLE OPERACAO (
     ID BIGINT,
     iniciou BOOLEAN,
@@ -43,16 +34,18 @@ CREATE TABLE TIPO_CANDLE (
 );
 
 CREATE TABLE INFO_CANDLE (
-    precoMedia8 BIGINT,
-    precoMedia20 BIGINT,
-    precoMedia200 BIGINT,
-    volumeMedia20 BIGINT,
+    precoMedia8 long,
+    precoMedia20 long,
+    precoMedia200 long,
+    volumeMedia20 long,
     nomeDoPapel VARCHAR(10),
-    ID_candle BIGINT,
+    abertura long,
+    fechamento long,
+    maxima long,
+    minima long,
+    volume long,
     dat TIMESTAMP not null,
-    PRIMARY KEY (nomeDoPapel , dat),
-    CONSTRAINT fk_ID_candle_info FOREIGN KEY (ID_candle)
-        REFERENCES CANDLE (ID)
+    PRIMARY KEY (nomeDoPapel , dat)
 );
 
 CREATE TABLE MARTELO (

@@ -50,6 +50,11 @@ public class Main {
 		long elapsedTime = (System.currentTimeMillis()-start);
 		System.out.println("Tempo gasto parar rodar: (segundos) " + elapsedTime / 1000F );
 		
+		
+		
+		
+		
+		
 	}
 
 }
