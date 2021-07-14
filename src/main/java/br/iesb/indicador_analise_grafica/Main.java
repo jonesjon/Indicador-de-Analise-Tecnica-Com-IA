@@ -2,23 +2,40 @@ package br.iesb.indicador_analise_grafica;
 
 import java.io.IOException;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+
+import br.iesb.indicador_analise_grafica.model.Teste;
+import br.iesb.indicador_analise_grafica.repository.ITesteRepository;
+import br.iesb.indicador_analise_grafica.service.TesteServiceImpl;
+
 
 
 public class Main {
 	
-	/*
-	@Autowired
-	static TesteRepository repository; */
 
 	public static void main(String[] args) throws IOException {
 		long start =  System.currentTimeMillis();   
 		
+		TesteServiceImpl t = new TesteServiceImpl();
+		Teste teste = t.getTesteById(1l);
+		long id = 1l;
+		
+		//encontraUmTeste();	
+		
+		//PrintDemo.getRepository();
+		System.out.println(t);
+		
+		//long count = t.getTesteById(null);
 		/*
-		Teste t = new Teste();
-		t.setId(23l);
-		t.setDescricao("aqui vai uma descrição");
-		repository.save(t); */
-	
+		if(count > 1l) {
+			Teste t = testeRepository.findOne(id);
+		
+			//t.setId(23l);
+			t.setDescricao("aqui vai uma descrição");
+			testeRepository.save(t); 
+		}*/
+		
 		//gitbash
 		String fileName = "COTAHIST_A2010.txt";
 		
@@ -29,8 +46,8 @@ public class Main {
 									"BVMF3 ","BVMF3 ","CCRO3 ", "CEBR6 ", "CIEL3 ", "CLAN4 ", "CMIG3 ", "CMIG4 ", "COCE3 ","CPFE3 "};
 		
 		String papel = "ABCB4 ";
-		
-		/*for(int i=0; i<36; i++) {
+		/*
+		for(int i=0; i<36; i++) {
 			
 			String abc = "/home/leonardo/eclipse-workspace/Indicador-de-Analise-Tecnica-Com-IA/";
 			InterpretadorDeDados dados = new InterpretadorDeDados( abc + "COTAHIST_A2010.txt", papeis[i]);
@@ -49,11 +66,7 @@ public class Main {
 		
 		long elapsedTime = (System.currentTimeMillis()-start);
 		System.out.println("Tempo gasto parar rodar: (segundos) " + elapsedTime / 1000F );
-		
-		
-		
-		
-		
+
 		
 	}
 
