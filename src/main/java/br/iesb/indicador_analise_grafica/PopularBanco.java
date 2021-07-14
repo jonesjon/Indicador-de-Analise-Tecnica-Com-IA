@@ -6,7 +6,7 @@ public class PopularBanco {
 	
 	private static EntityManagerFactory emf;
 	
-	private static EntityManager getEntityManager() {
+	public static EntityManager getEntityManager() {
 		
 		if(emf==null || !emf.isOpen()) {
 			emf = Persistence.createEntityManagerFactory("indicador");
