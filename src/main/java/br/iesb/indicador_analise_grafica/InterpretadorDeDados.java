@@ -14,9 +14,9 @@ import java.util.List;
 import java.util.Scanner;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import br.iesb.indicador_analise_grafica.repository.InfoCandleRepository;
-
 
 public class InterpretadorDeDados {
 
@@ -28,9 +28,6 @@ public class InterpretadorDeDados {
 	LocalDate data;
 	Scanner scanner = new Scanner(System.in);
 	RedeNeural redeNeural = new RedeNeural();
-	
-	@Autowired
-	private InfoCandleRepository infoCandleRepository;
 
 	public InterpretadorDeDados(String nome, String papel) throws IOException {
 
@@ -107,6 +104,8 @@ public class InterpretadorDeDados {
 						for (int i = 170; i <= 187; i++) { // Volume de negocia��o
 							volume += caracteres.get(i);
 						}
+						
+						
 
 						String sDate = dia + "/" + mes + "/" + ano;
 						LocalDate date = LocalDate.parse(sDate, formato);
@@ -137,21 +136,12 @@ public class InterpretadorDeDados {
 			System.err.printf("Não foi possivel abrir o arquivo: %s.\n", e.getMessage());
 		}
 		
-		List<InfoCandle> listaInfoCandle = consultar();
+		/*List<InfoCandle> listaInfoCandle = consultar();
 		
 		for(int i = 0; i<listaInfoCandle.size(); i++) {
 			System.out.println("Abertura de todos os Candles ABCB4: " + listaInfoCandle.get(i).getAbertura());
-		}
+		}*/
 
 	}
-	
-	private List<InfoCandle> consultar(){
-		return infoCandleRepository.findAll();
-	}
-	
-	private List<InfoCandle> consultarNomeDoPapel(){
-		return infoCandleRepository.nomeDoPapel("ABCB4");
-	}
-
 }
 
