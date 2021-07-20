@@ -7,8 +7,7 @@ import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Repository;
 
 import br.iesb.indicador_analise_grafica.model.Teste;
-
-@Repository
+/*
 public interface ITesteRepository extends ICrudRepository<Teste, Long>{
 	
 	@Override
@@ -19,3 +18,4 @@ public interface ITesteRepository extends ICrudRepository<Teste, Long>{
 	@Override
 	<S extends Teste> Optional<S> findOne(Example<S> arg0);
 }
+*/

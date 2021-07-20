@@ -24,6 +24,7 @@ public class InterpretadorDeDados {
 	Grafico grafico = new Grafico();
 	Candle candle;
 	InfoCandle infoCandle;
+	ArrayList<InfoCandle> listaInfoCandle = new ArrayList<InfoCandle>();
 	DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	LocalDate data;
 	Scanner scanner = new Scanner(System.in);
@@ -134,7 +135,11 @@ public class InterpretadorDeDados {
 
 				linha = leitura.readLine(); // Le a Proxima Linha
 			}
-
+			
+			listaInfoCandle = (ArrayList<InfoCandle>) PopularBanco.getInfoCandle();
+			for(int i = 0; i<listaInfoCandle.size(); i++) {
+				System.out.println("Abertura de todos os Candles ABCB4: " + listaInfoCandle.get(i).getAbertura());
+			}
 		} catch (IOException e) {
 			System.err.printf("Não foi possivel abrir o arquivo: %s.\n", e.getMessage());
 		}

@@ -12,6 +12,7 @@ import org.springframework.data.domain.Sort;
 
 import br.iesb.indicador_analise_grafica.model.Teste;
 
+/*
 public class TesteRepositoryImpl implements ITesteRepository	 {
 	
 	 private EntityManager em;
@@ -201,3 +202,4 @@ public class TesteRepositoryImpl implements ITesteRepository	 {
 	}
 
 }
+*/

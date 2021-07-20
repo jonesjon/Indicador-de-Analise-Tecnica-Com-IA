@@ -2,9 +2,11 @@ package br.iesb.indicador_analise_grafica.repository;
 
 import java.io.Serializable;
 
-import br.iesb.indicador_analise_grafica.Candle;
+import org.springframework.data.repository.CrudRepository;
 
-public interface CandleRepository extends ICrudRepository<Candle, Serializable>{
+import br.iesb.indicador_analise_grafica.Candle;
+/*
+public interface CandleRepository extends CrudRepository<Candle, Serializable>{
 
 	
-}
+}*/

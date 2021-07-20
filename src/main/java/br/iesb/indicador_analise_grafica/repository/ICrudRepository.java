@@ -6,8 +6,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.*;
 
-@Repository
-public interface ICrudRepository<T, ID extends Serializable> extends JpaRepository<T, Long> {
+/*public interface ICrudRepository<T, ID extends Serializable> extends JpaRepository<T, Long> {
 
 	<S extends T> S save(S entity);
     
@@ -21,3 +20,4 @@ public interface ICrudRepository<T, ID extends Serializable> extends JpaReposito
     
 	boolean exists(ID primaryKey);
 }
+*/

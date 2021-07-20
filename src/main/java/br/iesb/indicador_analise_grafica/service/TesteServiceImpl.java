@@ -10,8 +10,7 @@ import org.springframework.stereotype.Service;
 import br.iesb.indicador_analise_grafica.PopularBanco;
 import br.iesb.indicador_analise_grafica.model.Teste;
 import br.iesb.indicador_analise_grafica.model.TesteRepository;
-import br.iesb.indicador_analise_grafica.repository.TesteRepositoryImpl;
-
+/*
 @Service
 public class TesteServiceImpl implements ITesteService {
 	
@@ -24,7 +23,7 @@ public class TesteServiceImpl implements ITesteService {
 	
 
 
-
+/*
 	@PersistenceContext
 	private EntityManager em;
 	
@@ -37,3 +36,4 @@ public class TesteServiceImpl implements ITesteService {
 	}
 	
 }
+*/
