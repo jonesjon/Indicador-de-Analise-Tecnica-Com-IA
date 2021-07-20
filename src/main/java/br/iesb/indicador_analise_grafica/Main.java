@@ -3,6 +3,8 @@ package br.iesb.indicador_analise_grafica;
 import java.io.IOException;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.stereotype.Controller;
 
 import br.iesb.indicador_analise_grafica.model.Teste;
@@ -10,11 +12,13 @@ import br.iesb.indicador_analise_grafica.repository.ITesteRepository;
 import br.iesb.indicador_analise_grafica.service.TesteServiceImpl;
 
 
-
+@SpringBootApplication
 public class Main {
 	
 
 	public static void main(String[] args) throws IOException {
+		
+		SpringApplication.run(Main.class, args);
 		long start =  System.currentTimeMillis();   
 		
 		TesteServiceImpl t = new TesteServiceImpl();
@@ -37,7 +41,7 @@ public class Main {
 		}*/
 		
 		//gitbash
-		String fileName = "COTAHIST_A2010.txt";
+		String fileName = "C:\\Users\\João\\git\\Indicador-de-Analise-Tecnica-Com-IA\\src\\main\\resources\\COTAHIST_A2010.txt";
 		
 		TreinamentoRedeNeural treinamento = new TreinamentoRedeNeural();
 		

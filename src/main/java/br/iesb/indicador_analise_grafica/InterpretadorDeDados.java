@@ -35,12 +35,15 @@ public class InterpretadorDeDados {
 
 			Grafico.grafico.clear();
 			Grafico.listaDeMedias.clear();
-			ClassLoader classLoader = getClass().getClassLoader();
+			/*ClassLoader classLoader = getClass().getClassLoader();
 			File file = new File(classLoader.getResource(nome).getFile());
 
 			FileReader arquivo = new FileReader(file);
-			BufferedReader leitura = new BufferedReader(arquivo); // Leitura do Arquivo da S�rie Hist�rica
+			BufferedReader leitura = new BufferedReader(arquivo); // Leitura do Arquivo da S�rie Hist�rica*/
 
+			FileReader arquivo = new FileReader(nome);
+			BufferedReader leitura = new BufferedReader(arquivo);  																	//Leitura do Arquivo da Série Histórica
+			
 			String linha = leitura.readLine(); // Le linha por linha
 
 			while (linha != null) {

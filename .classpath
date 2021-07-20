@@ -29,20 +29,20 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:/Users/joaov/git/IndicadorIA/libs/aspectjrt-1.9.6.jar"/>
-	<classpathentry kind="lib" path="C:/Users/joaov/git/IndicadorIA/libs/hibernate-release-5.5.3.Final.zip"/>
-	<classpathentry kind="lib" path="C:/Users/joaov/git/IndicadorIA/libs/mysql-connector-java-8.0.25.jar"/>
-	<classpathentry kind="lib" path="C:/Users/joaov/git/IndicadorIA/libs/slf4j-api-1.7.26.jar"/>
-	<classpathentry kind="lib" path="C:/Users/joaov/git/IndicadorIA/libs/spring-aop-5.3.8.jar"/>
-	<classpathentry kind="lib" path="C:/Users/joaov/git/IndicadorIA/libs/spring-beans-5.3.8.jar"/>
-	<classpathentry kind="lib" path="C:/Users/joaov/git/IndicadorIA/libs/spring-context-5.3.8.jar"/>
-	<classpathentry kind="lib" path="C:/Users/joaov/git/IndicadorIA/libs/spring-core-5.3.8.jar"/>
-	<classpathentry kind="lib" path="C:/Users/joaov/git/IndicadorIA/libs/spring-data-commons-2.5.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/joaov/git/IndicadorIA/libs/spring-data-jpa-2.5.2.jar"/>
-	<classpathentry kind="lib" path="C:/Users/joaov/git/IndicadorIA/libs/spring-expression-5.3.8.jar"/>
-	<classpathentry kind="lib" path="C:/Users/joaov/git/IndicadorIA/libs/spring-jcl-5.3.8.jar"/>
-	<classpathentry kind="lib" path="C:/Users/joaov/git/IndicadorIA/libs/spring-jdbc-5.3.8.jar"/>
-	<classpathentry kind="lib" path="C:/Users/joaov/git/IndicadorIA/libs/spring-orm-5.3.8.jar"/>
-	<classpathentry kind="lib" path="C:/Users/joaov/git/IndicadorIA/libs/spring-tx-5.3.8.jar"/>
+	<classpathentry kind="lib" path="C:\Users\João\git\Indicador-de-Analise-Tecnica-Com-IA\libs/aspectjrt-1.9.6.jar"/>
+	<classpathentry kind="lib" path="C:\Users\João\git\Indicador-de-Analise-Tecnica-Com-IA\libs/hibernate-release-5.5.3.Final.zip"/>
+	<classpathentry kind="lib" path="C:\Users\João\git\Indicador-de-Analise-Tecnica-Com-IA\libs/mysql-connector-java-8.0.25.jar"/>
+	<classpathentry kind="lib" path="C:\Users\João\git\Indicador-de-Analise-Tecnica-Com-IA\libs/slf4j-api-1.7.26.jar"/>
+	<classpathentry kind="lib" path="C:\Users\João\git\Indicador-de-Analise-Tecnica-Com-IA\libs/spring-aop-5.3.8.jar"/>
+	<classpathentry kind="lib" path="C:\Users\João\git\Indicador-de-Analise-Tecnica-Com-IA\libs/spring-beans-5.3.8.jar"/>
+	<classpathentry kind="lib" path="C:\Users\João\git\Indicador-de-Analise-Tecnica-Com-IA\libs/spring-context-5.3.8.jar"/>
+	<classpathentry kind="lib" path="C:\Users\João\git\Indicador-de-Analise-Tecnica-Com-IA\libs/spring-core-5.3.8.jar"/>
+	<classpathentry kind="lib" path="C:\Users\João\git\Indicador-de-Analise-Tecnica-Com-IA\libs/spring-data-commons-2.5.2.jar"/>
+	<classpathentry kind="lib" path="C:\Users\João\git\Indicador-de-Analise-Tecnica-Com-IA\libs/spring-data-jpa-2.5.2.jar"/>
+	<classpathentry kind="lib" path="C:\Users\João\git\Indicador-de-Analise-Tecnica-Com-IA\libs/spring-expression-5.3.8.jar"/>
+	<classpathentry kind="lib" path="C:\Users\João\git\Indicador-de-Analise-Tecnica-Com-IA\libs/spring-jcl-5.3.8.jar"/>
+	<classpathentry kind="lib" path="C:\Users\João\git\Indicador-de-Analise-Tecnica-Com-IA\libs/spring-jdbc-5.3.8.jar"/>
+	<classpathentry kind="lib" path="C:\Users\João\git\Indicador-de-Analise-Tecnica-Com-IA\libs/spring-orm-5.3.8.jar"/>
+	<classpathentry kind="lib" path="C:\Users\João\git\Indicador-de-Analise-Tecnica-Com-IA\libs/spring-tx-5.3.8.jar"/>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

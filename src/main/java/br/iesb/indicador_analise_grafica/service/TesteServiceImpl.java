@@ -18,9 +18,9 @@ public class TesteServiceImpl implements ITesteService {
 	@Autowired
 	TesteRepository testRepository;
 	
-	public TesteServiceImpl() {
+	/*public TesteServiceImpl() {
 		this.em = PopularBanco.getEntityManager();
-	}
+	}*/
 	
 
 
