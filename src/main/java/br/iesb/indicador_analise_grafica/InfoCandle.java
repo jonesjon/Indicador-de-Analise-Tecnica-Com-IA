@@ -12,6 +12,11 @@ import com.sun.istack.NotNull;
 @IdClass(InfoCandlePK.class)
 public class InfoCandle implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	@Id
 	@Column(name="nomeDoPapel")
 	private String nomeDoPapel;

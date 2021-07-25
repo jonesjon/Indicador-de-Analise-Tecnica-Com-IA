@@ -1,5 +1,6 @@
 package br.iesb.indicador_analise_grafica;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -23,33 +24,18 @@ public class PopularBanco {
 		infoCandleRepository=infoCandle;
 	}
 	
-	private static EntityManagerFactory em;
-	
-	public static EntityManager getEntityManager() {
-		
-		if(em==null || !em.isOpen()) {
-			em = Persistence.createEntityManagerFactory("indicador");
-		}
-		return em.createEntityManager();
-	}
-	
 	public static void adicionaCandle(InfoCandle infoCandle){
-		/*EntityManager em = getEntityManager();
-	
-		em.getTransaction().begin();
-		em.persist(infoCandle);
-		em.getTransaction().commit();
-		
-		em.close();
-		emf.close();
-		*/
-		
 		infoCandleRepository.save(infoCandle);
-		
 	}
 	
 	public static List<InfoCandle> getInfoCandle(){
 		return (List<InfoCandle>) infoCandleRepository.findAll();
 	}
+
+	public static List<InfoCandle> getCandlePeloNome(String nome) {
+		return infoCandleRepository.findByNomeDoPapel(nome);
+	}
+	
+	
 
 }

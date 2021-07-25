@@ -5,6 +5,7 @@ import java.io.IOException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.stereotype.Controller;
 
 import br.iesb.indicador_analise_grafica.model.Teste;
@@ -35,7 +36,7 @@ public class Main {
 		 */
 
 		// gitbash
-		String fileName = "C:\\Users\\João\\git\\Indicador-de-Analise-Tecnica-Com-IA\\src\\main\\resources\\COTAHIST_A2010.txt";
+		String fileName = "C:\\Users\\joaov\\git\\Indicador-de-Analise-Tecnica-Com-IA\\src\\main\\resources\\COTAHIST_A2010.txt";
 
 		TreinamentoRedeNeural treinamento = new TreinamentoRedeNeural();
 

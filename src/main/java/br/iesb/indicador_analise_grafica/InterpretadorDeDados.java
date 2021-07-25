@@ -13,6 +13,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
+import org.hibernate.internal.build.AllowSysOut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -114,7 +115,10 @@ public class InterpretadorDeDados {
 						String sDate = dia + "/" + mes + "/" + ano;
 						LocalDate date = LocalDate.parse(sDate, formato);
 						
-						candle = new Candle(date, abertura, maxima, minima, fechamento, volume, papel);
+						String nomeDoPapel = papel.trim();
+						System.out.println(nomeDoPapel.length());
+						
+						candle = new Candle(date, abertura, maxima, minima, fechamento, volume, papel.trim());
 						grafico.adicionaCandle(candle);
 
 						infoCandle = new InfoCandle(candle, Indicador.mediaMovel(8, Grafico.grafico),
@@ -138,8 +142,17 @@ public class InterpretadorDeDados {
 			
 			listaInfoCandle = (ArrayList<InfoCandle>) PopularBanco.getInfoCandle();
 			for(int i = 0; i<listaInfoCandle.size(); i++) {
-				System.out.println("Abertura de todos os Candles ABCB4: " + listaInfoCandle.get(i).getAbertura());
+				System.out.println("Abertura de todos os Candles " + papel.trim() + ": " + listaInfoCandle.get(i).getAbertura());
 			}
+			
+			listaInfoCandle.clear();
+			
+			listaInfoCandle = (ArrayList<InfoCandle>) PopularBanco.getCandlePeloNome("AMBV3");
+			
+			for(int i = 0; i<listaInfoCandle.size(); i++) {
+				System.out.println("Abertura AMBV3: " + listaInfoCandle.get(i).getAbertura());
+			}
+			
 		} catch (IOException e) {
 			System.err.printf("Não foi possivel abrir o arquivo: %s.\n", e.getMessage());
 		}
