@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -31,21 +32,13 @@ public class InterpretadorDeDados {
 	Scanner scanner = new Scanner(System.in);
 	RedeNeural redeNeural = new RedeNeural();
 
-	public InterpretadorDeDados(String nome, String papel) throws IOException {
+	public InterpretadorDeDados(String nome) throws IOException {
 
 		try {
 
-			Grafico.grafico.clear();
-			Grafico.listaDeMedias.clear();
-			/*ClassLoader classLoader = getClass().getClassLoader();
-			File file = new File(classLoader.getResource(nome).getFile());
-
-			FileReader arquivo = new FileReader(file);
-			BufferedReader leitura = new BufferedReader(arquivo); // Leitura do Arquivo da S�rie Hist�rica*/
-
 			FileReader arquivo = new FileReader(nome);
-			BufferedReader leitura = new BufferedReader(arquivo);  																	//Leitura do Arquivo da Série Histórica
-			
+			BufferedReader leitura = new BufferedReader(arquivo); // Leitura do Arquivo da Série Histórica
+
 			String linha = leitura.readLine(); // Le linha por linha
 
 			while (linha != null) {
@@ -53,17 +46,16 @@ public class InterpretadorDeDados {
 				caracteres.clear();
 
 				for (int i = 0; i < linha.length(); i++) {
-					caracteres.add(i, "" + linha.charAt(i)); // Adiciona todos os caracteres da linha em um ArrayList,
-				} // para fazer a interpreta��o do arquivo.
+					caracteres.add(i, "" + linha.charAt(i));
+				} 
 
 				if (Integer.parseInt(caracteres.get(1)) == 0) { // Header
 
 					data = LocalDate.parse(caracteres.get(29) + caracteres.get(30) + "/" + caracteres.get(27)
 							+ caracteres.get(28) + "/" + caracteres.get(23) + caracteres.get(24) + caracteres.get(25)
-							+ caracteres.get(26), formato); // Data de gera��o do Arquivo no formato
-															// de datas
+							+ caracteres.get(26), formato); 
 
-					System.out.println("Data da geração do Arquivo: " + formato.format(data));
+					/* System.out.println("Data da geração do Arquivo: " + formato.format(data)); */
 				}
 
 				if (Integer.parseInt(caracteres.get(1)) == 1) { // Informa��es referentes aos papeis
@@ -78,91 +70,61 @@ public class InterpretadorDeDados {
 					String mes = "";
 					String ano = "";
 
-					for (int i = 12; i <= 17; i++) { // Verifica o nome do ativo no arquivo
+					for (int i = 12; i <= 23; i++) { // Verifica o nome do ativo no arquivo
 						papelDaLinha += caracteres.get(i);
+					} 
+
+					for (int i = 8; i <= 9; i++) { // dia de negocia��o
+						dia += caracteres.get(i);
+					}
+					for (int i = 6; i <= 7; i++) { // mes de negocia��o
+						mes += caracteres.get(i);
+					}
+					for (int i = 2; i <= 5; i++) { // ano de negocia��o
+						ano += caracteres.get(i);
+					}
+					for (int i = 56; i <= 68; i++) { // Pre�o de abertura do ativo
+						abertura += caracteres.get(i);
+					}
+					for (int i = 69; i <= 81; i++) { // Pre�o maximo do ativo
+						maxima += caracteres.get(i);
+					}
+					for (int i = 82; i <= 94; i++) { // Pre�o minimo do ativo
+						minima += caracteres.get(i);
+					}
+					for (int i = 108; i <= 120; i++) { // Pre�o de fechamento do ativo
+						fechamento += caracteres.get(i);
+					}
+					for (int i = 170; i <= 187; i++) { // Volume de negocia��o
+						volume += caracteres.get(i);
 					}
 
-					if (papelDaLinha.equals(papel)) { // Compara o nome do papel e se for o que est� observando, entra
-														// no if
+					String sDate = dia + "/" + mes + "/" + ano;
+					LocalDate date = LocalDate.parse(sDate, formato);
 
-						for (int i = 8; i <= 9; i++) { // dia de negocia��o
-							dia += caracteres.get(i);
-						}
-						for (int i = 6; i <= 7; i++) { // mes de negocia��o
-							mes += caracteres.get(i);
-						}
-						for (int i = 2; i <= 5; i++) { // ano de negocia��o
-							ano += caracteres.get(i);
-						}
-						for (int i = 56; i <= 68; i++) { // Pre�o de abertura do ativo
-							abertura += caracteres.get(i);
-						}
-						for (int i = 69; i <= 81; i++) { // Pre�o maximo do ativo
-							maxima += caracteres.get(i);
-						}
-						for (int i = 82; i <= 94; i++) { // Pre�o minimo do ativo
-							minima += caracteres.get(i);
-						}
-						for (int i = 108; i <= 120; i++) { // Pre�o de fechamento do ativo
-							fechamento += caracteres.get(i);
-						}
-						for (int i = 170; i <= 187; i++) { // Volume de negocia��o
-							volume += caracteres.get(i);
-						}
-						
-						
+					candle = new Candle(date, abertura, maxima, minima, fechamento, volume, papelDaLinha.trim());
+					grafico.adicionaCandle(candle);
 
-						String sDate = dia + "/" + mes + "/" + ano;
-						LocalDate date = LocalDate.parse(sDate, formato);
-						
-						String nomeDoPapel = papel.trim();
-						System.out.println(nomeDoPapel.length());
-						
-						candle = new Candle(date, abertura, maxima, minima, fechamento, volume, papel.trim());
-						grafico.adicionaCandle(candle);
+					listaInfoCandle.clear();
+					listaInfoCandle = InfoCandleService.getListForMediaMovel(papelDaLinha.trim());
 
-						infoCandle = new InfoCandle(candle, Indicador.mediaMovel(8, Grafico.grafico),
-								Indicador.mediaMovel(20, Grafico.grafico), Indicador.mediaMovel(200, Grafico.grafico),
-								Indicador.mediaMovelVolume(20, Grafico.grafico), papel);
+					Double media8 = Indicador.mediaMovel(8, listaInfoCandle, candle);
+					Double media20 = Indicador.mediaMovel(20, listaInfoCandle, candle);
+					Double media200 = Indicador.mediaMovel(200, listaInfoCandle, candle);
+					Double mediaVolume = Indicador.mediaMovelVolume(20, listaInfoCandle, candle);
 
-						PopularBanco.adicionaCandle(infoCandle);
-						
-						
+					infoCandle = new InfoCandle(candle, media8, media20, media200, mediaVolume);
 
-						grafico.adicionaMediaMovelNaLista(candle, 8);
-						grafico.adicionaMediaMovelNaLista(candle, 20);
-						grafico.adicionaMediaMovelNaLista(candle, 200);
-
-					}
+					InfoCandleService.adicionaCandle(infoCandle);
 
 				}
 
 				linha = leitura.readLine(); // Le a Proxima Linha
 			}
-			
-			listaInfoCandle = (ArrayList<InfoCandle>) PopularBanco.getInfoCandle();
-			for(int i = 0; i<listaInfoCandle.size(); i++) {
-				System.out.println("Abertura de todos os Candles " + papel.trim() + ": " + listaInfoCandle.get(i).getAbertura());
-			}
-			
-			listaInfoCandle.clear();
-			
-			listaInfoCandle = (ArrayList<InfoCandle>) PopularBanco.getCandlePeloNome("AMBV3");
-			
-			for(int i = 0; i<listaInfoCandle.size(); i++) {
-				System.out.println("Abertura AMBV3: " + listaInfoCandle.get(i).getAbertura());
-			}
-			
+
 		} catch (IOException e) {
 			System.err.printf("Não foi possivel abrir o arquivo: %s.\n", e.getMessage());
 		}
-		
-		/*List<InfoCandle> listaInfoCandle = consultar();
-		
-		for(int i = 0; i<listaInfoCandle.size(); i++) {
-			System.out.println("Abertura de todos os Candles ABCB4: " + listaInfoCandle.get(i).getAbertura());
-		}*/
 
 	}
 }
-

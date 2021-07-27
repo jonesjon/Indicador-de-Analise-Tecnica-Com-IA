@@ -7,7 +7,7 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.iesb.indicador_analise_grafica.PopularBanco;
+import br.iesb.indicador_analise_grafica.InfoCandleService;
 import br.iesb.indicador_analise_grafica.model.Teste;
 import br.iesb.indicador_analise_grafica.model.TesteRepository;
 /*

@@ -78,32 +78,26 @@ public class Grafico {
 		}
 	}
 	
-	public Double mediaMovel(int media) {
-		if(grafico.size()>media-2) {
-			Double mediaMovel = indicador.mediaMovel(media, grafico);
-			return mediaMovel;
-		}else {
-			return null;
-		}
-	}
+	/*
+	 * public Double mediaMovel(int media) { if(grafico.size()>media-2) { Double
+	 * mediaMovel = indicador.mediaMovel(media, grafico); return mediaMovel; }else {
+	 * return null; } }
+	 * 
+	 * public Double mediaMovelVolume(int media) { if(grafico.size()>media-2) {
+	 * Double mediaMovelVolume = indicador.mediaMovelVolume(media, grafico); return
+	 * mediaMovelVolume; }else { return null; } }
+	 */
 	
-	public Double mediaMovelVolume(int media) {
-		if(grafico.size()>media-2) {
-			Double mediaMovelVolume = indicador.mediaMovelVolume(media, grafico);
-			return mediaMovelVolume;
-		}else {
-			return null;
-		}
-	}
-	
-	public void adicionaMediaMovelNaLista(Candle candle, int media) {
-		if(mediaMovel(media)!= null) {
-			
-			
-			MediaMovel mediaMovel = new MediaMovel(candle.getDate(), candle.getPapel(), media, mediaMovel(media), mediaMovelVolume(media));
-			listaDeMedias.add(mediaMovel);
-			
-		}
-	}
+	/*
+	 * public void adicionaMediaMovelNaLista(Candle candle, int media) {
+	 * if(mediaMovel(media)!= null) {
+	 * 
+	 * 
+	 * MediaMovel mediaMovel = new MediaMovel(candle.getDate(), candle.getPapel(),
+	 * media, mediaMovel(media), mediaMovelVolume(media));
+	 * listaDeMedias.add(mediaMovel);
+	 * 
+	 * } }
+	 */
 
 }

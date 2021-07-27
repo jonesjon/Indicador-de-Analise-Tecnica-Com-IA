@@ -14,28 +14,35 @@ import br.iesb.indicador_analise_grafica.repository.InfoCandleRepository;
 import net.bytebuddy.implementation.Implementation.Context;
 
 @Service
-public class PopularBanco {
-	
+public class InfoCandleService {
+
 	@Autowired
-	private  InfoCandleRepository infoCandle;
+	private InfoCandleRepository infoCandle;
 	private static InfoCandleRepository infoCandleRepository;
+
 	@PostConstruct
-	public void getInfoCandleRepository(){
-		infoCandleRepository=infoCandle;
-	}
-	
-	public static void adicionaCandle(InfoCandle infoCandle){
-		infoCandleRepository.save(infoCandle);
-	}
-	
-	public static List<InfoCandle> getInfoCandle(){
-		return (List<InfoCandle>) infoCandleRepository.findAll();
+	public void getInfoCandleRepository() {
+		infoCandleRepository = infoCandle;
 	}
 
-	public static List<InfoCandle> getCandlePeloNome(String nome) {
-		return infoCandleRepository.findByNomeDoPapel(nome);
+	public static void adicionaCandle(InfoCandle infoCandle) {
+		infoCandleRepository.save(infoCandle);
 	}
-	
-	
+
+	public static ArrayList<InfoCandle> getInfoCandle() {
+		return (ArrayList<InfoCandle>) infoCandleRepository.findAll();
+	}
+
+	public static List<InfoCandle> getCandlePeloNome(String papel) {
+		return infoCandleRepository.findByNomeDoPapel(papel);
+	}
+
+	public static int countByPapelName(String papel) {
+		return infoCandleRepository.countByNomeDoPapel(papel);
+	}
+
+	public static ArrayList<InfoCandle> getListForMediaMovel(String papel) {
+		return infoCandleRepository.findByListForMediaMovel(papel);
+	}
 
 }
