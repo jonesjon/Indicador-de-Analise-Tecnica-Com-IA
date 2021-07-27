@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.iesb.indicador_analise_grafica.repository.InfoCandleRepository;
+import br.iesb.indicador_analise_grafica.service.InfoCandleService;
 
 public class InterpretadorDeDados {
 
@@ -59,63 +60,74 @@ public class InterpretadorDeDados {
 				}
 
 				if (Integer.parseInt(caracteres.get(1)) == 1) { // Informa��es referentes aos papeis
-
-					String papelDaLinha = "";
-					String abertura = "";
-					String fechamento = "";
-					String maxima = "";
-					String minima = "";
-					String volume = "";
-					String dia = "";
-					String mes = "";
-					String ano = "";
-
-					for (int i = 12; i <= 23; i++) { // Verifica o nome do ativo no arquivo
-						papelDaLinha += caracteres.get(i);
-					} 
-
-					for (int i = 8; i <= 9; i++) { // dia de negocia��o
-						dia += caracteres.get(i);
+					
+					String codigoBDI = "";
+					
+					for (int i = 10; i <= 11; i++) { // Verifica o nome do ativo no arquivo
+						codigoBDI += caracteres.get(i);
 					}
-					for (int i = 6; i <= 7; i++) { // mes de negocia��o
-						mes += caracteres.get(i);
-					}
-					for (int i = 2; i <= 5; i++) { // ano de negocia��o
-						ano += caracteres.get(i);
-					}
-					for (int i = 56; i <= 68; i++) { // Pre�o de abertura do ativo
-						abertura += caracteres.get(i);
-					}
-					for (int i = 69; i <= 81; i++) { // Pre�o maximo do ativo
-						maxima += caracteres.get(i);
-					}
-					for (int i = 82; i <= 94; i++) { // Pre�o minimo do ativo
-						minima += caracteres.get(i);
-					}
-					for (int i = 108; i <= 120; i++) { // Pre�o de fechamento do ativo
-						fechamento += caracteres.get(i);
-					}
-					for (int i = 170; i <= 187; i++) { // Volume de negocia��o
-						volume += caracteres.get(i);
-					}
+					
+					if(codigoBDI.equals("02")) {
+						
+						String papelDaLinha = "";
+						String abertura = "";
+						String fechamento = "";
+						String maxima = "";
+						String minima = "";
+						String volume = "";
+						String dia = "";
+						String mes = "";
+						String ano = "";
+						
 
-					String sDate = dia + "/" + mes + "/" + ano;
-					LocalDate date = LocalDate.parse(sDate, formato);
-
-					candle = new Candle(date, abertura, maxima, minima, fechamento, volume, papelDaLinha.trim());
-					grafico.adicionaCandle(candle);
-
-					listaInfoCandle.clear();
-					listaInfoCandle = InfoCandleService.getListForMediaMovel(papelDaLinha.trim());
-
-					Double media8 = Indicador.mediaMovel(8, listaInfoCandle, candle);
-					Double media20 = Indicador.mediaMovel(20, listaInfoCandle, candle);
-					Double media200 = Indicador.mediaMovel(200, listaInfoCandle, candle);
-					Double mediaVolume = Indicador.mediaMovelVolume(20, listaInfoCandle, candle);
-
-					infoCandle = new InfoCandle(candle, media8, media20, media200, mediaVolume);
-
-					InfoCandleService.adicionaCandle(infoCandle);
+						for (int i = 12; i <= 23; i++) { // Verifica o nome do ativo no arquivo
+							papelDaLinha += caracteres.get(i);
+						} 
+	
+						for (int i = 8; i <= 9; i++) { // dia de negocia��o
+							dia += caracteres.get(i);
+						}
+						for (int i = 6; i <= 7; i++) { // mes de negocia��o
+							mes += caracteres.get(i);
+						}
+						for (int i = 2; i <= 5; i++) { // ano de negocia��o
+							ano += caracteres.get(i);
+						}
+						for (int i = 56; i <= 68; i++) { // Pre�o de abertura do ativo
+							abertura += caracteres.get(i);
+						}
+						for (int i = 69; i <= 81; i++) { // Pre�o maximo do ativo
+							maxima += caracteres.get(i);
+						}
+						for (int i = 82; i <= 94; i++) { // Pre�o minimo do ativo
+							minima += caracteres.get(i);
+						}
+						for (int i = 108; i <= 120; i++) { // Pre�o de fechamento do ativo
+							fechamento += caracteres.get(i);
+						}
+						for (int i = 170; i <= 187; i++) { // Volume de negocia��o
+							volume += caracteres.get(i);
+						}
+	
+						String sDate = dia + "/" + mes + "/" + ano;
+						LocalDate date = LocalDate.parse(sDate, formato);
+	
+						candle = new Candle(date, abertura, maxima, minima, fechamento, volume, papelDaLinha.trim());
+						grafico.adicionaCandle(candle);
+	
+						listaInfoCandle.clear();
+						listaInfoCandle = InfoCandleService.getListForMediaMovel(papelDaLinha.trim());
+	
+						Double media8 = Indicador.mediaMovel(8, listaInfoCandle, candle);
+						Double media20 = Indicador.mediaMovel(20, listaInfoCandle, candle);
+						Double media200 = Indicador.mediaMovel(200, listaInfoCandle, candle);
+						Double mediaVolume = Indicador.mediaMovelVolume(20, listaInfoCandle, candle);
+	
+						infoCandle = new InfoCandle(candle, media8, media20, media200, mediaVolume);
+	
+						InfoCandleService.adicionaCandle(infoCandle);
+					
+				}
 
 				}
 
