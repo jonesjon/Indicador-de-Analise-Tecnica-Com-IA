@@ -1,32 +1,86 @@
 package br.iesb.indicador_analise_grafica;
 
 import java.text.DecimalFormat;
+import java.io.Serializable;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 
-public class Operacao {
-		
+import javax.persistence.*;
+
+import br.iesb.indicador_analise_grafica.primary_key.OperacaoPK;
+
+@Entity
+@Table(name = "OPERACAO")
+@IdClass(OperacaoPK.class)
+public class Operacao implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	
+	
+	@Id
+	@Column(name="dat")
 	private LocalDate data;
-	private DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy"); 
-	private Padroes padrao;
+	
+	@Id
+	@Column(name="nomeDoPapel")
+	private String nomeDoPapel;
+	
+	@Column(name="padrao")
+	private String padrao;
+	
+	@OneToOne
+    @JoinColumns({@JoinColumn(name="dats"), @JoinColumn(name="nomePapel")})
 	private Martelo martelo = null;
+	
+	@Column(name="start")
 	private boolean start = false;
-	private Entrada entrada = null;
+	
+	@Column(name="tipoEntrada")
+	private String tipoEntrada = null;
+	
+	@Column(name="precoEntrada")
 	private Double precoEntrada;
+	
+	@Column(name="precoCancelarEntrada")
 	private Double precoCancelarEntrada;
+	
+	@Column(name="precoGain")
 	private Double precoGain;
+	
+	@Column(name="precoLoss")
 	private Double precoLoss;
+	
+	@Column(name="precoGainMax")
 	private Double precoGainMax;
+	
+	@Column(name="percentualGain")
 	private Double percentualGain;
+	
+	@Column(name="percentualLoss")
 	private Double percentualLoss;
+	
+	@Column(name="percentualGainMax")
 	private Double percentualGainMax;
+	
+	@Column(name="lucro")
 	private Boolean lucro = false;
+	
+	@Column(name="lucroMax")
 	private Boolean lucroMax = false;
+	
+	@Column(name="porcentagemOperacaoFinal")
 	private Double porcentagemOperacaoFinal;
 	
-	public Operacao(LocalDate data,  Padroes padrao, Double precoEntrada, Double precoCancelarEntrada, Double precoGain, Double precoLoss) {
+	public Operacao() {
+		
+	}
+	
+	public Operacao(LocalDate data,  String nomeDoPapel, String padrao, Double precoEntrada, Double precoCancelarEntrada, Double precoGain, Double precoLoss) {
 		this.data = data;
+		this.nomeDoPapel = nomeDoPapel;
 		this.padrao = padrao;
 		this.precoEntrada = formataPreco(precoEntrada);
 		this.precoCancelarEntrada = formataPreco(precoCancelarEntrada);
@@ -49,16 +103,12 @@ public class Operacao {
 		return data;
 	}
 
-	public DateTimeFormatter getFormato() {
-		return formato;
-	}
-
 	public boolean isStart() {
 		return start;
 	}
 
-	public Entrada getEntrada() {
-		return entrada;
+	public String getEntrada() {
+		return tipoEntrada;
 	}
 
 	public Double getPrecoEntrada() {
@@ -101,16 +151,12 @@ public class Operacao {
 		this.data = data;
 	}
 
-	public void setFormato(DateTimeFormatter formato) {
-		this.formato = formato;
-	}
-
 	public void setStart(boolean start) {
 		this.start = start;
 	}
 
-	public void setEntrada(Entrada entrada) {
-		this.entrada = entrada;
+	public void setEntrada(String entrada) {
+		this.tipoEntrada = entrada;
 	}
 
 	public void setPrecoEntrada(Double precoEntrada) {
@@ -129,7 +175,7 @@ public class Operacao {
 		return precoCancelarEntrada;
 	}
 
-	public Padroes getPadrao() {
+	public String getPadrao() {
 		return padrao;
 	}
 
@@ -169,8 +215,8 @@ public class Operacao {
 		this.martelo = martelo;
 	}
 
-	
-	
-	
+	public String getNomeDoPapel() {
+		return nomeDoPapel;
+	}
 
 }

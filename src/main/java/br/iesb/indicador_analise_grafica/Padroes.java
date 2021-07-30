@@ -2,7 +2,7 @@ package br.iesb.indicador_analise_grafica;
 
 public enum Padroes {
 	
-	MARTELO("Padrão: Martelo");
+	MARTELO("Martelo");
 	
 	private String descricao;
 	

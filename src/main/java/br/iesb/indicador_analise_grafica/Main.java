@@ -16,7 +16,9 @@ public class Main {
 		SpringApplication.run(Main.class, args);
 		long start = System.currentTimeMillis();
 		
-		PopularBanco.inserirDados();
+		//PopularBanco.inserirDados();
+		
+		TreinamentoRedeNeural.realizaTreinamento();
 
 		/*TesteServiceImpl t = new TesteServiceImpl();
 		Teste teste = t.getTesteById(1l);

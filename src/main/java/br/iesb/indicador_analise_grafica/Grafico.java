@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 public class Grafico {
 	
-	private static String nomeDoPapel;
 	static ArrayList<Candle> grafico = new ArrayList<Candle>();
 	ArrayList<Candle> auxiliar = new ArrayList<Candle>();
 	Indicador indicador = new Indicador();

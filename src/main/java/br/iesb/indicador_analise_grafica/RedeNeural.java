@@ -3,13 +3,13 @@ package br.iesb.indicador_analise_grafica;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import br.iesb.indicador_analise_grafica.service.MarteloService;
+import br.iesb.indicador_analise_grafica.service.OperacaoService;
+
 public class RedeNeural {
-	
-	private Grafico grafico = new Grafico();
-	private Indicador indicador = new Indicador();
-	private static Martelo martelo;
+
 	ArrayList<Candle> ultimosCandles = new ArrayList<Candle>();
-	ArrayList<Martelo> listaMartelo = new ArrayList<Martelo>();
+	static ArrayList<Martelo> listaMartelo = new ArrayList<Martelo>();
 	
 	static int cont1 = 0;
 	static int cont2 = 0;
@@ -18,33 +18,32 @@ public class RedeNeural {
 	private final int MEDIALONGA = 200;
 	
 	
-	public boolean procuraPadraoUmCandle(Candle candle) {
+	public static Operacao procuraPadraoUmCandle(InfoCandle infoCandle) {
 		
-		if(candle != null) {
+		if(infoCandle != null) {
 		
-			Double pavioSuperior = pavioSuperiorEmPorcentagem(candle);
-			Double pavioInferior = pavioInferiorEmPorcentagem(candle);
+			Double pavioSuperior = pavioSuperiorEmPorcentagem(infoCandle);
+			Double pavioInferior = pavioInferiorEmPorcentagem(infoCandle);
 			
-			//Condições para Martelo
-			if(pavioSuperior <= 10 && pavioInferior >= 67 && tendenciaMediaCurta(candle) == TendenciaMediaCurta.BAIXA) {
-			
-				martelo = new Martelo(candle.data, tipoCandle(candle), classificaPavioSuperior(pavioSuperior), classificaPavioInferior(pavioInferior), volumeAcimaMedia20(candle));
-				listaMartelo.add(martelo);
-				
-				Operacao operacao = new Operacao(candle.data, Padroes.MARTELO, (candle.maxima + 0.01), (candle.minima - 0.01), projecaoPositiva(candle), candle.minima - 0.01);
+			//Condicoes para Martelo
+			if(condicaoParaMartelo(infoCandle, pavioSuperior, pavioInferior)) {
+				Operacao operacao = new Operacao(infoCandle.getData(), infoCandle.getNomeDoPapel(), Padroes.MARTELO.getDescricao(), (infoCandle.getMaxima() + 0.01), 
+										(infoCandle.getMinima() - 0.01), projecaoPositiva(infoCandle), infoCandle.getMinima() - 0.01);
+				Martelo martelo = new Martelo(infoCandle.getData(), tipoCandle(infoCandle).getTipo(), classificaPavioSuperior(pavioSuperior).getDescricao(), 
+						classificaPavioInferior(pavioInferior).getDescricao(), volumeAcimaMedia20(infoCandle), operacao);
 				operacao.setMartelo(martelo);
-				TreinamentoRedeNeural.adicionarOperacao(operacao);
-				
-				return true;
-				
+				MarteloService.adicionaMartelo(martelo);
+				OperacaoService.adicionaOperacao(operacao);
+				return operacao;
 			}
-		
-		}else {
-			System.out.println("Gráfico Vazio");
 		}
 		
-		return false;
+		return null;
 		
+	}
+
+	private static boolean condicaoParaMartelo(InfoCandle infoCandle, Double pavioSuperior, Double pavioInferior) {
+		return pavioSuperior <= 10 && pavioInferior >= 67 && tendenciaMediaCurta(infoCandle) == TendenciaMediaCurta.BAIXA;
 	}
 	
 	private void classificarMartelo(Candle candle) {
@@ -53,35 +52,36 @@ public class RedeNeural {
 		
 	}
 	
-	private TipoCandle tipoCandle(Candle candle) {
+	private static TipoCandle tipoCandle(InfoCandle infoCandle) {
 		
 		TipoCandle tipo;
 		
-		if(candle.abertura < candle.fechamento) {
+		if(infoCandle.getAbertura() < infoCandle.getFechamento()) {
 			tipo = TipoCandle.POSITIVO;
 			return tipo;
 		}
-		if(candle.abertura > candle.fechamento) {
+		if(infoCandle.getAbertura() > infoCandle.getFechamento()) {
 			tipo = TipoCandle.NEGATIVO;
 			return tipo;
 		}
-		if(candle.abertura == candle.fechamento){
+		if(infoCandle.getAbertura() == infoCandle.getFechamento()){
 			tipo = TipoCandle.NEUTRO;
 			return tipo;
 		}
-		return null;
+		tipo = TipoCandle.NULL;
+		return tipo;
 	}
 	
-	private Double pavioSuperiorEmPorcentagem(Candle candle) {
+	private static Double pavioSuperiorEmPorcentagem(InfoCandle infoCandle) {
 		
 		Double pavio;
 		
-		if(candle!=null) {
-			if(candle.abertura < candle.fechamento) {
-				pavio = 100*(candle.maxima - candle.fechamento)/ (candle.maxima - candle.minima);
+		if(infoCandle!=null) {
+			if(infoCandle.getAbertura() < infoCandle.getFechamento()) {
+				pavio = 100*(infoCandle.getMaxima() - infoCandle.getFechamento())/ (infoCandle.getMaxima() - infoCandle.getMinima());
 				return pavio;
 			}else{
-				pavio = 100*(candle.maxima - candle.abertura)/ (candle.maxima - candle.minima);
+				pavio = 100*(infoCandle.getMaxima() - infoCandle.getAbertura())/ (infoCandle.getMaxima() - infoCandle.getMinima());
 				return pavio;
 			}
 		}
@@ -90,12 +90,12 @@ public class RedeNeural {
 		
 	}
 	
-	private Double projecaoPositiva(Candle candle) {
+	private static Double projecaoPositiva(InfoCandle infoCandle) {
 		
 		Double projecao, projecaoFinal;
 		
-		projecao = Math.abs((((candle.minima-0.02)*100)/(candle.maxima+0.02))-100);
-		projecaoFinal = ((projecao+100)*candle.maxima)/100;
+		projecao = Math.abs((((infoCandle.getMinima()-0.02)*100)/(infoCandle.getMaxima()+0.02))-100);
+		projecaoFinal = ((projecao+100)*infoCandle.getMaxima())/100;
 		
 		return projecaoFinal;
 		
@@ -111,16 +111,16 @@ public class RedeNeural {
 		
 	}
 	
-	private Double pavioInferiorEmPorcentagem(Candle candle) {
+	private static Double pavioInferiorEmPorcentagem(InfoCandle infoCandle) {
 		
 		Double pavio;
 		
-		if(candle!=null) {
-			if(candle.abertura < candle.fechamento) {
-				pavio = 100*(candle.abertura - candle.minima)/ (candle.maxima - candle.minima);
+		if(infoCandle!=null) {
+			if(infoCandle.getAbertura() < infoCandle.getFechamento()) {
+				pavio = 100*(infoCandle.getAbertura() - infoCandle.getMinima())/ (infoCandle.getMaxima() - infoCandle.getMinima());
 				return pavio;
 			}else{
-				pavio = 100*(candle.fechamento - candle.minima)/ (candle.maxima - candle.minima);
+				pavio = 100*(infoCandle.getFechamento() - infoCandle.getMinima())/ (infoCandle.getMaxima() - infoCandle.getMinima());
 				return pavio;
 			}
 		}
@@ -129,34 +129,33 @@ public class RedeNeural {
 		
 	}
 	
-	private TendenciaMediaCurta tendenciaMediaCurta(Candle candle) {
+	private static TendenciaMediaCurta tendenciaMediaCurta(InfoCandle infoCandle) {
 		//Tendencia das medias de 8 e 20
 		
 		TendenciaMediaCurta tendencia;
 		
-		if(retornaMediaMovelPorData(candle.data, MEDIA) != null) {
-		
-			if(retornaMediaMovelPorData(candle.data, MEDIACURTA) > retornaMediaMovelPorData(candle.data, MEDIA)) {
+		if(infoCandle.getPrecoMedia20() != null) {
+			
+			if(infoCandle.getPrecoMedia8() > infoCandle.getPrecoMedia20()) {
 				tendencia = TendenciaMediaCurta.ALTA;
 				return tendencia;
-			}else if(retornaMediaMovelPorData(candle.data, MEDIACURTA) < retornaMediaMovelPorData(candle.data, MEDIA)) {
+			}else if(infoCandle.getPrecoMedia8() < infoCandle.getPrecoMedia20()) {
 				tendencia = TendenciaMediaCurta.BAIXA;
 				return tendencia;
-			}else if(retornaMediaMovelPorData(candle.data, MEDIACURTA) == retornaMediaMovelPorData(candle.data, MEDIA)) {
+			}else if(infoCandle.getPrecoMedia8() == infoCandle.getPrecoMedia20()) {
 				tendencia = TendenciaMediaCurta.NEUTRA;
 				return tendencia;
 			}
-		
 		}
 		
 		return null;
 		
 	}
 	
-	private Boolean volumeAcimaMedia20(Candle candle) {
+	private static Boolean volumeAcimaMedia20(InfoCandle infoCandle) {
 		
-		if(retornaMediaMovelVolumePorData(candle.data, MEDIA) != null) {
-			if(retornaMediaMovelVolumePorData(candle.data, MEDIA)>=candle.volume) {
+		if(infoCandle.getVolume()!=null) {
+			if(infoCandle.getVolume() >= infoCandle.getVolumeMedia20()) {
 				return true;
 			}else {
 				return false;
@@ -166,7 +165,7 @@ public class RedeNeural {
 		return null;
 	}
 	
-	private PavioSuperior classificaPavioSuperior(Double pavioSuperior) {
+	private static PavioSuperior classificaPavioSuperior(Double pavioSuperior) {
 		
 		if(pavioSuperior == 0) {
 			return PavioSuperior.SEMPAVIO;
@@ -190,11 +189,11 @@ public class RedeNeural {
 			return PavioSuperior.PAVIO100PORCENTO;
 		}
 		
-		return null;
+		return PavioSuperior.NULL;
 		
 	}
 	
-private PavioInferior classificaPavioInferior(Double pavioInferior) {
+private static PavioInferior classificaPavioInferior(Double pavioInferior) {
 		
 		if(pavioInferior == 0) {
 			return PavioInferior.SEMPAVIO;
@@ -218,7 +217,7 @@ private PavioInferior classificaPavioInferior(Double pavioInferior) {
 			return PavioInferior.PAVIO100PORCENTO;
 		}
 		
-		return null;
+		return PavioInferior.NULL;
 		
 	}
 	

@@ -3,79 +3,84 @@ package br.iesb.indicador_analise_grafica;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import javax.persistence.*;
+
+import org.hibernate.annotations.Type;
+
+import br.iesb.indicador_analise_grafica.primary_key.MarteloPK;
+
+@Entity
+@Table(name = "MARTELO")
+@IdClass(MarteloPK.class)
 public class Martelo {
+
+	@Id
+	@Column(name="dats")
+	private LocalDate dats;
 	
-	private final LocalDate data;
-	DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
-	private final TipoCandle tipo;
-	private final PavioSuperior pavioSuperior;
-	private final PavioInferior pavioInferior;
-	private final Boolean volumeAcimaMedia20;
-	private boolean startOperacao = false;
-	private Double precoAtivarOperacao;
-	private Double precoCancelarOperacao;
+	@Id
+	@Column(name="nomePapel")
+	private String nomePapel;
 	
+	@Column(name="tipo")
+	private final String tipo;
 	
-	public Martelo(LocalDate data, TipoCandle tipo, PavioSuperior pavioSuperior,
-			PavioInferior pavioInferior, Boolean volumeAcimaMedia20) {
-		super();
-		this.data = data;
+	@Column(name="pavioSuperior")
+	private final String pavioSuperior;
+	
+	@Column(name="pavioInferior")
+	private final String pavioInferior;
+	
+	@Column(name="volumeAcimaMedia20")
+	private Boolean volumeAcimaMedia20;
+	
+	@OneToOne(mappedBy = "martelo")
+	private Operacao operacao;
+	
+	public Martelo() {
+		this.dats = null;
+		this.tipo = "";
+		this.pavioSuperior = "";
+		this.pavioInferior = "";
+	}
+
+	public Martelo(LocalDate data, String tipo, String pavioSuperior,
+			String pavioInferior, Boolean volumeAcimaMedia20, Operacao operacao) {
+		this.dats = data;
 		this.tipo = tipo;
 		this.pavioSuperior = pavioSuperior;
 		this.pavioInferior = pavioInferior;
 		this.volumeAcimaMedia20 = volumeAcimaMedia20;
-	}
-	
-	public LocalDate getData() {
-		return data;
+		this.operacao = operacao;
+		this.nomePapel = operacao.getNomeDoPapel();
 	}
 
-	public TipoCandle getTipo() {
+	public LocalDate getData() {
+		return dats;
+	}
+
+	public String getTipo() {
 		return tipo;
 	}
 
-	public PavioSuperior getPavioSuperior() {
+	public String getPavioSuperior() {
 		return pavioSuperior;
 	}
 
-	public PavioInferior getPavioInferior() {
+	public String getPavioInferior() {
 		return pavioInferior;
 	}
 
 	public Boolean getVolumeAcimaMedia20() {
 		return volumeAcimaMedia20;
 	}
-	
-	public Boolean getStartOperacao() {
-		return startOperacao;
+
+	public Operacao getOperacao() {
+		return operacao;
 	}
 
-	public void setFormato(DateTimeFormatter formato) {
-		this.formato = formato;
-	}
-
-	public void setStartOperacao(boolean startOperacao) {
-		this.startOperacao = startOperacao;
-	}
-
-	public Double getPrecoAtivarOperacao() {
-		return precoAtivarOperacao;
-	}
-
-	public void setPrecoAtivarOperacao(Double precoAtivarOperacao) {
-		this.precoAtivarOperacao = precoAtivarOperacao;
-	}
-
-	public Double getPrecoCancelarOperacao() {
-		return precoCancelarOperacao;
-	}
-
-	public void setPrecoCancelarOperacao(Double precoCancelarOperacao) {
-		this.precoCancelarOperacao = precoCancelarOperacao;
-	}
-
-	public DateTimeFormatter getFormato() {
-		return formato;
+	public String getNomeDoPapel() {
+		return nomePapel;
 	}
 
 }

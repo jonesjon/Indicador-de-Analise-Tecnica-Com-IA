@@ -1,13 +1,11 @@
 package br.iesb.indicador_analise_grafica;
 
 import java.io.Serializable;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.time.LocalDate;
-
 import javax.persistence.*;
 
-import com.sun.istack.NotNull;
+import br.iesb.indicador_analise_grafica.primary_key.InfoCandlePK;
+
 
 @Entity
 @Table(name = "INFO_CANDLE")

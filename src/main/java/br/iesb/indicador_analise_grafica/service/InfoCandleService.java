@@ -34,7 +34,7 @@ public class InfoCandleService {
 		return (ArrayList<InfoCandle>) infoCandleRepository.findAll();
 	}
 
-	public static List<InfoCandle> getCandlePeloNome(String papel) {
+	public static ArrayList<InfoCandle> getInfoCandlePeloNome(String papel) {
 		return infoCandleRepository.findByNomeDoPapel(papel);
 	}
 
@@ -44,6 +44,10 @@ public class InfoCandleService {
 
 	public static ArrayList<InfoCandle> getListForMediaMovel(String papel) {
 		return infoCandleRepository.findByListForMediaMovel(papel);
+	}
+	
+	public static ArrayList<String> getListForAllPapeis(){
+		return infoCandleRepository.findByListForAllPapeis();
 	}
 
 }

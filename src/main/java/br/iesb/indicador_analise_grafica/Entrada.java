@@ -2,7 +2,7 @@ package br.iesb.indicador_analise_grafica;
 
 public enum Entrada {
 	
-	COMPRA("Realizada operaçãoo de Compra"), VENDA("Realizada operação de Venda");
+	COMPRA("Compra"), VENDA("Venda");
 	
 	private String descricao;
 	

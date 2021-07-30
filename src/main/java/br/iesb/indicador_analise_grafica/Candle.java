@@ -23,7 +23,6 @@ public class Candle {
 		
 	}
 	
-		
 	public Candle(LocalDate date, String abertura, String maxima,
 				String minima, String fechamento, String volume, String papel) {
 		
@@ -43,6 +42,11 @@ public class Candle {
 
 	public String getPapel() {
 		return papel;
+	}
+
+	public double getMaxima() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 

@@ -2,7 +2,7 @@ package br.iesb.indicador_analise_grafica;
 
 public enum TipoCandle {
 	
-	POSITIVO("Positivo", 1), NEGATIVO("Negativo", 2), NEUTRO("Neutro", 3);
+	POSITIVO("Positivo", 1), NEGATIVO("Negativo", 2), NEUTRO("Neutro", 3), NULL("Null", 4);
 	
 	private String tipo;
 	private int ID;

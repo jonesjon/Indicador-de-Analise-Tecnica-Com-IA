@@ -8,7 +8,7 @@ import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import br.iesb.indicador_analise_grafica.InfoCandle;
-import br.iesb.indicador_analise_grafica.InfoCandlePK;
+import br.iesb.indicador_analise_grafica.primary_key.InfoCandlePK;
 
 @Repository
 public interface InfoCandleRepository extends CrudRepository<InfoCandle, InfoCandlePK> {
@@ -19,6 +19,9 @@ public interface InfoCandleRepository extends CrudRepository<InfoCandle, InfoCan
 
 	@Query(value = "select * from INFO_CANDLE Where nomeDoPapel = ?1 order by dat desc limit 199;", nativeQuery = true)
 	ArrayList<InfoCandle> findByListForMediaMovel(String papel);
+	
+	@Query(value = "select distinct nomeDoPapel from INFO_CANDLE;", nativeQuery = true)
+	ArrayList<String> findByListForAllPapeis();
 
 //	@Query(name = "", nativeQuery = true)
 //	List<InfoCandle> findByNomeDoPapel1(String nomeDoPapel);
