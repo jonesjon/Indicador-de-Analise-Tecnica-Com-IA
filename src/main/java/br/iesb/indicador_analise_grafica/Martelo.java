@@ -15,12 +15,12 @@ import br.iesb.indicador_analise_grafica.primary_key.MarteloPK;
 public class Martelo {
 
 	@Id
-	@Column(name="dats")
-	private LocalDate dats;
+	@Column(name="dat")
+	private LocalDate dat;
 	
 	@Id
-	@Column(name="nomePapel")
-	private String nomePapel;
+	@Column(name="nomeDoPapel")
+	private String nomeDoPapel;
 	
 	@Column(name="tipo")
 	private final String tipo;
@@ -34,29 +34,33 @@ public class Martelo {
 	@Column(name="volumeAcimaMedia20")
 	private Boolean volumeAcimaMedia20;
 	
-	@OneToOne(mappedBy = "martelo")
+	@OneToOne(mappedBy = "martelo", cascade = CascadeType.PERSIST)
 	private Operacao operacao;
 	
 	public Martelo() {
-		this.dats = null;
+		this.dat = null;
 		this.tipo = "";
 		this.pavioSuperior = "";
 		this.pavioInferior = "";
 	}
 
-	public Martelo(LocalDate data, String tipo, String pavioSuperior,
+	public Martelo(LocalDate data, String nomeDoPapel, String tipo, String pavioSuperior,
 			String pavioInferior, Boolean volumeAcimaMedia20, Operacao operacao) {
-		this.dats = data;
+		this.dat = data;
+		this.nomeDoPapel = nomeDoPapel;
 		this.tipo = tipo;
 		this.pavioSuperior = pavioSuperior;
 		this.pavioInferior = pavioInferior;
 		this.volumeAcimaMedia20 = volumeAcimaMedia20;
 		this.operacao = operacao;
-		this.nomePapel = operacao.getNomeDoPapel();
+	}
+
+	public String getNomeDoPapel() {
+		return nomeDoPapel;
 	}
 
 	public LocalDate getData() {
-		return dats;
+		return dat;
 	}
 
 	public String getTipo() {
@@ -78,9 +82,4 @@ public class Martelo {
 	public Operacao getOperacao() {
 		return operacao;
 	}
-
-	public String getNomeDoPapel() {
-		return nomePapel;
-	}
-
 }

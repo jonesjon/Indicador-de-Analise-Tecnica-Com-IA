@@ -16,6 +16,7 @@ public class RedeNeural {
 	private final int MEDIACURTA = 8;
 	private final int MEDIA = 20;
 	private final int MEDIALONGA = 200;
+	private static int countID = 0;
 	
 	
 	public static Operacao procuraPadraoUmCandle(InfoCandle infoCandle) {
@@ -27,14 +28,16 @@ public class RedeNeural {
 			
 			//Condicoes para Martelo
 			if(condicaoParaMartelo(infoCandle, pavioSuperior, pavioInferior)) {
-				Operacao operacao = new Operacao(infoCandle.getData(), infoCandle.getNomeDoPapel(), Padroes.MARTELO.getDescricao(), (infoCandle.getMaxima() + 0.01), 
+				countID++;
+				Operacao operacao = new Operacao(countID, Padroes.MARTELO.getDescricao(), (infoCandle.getMaxima() + 0.01), 
 										(infoCandle.getMinima() - 0.01), projecaoPositiva(infoCandle), infoCandle.getMinima() - 0.01);
 				operacao.setEntrada(Entrada.COMPRA.getDescricao());
-				Martelo martelo = new Martelo(infoCandle.getData(), tipoCandle(infoCandle).getTipo(), classificaPavioSuperior(pavioSuperior).getDescricao(), 
+				Martelo martelo = new Martelo(infoCandle.getData(), infoCandle.getNomeDoPapel(), tipoCandle(infoCandle).getTipo(), classificaPavioSuperior(pavioSuperior).getDescricao(), 
 						classificaPavioInferior(pavioInferior).getDescricao(), volumeAcimaMedia20(infoCandle), operacao);
 				operacao.setMartelo(martelo);
 				MarteloService.adicionaMartelo(martelo);
 				OperacaoService.adicionaOperacao(operacao);
+				
 				return operacao;
 			}
 		}

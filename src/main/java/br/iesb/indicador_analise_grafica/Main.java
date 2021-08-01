@@ -16,10 +16,10 @@ public class Main {
 		SpringApplication.run(Main.class, args);
 		long start = System.currentTimeMillis();
 		
-		//PopularBanco.inserirDados();
+		PopularBanco.inserirDados();
 		
-		TreinamentoRedeNeural.realizaTreinamentoProcurandoPadroes();
-		TreinamentoRedeNeural.confereAlvosDasOperacoes();
+		//TreinamentoRedeNeural.realizaTreinamentoProcurandoPadroes();
+		//TreinamentoRedeNeural.confereAlvosDasOperacoes();
 		
 		/*TesteServiceImpl t = new TesteServiceImpl();
 		Teste teste = t.getTesteById(1l);

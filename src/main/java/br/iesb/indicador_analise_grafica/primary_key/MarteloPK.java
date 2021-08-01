@@ -9,40 +9,40 @@ public class MarteloPK implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private LocalDate dats;
-	private String nomePapel;
+	private LocalDate dat;
+	private String nomeDoPapel;
 	
 	public MarteloPK() {
 		
 	}
 	
 	public MarteloPK(LocalDate data, String nomeDoPapel) {
-		this.dats = data;
-		this.nomePapel = nomeDoPapel;
+		this.dat = data;
+		this.nomeDoPapel = nomeDoPapel;
 	}
 	
 	public LocalDate getData() {
-		return dats;
+		return dat;
 	}
 	
 	public void setData(LocalDate data) {
-		this.dats = data;
+		this.dat = data;
 	}
 	
 	public String getNomeDoPapel() {
-		return nomePapel;
+		return nomeDoPapel;
 	}
 	
 	public void setNomeDoPapel(String nomeDoPapel) {
-		this.nomePapel = nomeDoPapel;
+		this.nomeDoPapel = nomeDoPapel;
 	}
 
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((dats == null) ? 0 : dats.hashCode());
-		result = prime * result + ((nomePapel == null) ? 0 : nomePapel.hashCode());
+		result = prime * result + ((dat == null) ? 0 : dat.hashCode());
+		result = prime * result + ((nomeDoPapel == null) ? 0 : nomeDoPapel.hashCode());
 		return result;
 	}
 
@@ -55,15 +55,15 @@ public class MarteloPK implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		MarteloPK other = (MarteloPK) obj;
-		if (dats == null) {
-			if (other.dats != null)
+		if (dat == null) {
+			if (other.dat != null)
 				return false;
-		} else if (!dats.equals(other.dats))
+		} else if (!dat.equals(other.dat))
 			return false;
-		if (nomePapel == null) {
-			if (other.nomePapel != null)
+		if (nomeDoPapel == null) {
+			if (other.nomeDoPapel != null)
 				return false;
-		} else if (!nomePapel.equals(other.nomePapel))
+		} else if (!nomeDoPapel.equals(other.nomeDoPapel))
 			return false;
 		return true;
 	}

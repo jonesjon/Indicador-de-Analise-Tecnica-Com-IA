@@ -7,11 +7,12 @@ import java.time.LocalDate;
 
 import javax.persistence.*;
 
+import org.hibernate.annotations.GeneratorType;
+
 import br.iesb.indicador_analise_grafica.primary_key.OperacaoPK;
 
 @Entity
 @Table(name = "OPERACAO")
-@IdClass(OperacaoPK.class)
 public class Operacao implements Serializable{
 	
 	/**
@@ -19,20 +20,15 @@ public class Operacao implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	
 	@Id
-	@Column(name="dat")
-	private LocalDate data;
-	
-	@Id
-	@Column(name="nomeDoPapel")
-	private String nomeDoPapel;
+	@Column(name = "id")
+	private long iD;
 	
 	@Column(name="padrao")
 	private String padrao;
 	
 	@OneToOne
-    @JoinColumns({@JoinColumn(name="dats"), @JoinColumn(name="nomePapel")})
+    @JoinColumns({@JoinColumn(name="dat"), @JoinColumn(name="nomeDoPapel")})
 	private Martelo martelo = null;
 	
 	@Column(name="start")
@@ -78,9 +74,8 @@ public class Operacao implements Serializable{
 		
 	}
 	
-	public Operacao(LocalDate data,  String nomeDoPapel, String padrao, Double precoEntrada, Double precoCancelarEntrada, Double precoGain, Double precoLoss) {
-		this.data = data;
-		this.nomeDoPapel = nomeDoPapel;
+	public Operacao(int iD, String padrao, Double precoEntrada, Double precoCancelarEntrada, Double precoGain, Double precoLoss) {
+		this.iD = iD;
 		this.padrao = padrao;
 		this.precoEntrada = formataPreco(precoEntrada);
 		this.precoCancelarEntrada = formataPreco(precoCancelarEntrada);
@@ -97,10 +92,6 @@ public class Operacao implements Serializable{
 		DecimalFormat df = new DecimalFormat(fmt);
 		df.setRoundingMode(RoundingMode.DOWN);
 		return Double.parseDouble(df.format(num).replace(',', '.'));
-	}
-
-	public LocalDate getData() {
-		return data;
 	}
 
 	public boolean isStart() {
@@ -145,10 +136,6 @@ public class Operacao implements Serializable{
 
 	public void setPercentualGainMax(Double percentualGainMax) {
 		this.percentualGainMax = percentualGainMax;
-	}
-
-	public void setData(LocalDate data) {
-		this.data = data;
 	}
 
 	public void setStart(boolean start) {
@@ -215,8 +202,8 @@ public class Operacao implements Serializable{
 		this.martelo = martelo;
 	}
 
-	public String getNomeDoPapel() {
-		return nomeDoPapel;
+	public long getID() {
+		return iD;
 	}
 
 }

@@ -124,9 +124,6 @@ public class TreinamentoRedeNeural {
 	}
 	
 	public static void confereAlvosDasOperacoes() {
-		
-		int qtdOperacoes = OperacaoService.getQtdOperacoes();
-		
 		ArrayList<Operacao> operacoes = new ArrayList<Operacao>();
 		operacoes = OperacaoService.getOperacoesPossiveis(min, max);
 		
@@ -134,8 +131,8 @@ public class TreinamentoRedeNeural {
 		ArrayList<InfoCandle> grafico = new ArrayList<InfoCandle>();
 		
 		for(int i=0; i<operacoes.size(); i++) {
-			LocalDate data = operacoes.get(i).getData();
-			String nomeDoPapel = operacoes.get(i).getNomeDoPapel();
+			LocalDate data = operacoes.get(i).getMartelo().getData();
+			String nomeDoPapel = operacoes.get(i).getMartelo().getNomeDoPapel();
 			verificaContinuidade = InfoCandleService.verificaGraficoContinuo(data, nomeDoPapel, limitVerificaContinuidade);
 			int aux = verificaContinuidade.size() - 1;
 			
@@ -151,41 +148,43 @@ public class TreinamentoRedeNeural {
 						
 						if(operacoes.get(i).isStart()) {
 							
-							if(operacoes.get(i).getEntrada().equals(Entrada.COMPRA.getDescricao())) {
+							if(verificaSeOperacaoCompra(operacoes, i)) {
 								
-								if(!operacoes.get(i).getLucro()) {
-									if(grafico.get(j).getMaxima() >= operacoes.get(i).getPrecoGain()) {
+								if(verificaSeOperacaoAindaNaoDeuAlvo(operacoes, i)) {
+									if(verificaSeMaximaChegouAoPrimeiroAlvo(operacoes, grafico, i, j)) {
 										operacoes.get(i).setLucro(true);
-									}else if(grafico.get(j).getMinima() <= operacoes.get(i).getPrecoLoss()) {
+									}else if(verificaSeMinimaChegouAoPrecoLoss(operacoes, grafico, i, j)) {
 										operacoes.get(i).setPorcentagemOperacaoFinal(operacoes.get(i).getPercentualLoss());
 										j = grafico.size();
 									}
-								}else if(operacoes.get(i).getLucro() && !operacoes.get(i).getLucroMax()) {
-									if(grafico.get(j).getMaxima() >= operacoes.get(i).getPrecoGainMax()) {
+								}else if(verificaSeOperacaoDeuPrimeiroAlvoMasAindaNaoChegouNoSegundo(operacoes, i)) {
+									if(verificaSeMaximaChegouAoSegundoAlvo(operacoes, grafico, i, j)) {
 										operacoes.get(i).setLucroMax(true);
 										operacoes.get(i).setPorcentagemOperacaoFinal((operacoes.get(i).getPercentualGainMax()/2) + ((operacoes.get(i).getPercentualGain())/2));
-									}else if(grafico.get(j).getMinima() <= operacoes.get(i).getPrecoEntrada()) {
+									}else if(verificaSeOperacaoChegouAoPrecoDeEntradaAposChegarAoPrimeiroAlvo(operacoes, grafico,
+											i, j)) {
 										Double percentualGain = (operacoes.get(i).getPercentualGain()/2);
 										operacoes.get(i).setPorcentagemOperacaoFinal(percentualGain);
 										j = grafico.size();
 									}
 								}
 								
-							}else if(operacoes.get(i).getEntrada().equals(Entrada.VENDA.getDescricao())) {
+							}else if(verificaSeOperacaoVenda(operacoes, i)) {
 								
-								if(!operacoes.get(i).getLucro()) {
-									if(grafico.get(j).getMinima() <= operacoes.get(i).getPrecoGain()) {
+								if(verificaSeOperacaoAindaNaoDeuAlvo(operacoes, i)) {
+									if(verificaSeMinimaChegouNoPrimeiroAlvo(operacoes, grafico, i, j)) {
 										operacoes.get(i).setLucro(true);
-									}else if(grafico.get(j).getMaxima() >= operacoes.get(i).getPrecoLoss()) {
+									}else if(verificaSeMaximaChegouAoPrecoLoss(operacoes, grafico, i, j)) {
 										operacoes.get(i).setPorcentagemOperacaoFinal(operacoes.get(i).getPercentualLoss());
 										j = grafico.size();
 									}
-								}else if(operacoes.get(i).getLucro() && !operacoes.get(i).getLucroMax()) {
-									if(grafico.get(j).getMinima() <= operacoes.get(i).getPrecoGainMax()) {
+								}else if(verificaSeOperacaoDeuPrimeiroAlvoMasAindaNaoChegouNoSegundo(operacoes, i)) {
+									if(verificaSeMinimaChegouAoPrecoDeGainMax(operacoes, grafico, i, j)) {
 										operacoes.get(i).setLucroMax(true);
 										Double percentualGainMax = (operacoes.get(i).getPercentualGainMax()/2) + ((operacoes.get(i).getPercentualGain())/2);
 										operacoes.get(i).setPorcentagemOperacaoFinal(percentualGainMax);
-									}else if(grafico.get(j).getMaxima() >= operacoes.get(i).getPrecoEntrada()) {
+									}else if(verificaSeMaximaChegouAoPrecoDeEntradaAposChegarPrimeiroAlvo(operacoes, grafico, i,
+											j)) {
 										Double percentualLoss = operacoes.get(i).getPrecoLoss();
 										operacoes.get(i).setPorcentagemOperacaoFinal(percentualLoss);
 										j = grafico.size();
@@ -195,17 +194,18 @@ public class TreinamentoRedeNeural {
 							}
 							
 						}else {
-							if(operacoes.get(i).getEntrada().equals(Entrada.COMPRA.getDescricao())) {
+							if(verificaSeOperacaoCompra(operacoes, i)) {
 								
-								if(grafico.get(j).getMaxima() >= operacoes.get(i).getPrecoEntrada()) {
+								if(verificaSeMaximaChegouAoPrecoDeEntradaAposChegarPrimeiroAlvo(operacoes, grafico, i, j)) {
 									operacoes.get(i).setStart(true);
 								}else if(grafico.get(j).getMinima() <= operacoes.get(i).getPrecoCancelarEntrada()) {
 									j = grafico.size();
 								}
 								
-							}else if(operacoes.get(i).getEntrada().equals(Entrada.VENDA.getDescricao())) {
+							}else if(verificaSeOperacaoVenda(operacoes, i)) {
 								
-								if(grafico.get(j).getMinima() <= operacoes.get(i).getPrecoEntrada()) {
+								if(verificaSeOperacaoChegouAoPrecoDeEntradaAposChegarAoPrimeiroAlvo(operacoes, grafico, i,
+										j)) {
 									operacoes.get(i).setStart(true);
 								}else if(grafico.get(j).getMaxima() >= operacoes.get(i).getPrecoCancelarEntrada()) {
 									j = grafico.size();
@@ -224,6 +224,63 @@ public class TreinamentoRedeNeural {
 		
 	}
 
+	private static boolean verificaSeMaximaChegouAoPrecoDeEntradaAposChegarPrimeiroAlvo(ArrayList<Operacao> operacoes,
+			ArrayList<InfoCandle> grafico, int i, int j) {
+		return grafico.get(j).getMaxima() >= operacoes.get(i).getPrecoEntrada();
+	}
+
+	private static boolean verificaSeMinimaChegouAoPrecoDeGainMax(ArrayList<Operacao> operacoes,
+			ArrayList<InfoCandle> grafico, int i, int j) {
+		return grafico.get(j).getMinima() <= operacoes.get(i).getPrecoGainMax();
+	}
+
+	private static boolean verificaSeMaximaChegouAoPrecoLoss(ArrayList<Operacao> operacoes,
+			ArrayList<InfoCandle> grafico, int i, int j) {
+		return grafico.get(j).getMaxima() >= operacoes.get(i).getPrecoLoss();
+	}
+
+	private static boolean verificaSeMinimaChegouNoPrimeiroAlvo(ArrayList<Operacao> operacoes,
+			ArrayList<InfoCandle> grafico, int i, int j) {
+		return grafico.get(j).getMinima() <= operacoes.get(i).getPrecoGain();
+	}
+
+	private static boolean verificaSeOperacaoChegouAoPrecoDeEntradaAposChegarAoPrimeiroAlvo(
+			ArrayList<Operacao> operacoes, ArrayList<InfoCandle> grafico, int i, int j) {
+		return grafico.get(j).getMinima() <= operacoes.get(i).getPrecoEntrada();
+	}
+
+	private static boolean verificaSeMaximaChegouAoSegundoAlvo(ArrayList<Operacao> operacoes,
+			ArrayList<InfoCandle> grafico, int i, int j) {
+		return grafico.get(j).getMaxima() >= operacoes.get(i).getPrecoGainMax();
+	}
+
+	private static boolean verificaSeMinimaChegouAoPrecoLoss(ArrayList<Operacao> operacoes,
+			ArrayList<InfoCandle> grafico, int i, int j) {
+		return grafico.get(j).getMinima() <= operacoes.get(i).getPrecoLoss();
+	}
+
+	private static boolean verificaSeMaximaChegouAoPrimeiroAlvo(ArrayList<Operacao> operacoes,
+			ArrayList<InfoCandle> grafico, int i, int j) {
+		return grafico.get(j).getMaxima() >= operacoes.get(i).getPrecoGain();
+	}
+
+	private static boolean verificaSeOperacaoDeuPrimeiroAlvoMasAindaNaoChegouNoSegundo(ArrayList<Operacao> operacoes,
+			int i) {
+		return operacoes.get(i).getLucro() && !operacoes.get(i).getLucroMax();
+	}
+
+	private static boolean verificaSeOperacaoAindaNaoDeuAlvo(ArrayList<Operacao> operacoes, int i) {
+		return !operacoes.get(i).getLucro();
+	}
+
+	private static boolean verificaSeOperacaoVenda(ArrayList<Operacao> operacoes, int i) {
+		return operacoes.get(i).getEntrada().equals(Entrada.VENDA.getDescricao());
+	}
+
+	private static boolean verificaSeOperacaoCompra(ArrayList<Operacao> operacoes, int i) {
+		return operacoes.get(i).getEntrada().equals(Entrada.COMPRA.getDescricao());
+	}
+
 	private static boolean verifPrecoDeEntradaMenorQueMin(ArrayList<Operacao> operacoes, int i) {
 		return operacoes.get(i).getPrecoEntrada() < max;
 	}
@@ -235,44 +292,50 @@ public class TreinamentoRedeNeural {
 	private static boolean verificaContinuidadeDoGrafico(LocalDate data, ArrayList<InfoCandle> verif, int aux) {
 		return ChronoUnit.DAYS.between(data, verif.get(aux).getData())  < numDistanciaEntreDatasMax;
 	}
-
-	private static boolean verificaPadraoMarteloNaoIniciada(int j) {
-		return operacoesAtivas.get(j).getPadrao().equals(Padroes.MARTELO.getDescricao()) && operacoesAtivas.get(j).isStart() == false;
-	}
 	
-	public void imprimeOperacoes() {
-		for(int i=0; i<operacoesFinalizadas.size(); i++) {
-			
-			if(operacoesFinalizadas.get(i).isStart()) {
-			
-				System.out.println("Data da Opera��o: " + formato.format(operacoesFinalizadas.get(i).getData()));
-				System.out.println(operacoesFinalizadas.get(i).getEntrada());
-				System.out.println("Foi lucrativa? - "+operacoesFinalizadas.get(i).getLucro());
-				System.out.println("Deu lucro 2x? - "+operacoesFinalizadas.get(i).getLucroMax());
-				System.out.println("Preco de Entrada: "+operacoesFinalizadas.get(i).getPrecoEntrada());
-				System.out.println("Pre�o de Gain: " + operacoesFinalizadas.get(i).getPrecoGain());
-				System.out.println("Pre�o de Loss: " + operacoesFinalizadas.get(i).getPrecoLoss());
-				System.out.println("Pre�o de Gain Maximo: " + operacoesFinalizadas.get(i).getPrecoGainMax());
-				System.out.println("% Lucro: "+operacoesFinalizadas.get(i).getPercentualGain());
-				System.out.println("% Prejuizo: "+operacoesFinalizadas.get(i).getPercentualLoss());
-				System.out.println("% Lucro M�ximo: "+operacoesFinalizadas.get(i).getPercentualGainMax());
-				System.out.println("% Da opera��o: "+operacoesFinalizadas.get(i).getPorcentagemOperacaoFinal());
-				System.out.println();
-			
-			}else {
-				
-				System.out.println("Data da Opera��o: " + formato.format(operacoesFinalizadas.get(i).getData()));
-				System.out.println("OPERA��O N�O INICIADA");
-				System.out.println("Pre�o de Gain: " + operacoesFinalizadas.get(i).getPrecoGain());
-				System.out.println("% Lucro: "+operacoesFinalizadas.get(i).getPercentualGain());
-				System.out.println("Pre�o de Entrada: "+operacoesFinalizadas.get(i).getPrecoEntrada());
-				System.out.println("Pre�o de Loss: " + operacoesFinalizadas.get(i).getPrecoLoss());
-				System.out.println("% Prejuizo: "+operacoesFinalizadas.get(i).getPercentualLoss());
-				System.out.println();
-				
-			}
-		}
-	}
+	/*
+	 * public void imprimeOperacoes() { for(int i=0; i<operacoesFinalizadas.size();
+	 * i++) {
+	 * 
+	 * if(operacoesFinalizadas.get(i).isStart()) {
+	 * 
+	 * System.out.println("Data da Opera��o: " +
+	 * formato.format(operacoesFinalizadas.get(i).getData()));
+	 * System.out.println(operacoesFinalizadas.get(i).getEntrada());
+	 * System.out.println("Foi lucrativa? - "+operacoesFinalizadas.get(i).getLucro()
+	 * );
+	 * System.out.println("Deu lucro 2x? - "+operacoesFinalizadas.get(i).getLucroMax
+	 * ()); System.out.println("Preco de Entrada: "+operacoesFinalizadas.get(i).
+	 * getPrecoEntrada()); System.out.println("Pre�o de Gain: " +
+	 * operacoesFinalizadas.get(i).getPrecoGain());
+	 * System.out.println("Pre�o de Loss: " +
+	 * operacoesFinalizadas.get(i).getPrecoLoss());
+	 * System.out.println("Pre�o de Gain Maximo: " +
+	 * operacoesFinalizadas.get(i).getPrecoGainMax());
+	 * System.out.println("% Lucro: "+operacoesFinalizadas.get(i).getPercentualGain(
+	 * )); System.out.println("% Prejuizo: "+operacoesFinalizadas.get(i).
+	 * getPercentualLoss());
+	 * System.out.println("% Lucro M�ximo: "+operacoesFinalizadas.get(i).
+	 * getPercentualGainMax());
+	 * System.out.println("% Da opera��o: "+operacoesFinalizadas.get(i).
+	 * getPorcentagemOperacaoFinal()); System.out.println();
+	 * 
+	 * }else {
+	 * 
+	 * System.out.println("Data da Opera��o: " +
+	 * formato.format(operacoesFinalizadas.get(i).getData()));
+	 * System.out.println("OPERA��O N�O INICIADA");
+	 * System.out.println("Pre�o de Gain: " +
+	 * operacoesFinalizadas.get(i).getPrecoGain());
+	 * System.out.println("% Lucro: "+operacoesFinalizadas.get(i).getPercentualGain(
+	 * )); System.out.println("Pre�o de Entrada: "+operacoesFinalizadas.get(i).
+	 * getPrecoEntrada()); System.out.println("Pre�o de Loss: " +
+	 * operacoesFinalizadas.get(i).getPrecoLoss());
+	 * System.out.println("% Prejuizo: "+operacoesFinalizadas.get(i).
+	 * getPercentualLoss()); System.out.println();
+	 * 
+	 * } } }
+	 */
 	
 	public void percentualFinal() {
 		
