@@ -1,5 +1,8 @@
 package br.iesb.indicador_analise_grafica.service;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +24,18 @@ public class OperacaoService {
 	
 	public static void adicionaOperacao(Operacao operacao) {
 		operacaoRepository.save(operacao);
+	}
+	
+	public static ArrayList<Operacao> getOperacoes(){
+		return  (ArrayList<Operacao>) operacaoRepository.findAll();
+	}
+	
+	public static ArrayList<Operacao> getOperacoesPossiveis(Double min, Double max){
+		return  (ArrayList<Operacao>) operacaoRepository.findByOperacoesPossiveis(min, max);
+	}
+	
+	public static int getQtdOperacoes() {
+		return operacaoRepository.findCountOperacao();
 	}
 	
 }

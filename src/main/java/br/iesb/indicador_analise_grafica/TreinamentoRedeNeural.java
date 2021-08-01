@@ -1,6 +1,8 @@
 package br.iesb.indicador_analise_grafica;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 
 import br.iesb.indicador_analise_grafica.service.InfoCandleService;
@@ -13,11 +15,16 @@ public class TreinamentoRedeNeural {
 	static ArrayList<Operacao> operacoesFinalizadas = new ArrayList<Operacao>();
 	static RedeNeural redeNeural = new RedeNeural();
 	static ArrayList<InfoCandle> grafico = new ArrayList<InfoCandle>();
+	private final static Double min = 10.0;
+	private final static Double max = 100.0;
+	private final static int limitVerificaContinuidade = 10;
+	private final static long numDistanciaEntreDatasMax = 25;
+	
 	public static void adicionarOperacao(Operacao operacao) {
 		operacoesAtivas.add(operacao);
 	}
 	
-	public static void realizaTreinamento() {
+	public static void realizaTreinamentoProcurandoPadroes() {
 		
 		ArrayList<String> allPapeis = new ArrayList<String>();
 		allPapeis = InfoCandleService.getListForAllPapeis();
@@ -30,6 +37,8 @@ public class TreinamentoRedeNeural {
 				RedeNeural.procuraPadraoUmCandle(grafico.get(j));
 			}
 		}
+		
+		
 		
 		
 		/*
@@ -112,6 +121,119 @@ public class TreinamentoRedeNeural {
 		 * 
 		 * }
 		 */
+	}
+	
+	public static void confereAlvosDasOperacoes() {
+		
+		int qtdOperacoes = OperacaoService.getQtdOperacoes();
+		
+		ArrayList<Operacao> operacoes = new ArrayList<Operacao>();
+		operacoes = OperacaoService.getOperacoesPossiveis(min, max);
+		
+		ArrayList<InfoCandle> verificaContinuidade = new ArrayList<InfoCandle>();
+		ArrayList<InfoCandle> grafico = new ArrayList<InfoCandle>();
+		
+		for(int i=0; i<operacoes.size(); i++) {
+			LocalDate data = operacoes.get(i).getData();
+			String nomeDoPapel = operacoes.get(i).getNomeDoPapel();
+			verificaContinuidade = InfoCandleService.verificaGraficoContinuo(data, nomeDoPapel, limitVerificaContinuidade);
+			int aux = verificaContinuidade.size() - 1;
+			
+			if(aux >= 0) {
+
+				if(verificaContinuidadeDoGrafico(data, verificaContinuidade, aux) && 
+											verifPrecoEntradaMaiorQueMin(operacoes, i) && 
+													verifPrecoDeEntradaMenorQueMin(operacoes, i)) {
+					
+					grafico = InfoCandleService.getGraficoAPartirDaData(data, nomeDoPapel);
+					
+					for(int j=0; j<grafico.size(); j++) {
+						
+						if(operacoes.get(i).isStart()) {
+							
+							if(operacoes.get(i).getEntrada().equals(Entrada.COMPRA.getDescricao())) {
+								
+								if(!operacoes.get(i).getLucro()) {
+									if(grafico.get(j).getMaxima() >= operacoes.get(i).getPrecoGain()) {
+										operacoes.get(i).setLucro(true);
+									}else if(grafico.get(j).getMinima() <= operacoes.get(i).getPrecoLoss()) {
+										operacoes.get(i).setPorcentagemOperacaoFinal(operacoes.get(i).getPercentualLoss());
+										j = grafico.size();
+									}
+								}else if(operacoes.get(i).getLucro() && !operacoes.get(i).getLucroMax()) {
+									if(grafico.get(j).getMaxima() >= operacoes.get(i).getPrecoGainMax()) {
+										operacoes.get(i).setLucroMax(true);
+										operacoes.get(i).setPorcentagemOperacaoFinal((operacoes.get(i).getPercentualGainMax()/2) + ((operacoes.get(i).getPercentualGain())/2));
+									}else if(grafico.get(j).getMinima() <= operacoes.get(i).getPrecoEntrada()) {
+										Double percentualGain = (operacoes.get(i).getPercentualGain()/2);
+										operacoes.get(i).setPorcentagemOperacaoFinal(percentualGain);
+										j = grafico.size();
+									}
+								}
+								
+							}else if(operacoes.get(i).getEntrada().equals(Entrada.VENDA.getDescricao())) {
+								
+								if(!operacoes.get(i).getLucro()) {
+									if(grafico.get(j).getMinima() <= operacoes.get(i).getPrecoGain()) {
+										operacoes.get(i).setLucro(true);
+									}else if(grafico.get(j).getMaxima() >= operacoes.get(i).getPrecoLoss()) {
+										operacoes.get(i).setPorcentagemOperacaoFinal(operacoes.get(i).getPercentualLoss());
+										j = grafico.size();
+									}
+								}else if(operacoes.get(i).getLucro() && !operacoes.get(i).getLucroMax()) {
+									if(grafico.get(j).getMinima() <= operacoes.get(i).getPrecoGainMax()) {
+										operacoes.get(i).setLucroMax(true);
+										Double percentualGainMax = (operacoes.get(i).getPercentualGainMax()/2) + ((operacoes.get(i).getPercentualGain())/2);
+										operacoes.get(i).setPorcentagemOperacaoFinal(percentualGainMax);
+									}else if(grafico.get(j).getMaxima() >= operacoes.get(i).getPrecoEntrada()) {
+										Double percentualLoss = operacoes.get(i).getPrecoLoss();
+										operacoes.get(i).setPorcentagemOperacaoFinal(percentualLoss);
+										j = grafico.size();
+									}
+								}
+								
+							}
+							
+						}else {
+							if(operacoes.get(i).getEntrada().equals(Entrada.COMPRA.getDescricao())) {
+								
+								if(grafico.get(j).getMaxima() >= operacoes.get(i).getPrecoEntrada()) {
+									operacoes.get(i).setStart(true);
+								}else if(grafico.get(j).getMinima() <= operacoes.get(i).getPrecoCancelarEntrada()) {
+									j = grafico.size();
+								}
+								
+							}else if(operacoes.get(i).getEntrada().equals(Entrada.VENDA.getDescricao())) {
+								
+								if(grafico.get(j).getMinima() <= operacoes.get(i).getPrecoEntrada()) {
+									operacoes.get(i).setStart(true);
+								}else if(grafico.get(j).getMaxima() >= operacoes.get(i).getPrecoCancelarEntrada()) {
+									j = grafico.size();
+								}
+								
+							}
+						}
+						
+					}
+					
+					OperacaoService.adicionaOperacao(operacoes.get(i));
+					
+				}
+		}
+		}
+		
+	}
+
+	private static boolean verifPrecoDeEntradaMenorQueMin(ArrayList<Operacao> operacoes, int i) {
+		return operacoes.get(i).getPrecoEntrada() < max;
+	}
+
+	private static boolean verifPrecoEntradaMaiorQueMin(ArrayList<Operacao> operacoes, int i) {
+		return operacoes.get(i).getPrecoEntrada() > min;
+	}
+
+	private static boolean verificaContinuidadeDoGrafico(LocalDate data, ArrayList<InfoCandle> verif, int aux) {
+		return ChronoUnit.DAYS.between(data, verif.get(aux).getData())  < numDistanciaEntreDatasMax;
 	}
 
 	private static boolean verificaPadraoMarteloNaoIniciada(int j) {

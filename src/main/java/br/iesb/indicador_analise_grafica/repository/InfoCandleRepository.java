@@ -1,5 +1,6 @@
 package br.iesb.indicador_analise_grafica.repository;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,12 @@ public interface InfoCandleRepository extends CrudRepository<InfoCandle, InfoCan
 	
 	@Query(value = "select distinct nomeDoPapel from INFO_CANDLE;", nativeQuery = true)
 	ArrayList<String> findByListForAllPapeis();
+	
+	@Query(value = "select * from INFO_CANDLE where dat > ?1 and nomeDoPapel = ?2 limit 50;", nativeQuery = true)
+	ArrayList<InfoCandle> findByDatAfterAndNomeDoPapel(LocalDate dat, String nomeDoPapel);
+
+	@Query(value = "select * from INFO_CANDLE where dat < ?1 and nomeDoPapel = ?2  order by dat desc limit ?3", nativeQuery = true)
+	ArrayList<InfoCandle> findByVerificaGraficoContinuo(LocalDate data, String nomeDoPapel, int limit);
 
 //	@Query(name = "", nativeQuery = true)
 //	List<InfoCandle> findByNomeDoPapel1(String nomeDoPapel);

@@ -18,8 +18,9 @@ public class Main {
 		
 		//PopularBanco.inserirDados();
 		
-		TreinamentoRedeNeural.realizaTreinamento();
-
+		TreinamentoRedeNeural.realizaTreinamentoProcurandoPadroes();
+		TreinamentoRedeNeural.confereAlvosDasOperacoes();
+		
 		/*TesteServiceImpl t = new TesteServiceImpl();
 		Teste teste = t.getTesteById(1l);
 		long id = 1l;

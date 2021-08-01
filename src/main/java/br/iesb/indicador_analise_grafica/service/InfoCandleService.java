@@ -1,5 +1,6 @@
 package br.iesb.indicador_analise_grafica.service;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,6 +49,14 @@ public class InfoCandleService {
 	
 	public static ArrayList<String> getListForAllPapeis(){
 		return infoCandleRepository.findByListForAllPapeis();
+	}
+	
+	public static ArrayList<InfoCandle> getGraficoAPartirDaData(LocalDate data, String nomeDoPapel){
+		return infoCandleRepository.findByDatAfterAndNomeDoPapel(data, nomeDoPapel);
+	}
+	
+	public static ArrayList<InfoCandle> verificaGraficoContinuo(LocalDate data, String nomeDoPapel, int limit){
+		return infoCandleRepository.findByVerificaGraficoContinuo(data,nomeDoPapel, limit);
 	}
 
 }

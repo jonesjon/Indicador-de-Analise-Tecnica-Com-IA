@@ -29,6 +29,7 @@ public class RedeNeural {
 			if(condicaoParaMartelo(infoCandle, pavioSuperior, pavioInferior)) {
 				Operacao operacao = new Operacao(infoCandle.getData(), infoCandle.getNomeDoPapel(), Padroes.MARTELO.getDescricao(), (infoCandle.getMaxima() + 0.01), 
 										(infoCandle.getMinima() - 0.01), projecaoPositiva(infoCandle), infoCandle.getMinima() - 0.01);
+				operacao.setEntrada(Entrada.COMPRA.getDescricao());
 				Martelo martelo = new Martelo(infoCandle.getData(), tipoCandle(infoCandle).getTipo(), classificaPavioSuperior(pavioSuperior).getDescricao(), 
 						classificaPavioInferior(pavioInferior).getDescricao(), volumeAcimaMedia20(infoCandle), operacao);
 				operacao.setMartelo(martelo);
@@ -195,7 +196,7 @@ public class RedeNeural {
 	
 private static PavioInferior classificaPavioInferior(Double pavioInferior) {
 		
-		if(pavioInferior == 0) {
+		if(pavioInferior.equals(0.0)) {
 			return PavioInferior.SEMPAVIO;
 		}else if(pavioInferior > 0 && pavioInferior <= 5) {
 			return PavioInferior.PAVIO5PORCENTO;
