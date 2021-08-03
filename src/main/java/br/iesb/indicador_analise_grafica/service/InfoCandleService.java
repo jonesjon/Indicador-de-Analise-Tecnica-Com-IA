@@ -47,8 +47,8 @@ public class InfoCandleService {
 		return infoCandleRepository.findByListForMediaMovel(papel);
 	}
 	
-	public static ArrayList<String> getListForAllPapeis(){
-		return infoCandleRepository.findByListForAllPapeis();
+	public static ArrayList<String> getListForAllPapeis(String nomeDoPapel, int limit){
+		return infoCandleRepository.findByListForAllPapeis(nomeDoPapel, limit);
 	}
 	
 	public static ArrayList<InfoCandle> getGraficoAPartirDaData(LocalDate data, String nomeDoPapel){
@@ -57,6 +57,10 @@ public class InfoCandleService {
 	
 	public static ArrayList<InfoCandle> verificaGraficoContinuo(LocalDate data, String nomeDoPapel, int limit){
 		return infoCandleRepository.findByVerificaGraficoContinuo(data,nomeDoPapel, limit);
+	}
+
+	public static int getQtdPapeis() {
+		return infoCandleRepository.findQtdPapeis();
 	}
 
 }

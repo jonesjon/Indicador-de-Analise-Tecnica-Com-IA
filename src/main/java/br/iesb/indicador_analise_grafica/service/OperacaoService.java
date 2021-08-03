@@ -30,12 +30,16 @@ public class OperacaoService {
 		return  (ArrayList<Operacao>) operacaoRepository.findAll();
 	}
 	
-	public static ArrayList<Operacao> getOperacoesPossiveis(Double min, Double max){
-		return  (ArrayList<Operacao>) operacaoRepository.findByOperacoesPossiveis(min, max);
+	public static ArrayList<Operacao> getOperacoesPossiveis(Double min, Double max, String nomeDoPapel, LocalDate dat, int limit){
+		return  (ArrayList<Operacao>) operacaoRepository.findByOperacoesPossiveis(min, max, nomeDoPapel, dat, limit);
 	}
 	
-	public static int getQtdOperacoes() {
-		return operacaoRepository.findCountOperacao();
+	public static int getQtdOperacoesPossiveis(Double min, Double max) {
+		return operacaoRepository.findCountOperacoesPossiveis(min, max);
+	}
+	
+	public static ArrayList<String> getAllPapeisOperacoesPossiveis(Double min, Double max){
+		return operacaoRepository.findDistinctNomeDosPapeisOperacoesPossiveis(min, max);
 	}
 	
 }
