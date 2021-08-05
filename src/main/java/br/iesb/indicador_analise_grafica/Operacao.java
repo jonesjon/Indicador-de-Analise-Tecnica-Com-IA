@@ -9,10 +9,12 @@ import javax.persistence.*;
 
 import org.hibernate.annotations.GeneratorType;
 
+import br.iesb.indicador_analise_grafica.primary_key.MarteloPK;
 import br.iesb.indicador_analise_grafica.primary_key.OperacaoPK;
 
 @Entity
 @Table(name = "OPERACAO")
+@IdClass(OperacaoPK.class)
 public class Operacao implements Serializable{
 	
 	/**
@@ -21,14 +23,17 @@ public class Operacao implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@Column(name = "id")
-	private long iD;
+	@Column(name="dat")
+	private LocalDate dat;
+	
+	@Id
+	@Column(name="nomeDoPapel")
+	private String nomeDoPapel;
 	
 	@Column(name="padrao")
 	private String padrao;
 	
-	@OneToOne
-    @JoinColumns({@JoinColumn(name="dat"), @JoinColumn(name="nomeDoPapel")})
+	@OneToOne(mappedBy = "operacao", cascade = CascadeType.PERSIST)
 	private Martelo martelo = null;
 	
 	@Column(name="start")
@@ -74,8 +79,9 @@ public class Operacao implements Serializable{
 		
 	}
 	
-	public Operacao(int iD, String padrao, Double precoEntrada, Double precoCancelarEntrada, Double precoGain, Double precoLoss) {
-		this.iD = iD;
+	public Operacao(LocalDate dat, String nomeDoPapel, String padrao, Double precoEntrada, Double precoCancelarEntrada, Double precoGain, Double precoLoss) {
+		this.dat = dat;
+		this.nomeDoPapel = nomeDoPapel;
 		this.padrao = padrao;
 		this.precoEntrada = formataPreco(precoEntrada);
 		this.precoCancelarEntrada = formataPreco(precoCancelarEntrada);
@@ -92,6 +98,14 @@ public class Operacao implements Serializable{
 		DecimalFormat df = new DecimalFormat(fmt);
 		df.setRoundingMode(RoundingMode.DOWN);
 		return Double.parseDouble(df.format(num).replace(',', '.'));
+	}
+	
+	public String getNomeDoPapel() {
+		return nomeDoPapel;
+	}
+
+	public LocalDate getData() {
+		return dat;
 	}
 
 	public boolean isStart() {
@@ -200,10 +214,6 @@ public class Operacao implements Serializable{
 
 	public void setMartelo(Martelo martelo) {
 		this.martelo = martelo;
-	}
-
-	public long getID() {
-		return iD;
 	}
 
 }

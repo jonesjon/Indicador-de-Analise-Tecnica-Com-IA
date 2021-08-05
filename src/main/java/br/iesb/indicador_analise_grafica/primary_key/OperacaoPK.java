@@ -10,7 +10,7 @@ public class OperacaoPK implements Serializable{
 	 */
 	private static final long serialVersionUID = -5695820878657075030L;
 	
-	private LocalDate data;
+	private LocalDate dat;
 	private String nomeDoPapel;
 	
 	public OperacaoPK() {
@@ -18,16 +18,16 @@ public class OperacaoPK implements Serializable{
 	}
 	
 	public OperacaoPK(LocalDate data, String nomeDoPapel) {
-		this.data = data;
+		this.dat = data;
 		this.nomeDoPapel = nomeDoPapel;
 	}
 	
 	public LocalDate getData() {
-		return data;
+		return dat;
 	}
 	
 	public void setData(LocalDate data) {
-		this.data = data;
+		this.dat = data;
 	}
 	
 	public String getNomeDoPapel() {
@@ -42,7 +42,7 @@ public class OperacaoPK implements Serializable{
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((data == null) ? 0 : data.hashCode());
+		result = prime * result + ((dat == null) ? 0 : dat.hashCode());
 		result = prime * result + ((nomeDoPapel == null) ? 0 : nomeDoPapel.hashCode());
 		return result;
 	}
@@ -56,10 +56,10 @@ public class OperacaoPK implements Serializable{
 		if (getClass() != obj.getClass())
 			return false;
 		OperacaoPK other = (OperacaoPK) obj;
-		if (data == null) {
-			if (other.data != null)
+		if (dat == null) {
+			if (other.dat != null)
 				return false;
-		} else if (!data.equals(other.data))
+		} else if (!dat.equals(other.dat))
 			return false;
 		if (nomeDoPapel == null) {
 			if (other.nomeDoPapel != null)

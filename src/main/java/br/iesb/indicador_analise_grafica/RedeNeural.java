@@ -29,17 +29,17 @@ public class RedeNeural {
 			// Condicoes para Martelo
 			if (condicaoParaMartelo(infoCandle, pavioSuperior, pavioInferior)) {
 				countID++;
-				Operacao operacao = new Operacao(countID, Padroes.MARTELO.getDescricao(),
+				Operacao operacao = new Operacao(infoCandle.getData(), infoCandle.getNomeDoPapel(), Padroes.MARTELO.getDescricao(),
 						precoDeAlvoMaxima(infoCandle), precoDeAlvoMinima(infoCandle), projecaoPositiva(infoCandle),
 						precoDeAlvoMinima(infoCandle));
 				operacao.setEntrada(Entrada.COMPRA.getDescricao());
-				Martelo martelo = new Martelo(infoCandle.getData(), infoCandle.getNomeDoPapel(),
+				Martelo martelo = new Martelo(countID,
 						tipoCandle(infoCandle).getTipo(), classificaPavioSuperior(pavioSuperior).getDescricao(),
 						classificaPavioInferior(pavioInferior).getDescricao(), volumeAcimaMedia20(infoCandle),
 						operacao);
 				operacao.setMartelo(martelo);
-				MarteloService.adicionaMartelo(martelo);
 				OperacaoService.adicionaOperacao(operacao);
+				MarteloService.adicionaMartelo(martelo);
 
 				return operacao;
 			}
@@ -76,21 +76,8 @@ public class RedeNeural {
 			if (condicaoParaMarubozu(pavioSuperior, pavioInferior, validaMarubozu)) {
 				
 				
-				
-				countID++;
-				Operacao operacao = new Operacao(countID, Padroes.MARTELO.getDescricao(),
-						precoDeAlvoMaxima(infoCandle), precoDeAlvoMinima(infoCandle), projecaoPositiva(infoCandle),
-						precoDeAlvoMinima(infoCandle));
-				operacao.setEntrada(Entrada.COMPRA.getDescricao());
-				Martelo martelo = new Martelo(infoCandle.getData(), infoCandle.getNomeDoPapel(),
-						tipoCandle(infoCandle).getTipo(), classificaPavioSuperior(pavioSuperior).getDescricao(),
-						classificaPavioInferior(pavioInferior).getDescricao(), volumeAcimaMedia20(infoCandle),
-						operacao);
-				operacao.setMartelo(martelo);
-				MarteloService.adicionaMartelo(martelo);
-				OperacaoService.adicionaOperacao(operacao);
 
-				return operacao;
+				return null;
 			}
 		}
 

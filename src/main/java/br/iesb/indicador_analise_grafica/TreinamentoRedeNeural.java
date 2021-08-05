@@ -76,8 +76,8 @@ public class TreinamentoRedeNeural {
 				ArrayList<InfoCandle> grafico = new ArrayList<InfoCandle>();
 
 				for (int i = 0; i < operacoes.size(); i++) {
-					LocalDate data = operacoes.get(i).getMartelo().getData();
-					String nomeDoPapel = operacoes.get(i).getMartelo().getNomeDoPapel();
+					LocalDate data = operacoes.get(i).getData();
+					String nomeDoPapel = operacoes.get(i).getNomeDoPapel();
 					verificaContinuidade = InfoCandleService.verificaGraficoContinuo(data, nomeDoPapel,
 							LIMITVERIFICACONTINUIDADE);
 					int aux = verificaContinuidade.size() - 1;
@@ -178,7 +178,7 @@ public class TreinamentoRedeNeural {
 					}
 				}
 
-				dataUltimaOperacao = operacoes.get(operacoes.size() - 1).getMartelo().getData();
+				dataUltimaOperacao = operacoes.get(operacoes.size() - 1).getData();
 			}
 		}
 	}
