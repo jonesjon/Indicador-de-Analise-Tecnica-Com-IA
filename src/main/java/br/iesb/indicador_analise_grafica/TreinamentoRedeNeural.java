@@ -44,7 +44,7 @@ public class TreinamentoRedeNeural {
 				grafico = InfoCandleService.getInfoCandlePeloNome(allPapeis.get(j));
 
 				for (int k = 0; k < grafico.size(); k++) {
-					RedeNeural.procuraPadraoUmCandle(grafico.get(k));
+					RedeNeural.procuraPadraoMartelo(grafico.get(k));
 				}
 			}
 
@@ -181,6 +181,25 @@ public class TreinamentoRedeNeural {
 				dataUltimaOperacao = operacoes.get(operacoes.size() - 1).getMartelo().getData();
 			}
 		}
+	}
+	
+	public static void verificaEstatistica() {
+		String nomeDoPapelOperacao = "";
+		LocalDate dataUltimaOperacao = LocalDate.parse(DATAINICIAL);
+		ArrayList<String> listaNomesPapeisOperaveis = OperacaoService.getAllPapeisOperacoesPossiveis(MIN, MAX);
+		
+		for(int i=0; i<listaNomesPapeisOperaveis.size(); i++) {
+			nomeDoPapelOperacao = listaNomesPapeisOperaveis.get(i);
+			dataUltimaOperacao = LocalDate.parse(DATAINICIAL);
+			
+			ArrayList<Operacao> operacoes = new ArrayList<Operacao>();
+			
+		}
+		
+	}
+	
+	public static void verificaEstatisticasMartelo(Operacao operacao) {
+		
 	}
 
 	private static boolean verificaSeMaximaChegouAoPrecoDeEntradaAposChegarPrimeiroAlvo(ArrayList<Operacao> operacoes,
