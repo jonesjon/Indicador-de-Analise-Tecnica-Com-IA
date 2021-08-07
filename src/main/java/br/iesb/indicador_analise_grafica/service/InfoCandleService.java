@@ -38,6 +38,10 @@ public class InfoCandleService {
 	public static ArrayList<InfoCandle> getInfoCandlePeloNome(String papel) {
 		return infoCandleRepository.findByNomeDoPapel(papel);
 	}
+	
+	public static ArrayList<InfoCandle> getUltimosInfoCandle(String nomeDoPapel, LocalDate data, int limit){
+		return infoCandleRepository.findByUltimosCandles(nomeDoPapel, data, limit);
+	}
 
 	public static int countByPapelName(String papel) {
 		return infoCandleRepository.countByNomeDoPapel(papel);

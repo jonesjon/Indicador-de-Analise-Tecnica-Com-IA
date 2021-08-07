@@ -33,6 +33,9 @@ public interface InfoCandleRepository extends CrudRepository<InfoCandle, InfoCan
 	@Query(value = "select count(distinct(nomeDoPapel)) from INFO_CANDLE;", nativeQuery = true)
 	int findQtdPapeis();
 
+	@Query(value = "select * from INFO_CANDLE Where nomeDoPapel = ?1 and dat <= ?2 order by dat desc limit ?3", nativeQuery = true)
+	ArrayList<InfoCandle> findByUltimosCandles(String nomeDoPapel, LocalDate dat, int limit);
+
 //	@Query(name = "", nativeQuery = true)
 //	List<InfoCandle> findByNomeDoPapel1(String nomeDoPapel);
 

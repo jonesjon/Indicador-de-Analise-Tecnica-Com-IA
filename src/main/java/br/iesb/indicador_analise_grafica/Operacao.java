@@ -30,11 +30,15 @@ public class Operacao implements Serializable{
 	@Column(name="nomeDoPapel")
 	private String nomeDoPapel;
 	
+	@Id
 	@Column(name="padrao")
 	private String padrao;
 	
 	@OneToOne(mappedBy = "operacao", cascade = CascadeType.PERSIST)
 	private Martelo martelo = null;
+	
+	@OneToOne(mappedBy = "operacao", cascade = CascadeType.PERSIST)
+	private Marubozu marubozu = null;
 	
 	@Column(name="start")
 	private boolean start = false;
@@ -88,16 +92,22 @@ public class Operacao implements Serializable{
 		this.precoGain = formataPreco(precoGain);
 		this.precoLoss = formataPreco(precoLoss);
 		this.precoGainMax = formataPreco(precoEntrada + ((precoGain-precoEntrada)*2));
-		this.percentualGain = formataPreco((100*precoGain/precoEntrada)-100);
-		this.percentualLoss = formataPreco((100*precoLoss/precoEntrada)-100);
-		this.percentualGainMax = formataPreco((100*precoGainMax/precoEntrada)-100);
+		this.percentualGain = Math.abs(formataPreco((100*precoGain/precoEntrada)-100));
+		this.percentualLoss = Math.abs(formataPreco((100*precoLoss/precoEntrada)-100));
+		this.percentualGainMax = Math.abs(formataPreco((100*precoGainMax/precoEntrada)-100));
 	}
 	
 	public Double formataPreco(Double num) {
+		
+		
 		String fmt = "#.##";
 		DecimalFormat df = new DecimalFormat(fmt);
 		df.setRoundingMode(RoundingMode.DOWN);
-		return Double.parseDouble(df.format(num).replace(',', '.'));
+		if(!df.format(num).replace(',', '.').equals("-∞") && !df.format(num).replace(',', '.').equals("∞")) {
+			return Double.parseDouble(df.format(num).replace(',', '.'));
+		}
+		
+		return 1000000.0;
 	}
 	
 	public String getNomeDoPapel() {
@@ -214,6 +224,14 @@ public class Operacao implements Serializable{
 
 	public void setMartelo(Martelo martelo) {
 		this.martelo = martelo;
+	}
+
+	public Marubozu getMarubozu() {
+		return marubozu;
+	}
+
+	public void setMarubozu(Marubozu marubozu) {
+		this.marubozu = marubozu;
 	}
 
 }

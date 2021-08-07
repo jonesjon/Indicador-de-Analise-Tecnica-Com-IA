@@ -21,6 +21,7 @@ public class TreinamentoRedeNeural {
 	private final static long NUMDISTANCIAENTREDATAS = 25;
 	private final static int LIMIT = 50;
 	private final static String DATAINICIAL = "2000-01-01";
+	public static final int LIMITDECANDLEMARUBOZUENGOLFO = 5;
 
 	public static void adicionarOperacao(Operacao operacao) {
 		operacoesAtivas.add(operacao);
@@ -44,7 +45,9 @@ public class TreinamentoRedeNeural {
 				grafico = InfoCandleService.getInfoCandlePeloNome(allPapeis.get(j));
 
 				for (int k = 0; k < grafico.size(); k++) {
-					RedeNeural.procuraPadraoMartelo(grafico.get(k));
+					//RedeNeural.procuraPadraoMartelo(grafico.get(k));
+					ArrayList<InfoCandle> listaUltimosCandles = InfoCandleService.getUltimosInfoCandle(allPapeis.get(j), grafico.get(k).getData(), LIMITDECANDLEMARUBOZUENGOLFO);
+					RedeNeural.procuraPadraoEngolfo(listaUltimosCandles);
 				}
 			}
 

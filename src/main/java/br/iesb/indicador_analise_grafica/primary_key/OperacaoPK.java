@@ -12,14 +12,16 @@ public class OperacaoPK implements Serializable{
 	
 	private LocalDate dat;
 	private String nomeDoPapel;
+	private String padrao;
 	
 	public OperacaoPK() {
 		
 	}
 	
-	public OperacaoPK(LocalDate data, String nomeDoPapel) {
+	public OperacaoPK(LocalDate data, String nomeDoPapel, String padrao) {
 		this.dat = data;
 		this.nomeDoPapel = nomeDoPapel;
+		this.setPadrao(padrao);
 	}
 	
 	public LocalDate getData() {
@@ -38,12 +40,22 @@ public class OperacaoPK implements Serializable{
 		this.nomeDoPapel = nomeDoPapel;
 	}
 	
+
+	public String getPadrao() {
+		return padrao;
+	}
+
+	public void setPadrao(String padrao) {
+		this.padrao = padrao;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((dat == null) ? 0 : dat.hashCode());
 		result = prime * result + ((nomeDoPapel == null) ? 0 : nomeDoPapel.hashCode());
+		result = prime * result + ((padrao == null) ? 0 : padrao.hashCode());
 		return result;
 	}
 
@@ -66,7 +78,12 @@ public class OperacaoPK implements Serializable{
 				return false;
 		} else if (!nomeDoPapel.equals(other.nomeDoPapel))
 			return false;
+		if (padrao == null) {
+			if (other.padrao != null)
+				return false;
+		} else if (!padrao.equals(other.padrao))
+			return false;
 		return true;
 	}
-
+	
 }

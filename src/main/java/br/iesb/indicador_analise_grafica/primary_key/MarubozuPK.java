@@ -2,30 +2,28 @@ package br.iesb.indicador_analise_grafica.primary_key;
 
 import java.io.Serializable;
 
-public class MarteloPK implements Serializable{
-	
+public class MarubozuPK implements Serializable{
+
 	/**
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private long iD;
 	
-	public MarteloPK() {
+	private long iD;
+
+	public MarubozuPK() {
 		
 	}
-	
-	public MarteloPK(long iD) {
-		this.setiD(iD);
+
+	public MarubozuPK(long iD) {
+		super();
+		this.iD = iD;
 	}
 
 	public long getiD() {
 		return iD;
 	}
-
-	public void setiD(long iD) {
-		this.iD = iD;
-	}
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -42,11 +40,12 @@ public class MarteloPK implements Serializable{
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		MarteloPK other = (MarteloPK) obj;
+		MarubozuPK other = (MarubozuPK) obj;
 		if (iD != other.iD)
 			return false;
 		return true;
 	}
+
 	
-	
+
 }

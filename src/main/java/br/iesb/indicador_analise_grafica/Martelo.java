@@ -31,8 +31,8 @@ public class Martelo {
 	private Boolean volumeAcimaMedia20;
 	
 	@OneToOne
-    @JoinColumns({@JoinColumn(name="dat"), @JoinColumn(name="nomeDoPapel")})
-	private Operacao operacao;
+    @JoinColumns({@JoinColumn(name="dat"), @JoinColumn(name="nomeDoPapel"), @JoinColumn(name="padrao")})
+	private Operacao operacao = null;
 	
 	public Martelo() {
 		this.tipo = "";
