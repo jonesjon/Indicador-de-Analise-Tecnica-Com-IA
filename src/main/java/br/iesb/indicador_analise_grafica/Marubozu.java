@@ -15,6 +15,7 @@ public class Marubozu implements Serializable{
 
 	@Id
 	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long iD;
 	
 	@Column(name="tipo")

@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import br.iesb.indicador_analise_grafica.service.InfoCandleService;
 import br.iesb.indicador_analise_grafica.service.OperacaoService;
+import br.iesb.indicador_analise_grafica.service.PapeisOperaveisService;
 
 public class TreinamentoRedeNeural {
 
@@ -29,6 +30,8 @@ public class TreinamentoRedeNeural {
 
 	public static boolean realizaTreinamentoProcurandoPadroes() {
 
+		System.out.println("Iniciando busca por padroes...");
+
 		int qtdPapeis = InfoCandleService.getQtdPapeis();
 		String nomeDoUltimoPapel = "";
 
@@ -45,9 +48,10 @@ public class TreinamentoRedeNeural {
 				grafico = InfoCandleService.getInfoCandlePeloNome(allPapeis.get(j));
 
 				for (int k = 0; k < grafico.size(); k++) {
-					//RedeNeural.procuraPadraoMartelo(grafico.get(k));
-					ArrayList<InfoCandle> listaUltimosCandles = InfoCandleService.getUltimosInfoCandle(allPapeis.get(j), grafico.get(k).getData(), LIMITDECANDLEMARUBOZUENGOLFO);
-					RedeNeural.procuraPadraoEngolfo(listaUltimosCandles);
+//					RedeNeural.procuraPadraoMartelo(grafico.get(k));
+//					ArrayList<InfoCandle> listaUltimosCandles = InfoCandleService.getUltimosInfoCandle(allPapeis.get(j),
+//							grafico.get(k).getData(), LIMITDECANDLEMARUBOZUENGOLFO);
+//					RedeNeural.procuraPadraoMarubozu(listaUltimosCandles);
 				}
 			}
 
@@ -55,223 +59,325 @@ public class TreinamentoRedeNeural {
 
 		}
 
+		System.out.println("Finalizando busca por padroes.");
+
 		return false;
 
 	}
 
-	public static void confereAlvosDasOperacoes() {
+	public static void realizaTreinamentoProcurandoPadroesEmPapeisOperaveis() {
 
-		String nomeDoPapelOperacao = "";
-		LocalDate dataUltimaOperacao = LocalDate.parse(DATAINICIAL);
-		ArrayList<String> listaNomesPapeisOperaveis = OperacaoService.getAllPapeisOperacoesPossiveis(MIN, MAX);
+		System.out.println("Iniciando busca por padroes...");
 
-		for (int k = 0; k < listaNomesPapeisOperaveis.size(); k++) {
+		ArrayList<PapeisOperaveis> po = new ArrayList<PapeisOperaveis>();
+		po.addAll(PapeisOperaveisService.getAllPapeis());
 
-			nomeDoPapelOperacao = listaNomesPapeisOperaveis.get(k);
-			dataUltimaOperacao = LocalDate.parse(DATAINICIAL);
+		for (int i = 0; i < po.size(); i++) {
 
+			String nomeDoPapel = po.get(i).getNomeDoPapel();
+
+			grafico.clear();
+			grafico = InfoCandleService.getInfoCandlePeloNome(nomeDoPapel);
+
+			for (int j = 0; j < grafico.size(); j++) {
+				RedeNeural.procuraPadraoMartelo(grafico.get(j));
+				ArrayList<InfoCandle> listaUltimosCandles = InfoCandleService.getUltimosInfoCandle(nomeDoPapel,
+						grafico.get(j).getData(), LIMITDECANDLEMARUBOZUENGOLFO);
+				RedeNeural.procuraPadraoMarubozu(listaUltimosCandles);
+			}
+
+		}
+
+		System.out.println("Finalizando busca por padroes.");
+
+	}
+
+	public static void confereAlvosDasOperacoesPossiveis() {
+		
+		System.out.println("Conferindo alvos...");
+		
+		ArrayList<PapeisOperaveis> po = new ArrayList<PapeisOperaveis>();
+		po.addAll(PapeisOperaveisService.getAllPapeis());
+
+		for (int i = 0; i < po.size(); i++) {
+			
 			ArrayList<Operacao> operacoes = new ArrayList<Operacao>();
-			operacoes = OperacaoService.getOperacoesPossiveis(MIN, MAX, nomeDoPapelOperacao, dataUltimaOperacao, LIMIT);
-
-			if(operacoes != null) {
-
+			operacoes = OperacaoService.getOperacoesPossiveis(MIN, MAX, po.get(i).getNomeDoPapel());
+			
+			for(int j=0;j<operacoes.size();j++) {
+				Operacao operacao = operacoes.get(j);
 				ArrayList<InfoCandle> verificaContinuidade = new ArrayList<InfoCandle>();
-				ArrayList<InfoCandle> grafico = new ArrayList<InfoCandle>();
-
-				for (int i = 0; i < operacoes.size(); i++) {
-					LocalDate data = operacoes.get(i).getData();
-					String nomeDoPapel = operacoes.get(i).getNomeDoPapel();
-					verificaContinuidade = InfoCandleService.verificaGraficoContinuo(data, nomeDoPapel,
-							LIMITVERIFICACONTINUIDADE);
-					int aux = verificaContinuidade.size() - 1;
-
-					if (aux >= 0) {
-
-						if (verificaContinuidadeDoGrafico(data, verificaContinuidade, aux)
-								&& verifPrecoEntradaMaiorQueMin(operacoes, i)
-								&& verifPrecoDeEntradaMenorQueMin(operacoes, i)) {
-
-							grafico = InfoCandleService.getGraficoAPartirDaData(data, nomeDoPapel);
-
-							for (int j = 0; j < grafico.size(); j++) {
-
-								if (operacoes.get(i).isStart()) {
-
-									if (verificaSeOperacaoCompra(operacoes, i)) {
-
-										if (verificaSeOperacaoAindaNaoDeuAlvo(operacoes, i)) {
-											if (verificaSeMaximaChegouAoPrimeiroAlvo(operacoes, grafico, i, j)) {
-												operacoes.get(i).setLucro(true);
-											} else if (verificaSeMinimaChegouAoPrecoLoss(operacoes, grafico, i, j)) {
-												operacoes.get(i).setPorcentagemOperacaoFinal(
-														operacoes.get(i).getPercentualLoss());
-												j = grafico.size();
-											}
-										} else if (verificaSeOperacaoDeuPrimeiroAlvoMasAindaNaoChegouNoSegundo(
-												operacoes, i)) {
-											if (verificaSeMaximaChegouAoSegundoAlvo(operacoes, grafico, i, j)) {
-												operacoes.get(i).setLucroMax(true);
-												operacoes.get(i).setPorcentagemOperacaoFinal(
-														(operacoes.get(i).getPercentualGainMax() / 2)
-																+ ((operacoes.get(i).getPercentualGain()) / 2));
-											} else if (verificaSeOperacaoChegouAoPrecoDeEntradaAposChegarAoPrimeiroAlvo(
-													operacoes, grafico, i, j)) {
-												Double percentualGain = (operacoes.get(i).getPercentualGain() / 2);
-												operacoes.get(i).setPorcentagemOperacaoFinal(percentualGain);
-												j = grafico.size();
-											}
-										}
-
-									} else if (verificaSeOperacaoVenda(operacoes, i)) {
-
-										if (verificaSeOperacaoAindaNaoDeuAlvo(operacoes, i)) {
-											if (verificaSeMinimaChegouNoPrimeiroAlvo(operacoes, grafico, i, j)) {
-												operacoes.get(i).setLucro(true);
-											} else if (verificaSeMaximaChegouAoPrecoLoss(operacoes, grafico, i, j)) {
-												operacoes.get(i).setPorcentagemOperacaoFinal(
-														operacoes.get(i).getPercentualLoss());
-												j = grafico.size();
-											}
-										} else if (verificaSeOperacaoDeuPrimeiroAlvoMasAindaNaoChegouNoSegundo(
-												operacoes, i)) {
-											if (verificaSeMinimaChegouAoPrecoDeGainMax(operacoes, grafico, i, j)) {
-												operacoes.get(i).setLucroMax(true);
-												Double percentualGainMax = (operacoes.get(i).getPercentualGainMax() / 2)
-														+ ((operacoes.get(i).getPercentualGain()) / 2);
-												operacoes.get(i).setPorcentagemOperacaoFinal(percentualGainMax);
-											} else if (verificaSeMaximaChegouAoPrecoDeEntradaAposChegarPrimeiroAlvo(
-													operacoes, grafico, i, j)) {
-												Double percentualLoss = operacoes.get(i).getPrecoLoss();
-												operacoes.get(i).setPorcentagemOperacaoFinal(percentualLoss);
-												j = grafico.size();
-											}
-										}
-
+				verificaContinuidade = InfoCandleService.verificaGraficoContinuo(operacao.getData(), operacao.getNomeDoPapel(), LIMITVERIFICACONTINUIDADE);
+				
+				if(verificaContinuidadeDoGrafico(operacao.getData(), verificaContinuidade)) {
+					ArrayList<InfoCandle> grafico = new ArrayList<InfoCandle>();
+					grafico = InfoCandleService.getGraficoAPartirDaData(operacao.getData(), operacao.getNomeDoPapel());
+					
+					for(int k=0; k<grafico.size(); k++) {
+						
+						if (operacao.isStart()) {
+							
+							if (verificaSeOperacaoCompra(operacao)) {
+								
+								if(!verificaSeOperacaoAindaNaoChegouNoPrimeiroAlvo(operacao)) {
+									
+									if(verificaSeMaximaChegouPrimeiroAlvoCompra(grafico.get(k), operacao)) {
+										
+										operacao.setPrimeiroAlvoAtingido(true);
+										operacao.setPorcentagemOperacaoFinal(operacao.getPorcentagemOperacaoFinal() + calculaPorcentagemPrimeiroAlvo(operacao));
+										k--;
+										
+									}else if(verificaSeOperacaoChegouAoPrecoLossCompra(grafico.get(k), operacao)) {
+										
+										operacao.setPorcentagemOperacaoFinal(calculaPorcentagemStop(operacao));
+										k = grafico.size();
+										
 									}
-
-								} else {
-									if (verificaSeOperacaoCompra(operacoes, i)) {
-
-										if (verificaSeMaximaChegouAoPrecoDeEntradaAposChegarPrimeiroAlvo(operacoes,
-												grafico, i, j)) {
-											operacoes.get(i).setStart(true);
-										} else if (grafico.get(j).getMinima() <= operacoes.get(i)
-												.getPrecoCancelarEntrada()) {
-											j = grafico.size();
-										}
-
-									} else if (verificaSeOperacaoVenda(operacoes, i)) {
-
-										if (verificaSeOperacaoChegouAoPrecoDeEntradaAposChegarAoPrimeiroAlvo(operacoes,
-												grafico, i, j)) {
-											operacoes.get(i).setStart(true);
-										} else if (grafico.get(j).getMaxima() >= operacoes.get(i)
-												.getPrecoCancelarEntrada()) {
-											j = grafico.size();
-										}
-
+									
+								}else if(verificaSeOperacaoChegouNoPrimeiroAlvoMasNaoNoSegundo(operacao)) {
+									
+									if(verificaSeMaximaChegouSegundoAlvoCompra(grafico.get(k), operacao)) {
+										
+										operacao.setSegundoAlvoAtingido(true);
+										operacao.setPorcentagemOperacaoFinal(operacao.getPorcentagemOperacaoFinal() + calculaPorcentagemSegundoAlvo(operacao));
+										k--;
+										
+									}else if(verificaSeOperacaoChegouAoPrecoEntradaAposPrimeiroAlvoCompra(grafico.get(k), operacao)) {
+										
+										k = grafico.size();
+										
 									}
+									
+								}else if(verificaSeOperacaoChegouNoSegundoAlvoMasNaoNoTerceiro(operacao)) {
+									
+									if(verificaSeMaximaChegouTerceiroAlvoCompra(grafico.get(k), operacao)) {
+										
+										operacao.setTerceiroAlvoAtingido(true);
+										operacao.setPorcentagemOperacaoFinal(operacao.getPorcentagemOperacaoFinal() + calculaPorcentagemTerceiroAlvo(operacao));
+										k = grafico.size();
+										
+									}else if(verificaSeOperacaoChegouNoPrimeiroAlvoAposChegarNoSegundoAlvoCompra(grafico.get(k), operacao)) {
+										
+										k = grafico.size();
+										operacao.setPorcentagemOperacaoFinal(operacao.getPorcentagemOperacaoFinal() + calculaPorcentagemPrimeiroAlvo(operacao));
+										
+									}
+									
+								}
+								
+							}else if (verificaSeOperacaoVenda(operacao)) {
+								
+								if(verificaSeOperacaoAindaNaoChegouNoPrimeiroAlvo(operacao)) {
+									
+									if(verificaSeMinimaChegouPrimeiroAlvoVenda(grafico.get(k), operacao)) {
+										operacao.setPrimeiroAlvoAtingido(true);
+										operacao.setPorcentagemOperacaoFinal(operacao.getPorcentagemOperacaoFinal() + calculaPorcentagemPrimeiroAlvo(operacao));
+										k--;
+									}else if(verificaSeOperacaoChegouAoPrecoLossVenda(grafico.get(k), operacao)) {
+										
+										operacao.setPorcentagemOperacaoFinal(calculaPorcentagemStop(operacao));
+										k = grafico.size();
+										
+									}
+								}else if(verificaSeOperacaoChegouNoPrimeiroAlvoMasNaoNoSegundo(operacao)) {
+									
+									if(verificaSeMinimaChegouSegundoAlvoVenda(grafico.get(k), operacao)) {
+										
+										operacao.setSegundoAlvoAtingido(true);
+										operacao.setPorcentagemOperacaoFinal(operacao.getPorcentagemOperacaoFinal() + calculaPorcentagemSegundoAlvo(operacao));
+										k--;
+										
+									}else if(verificaSeOperacaoChegouAoPrecoEntradaAposPrimeiroAlvoVenda(grafico.get(k), operacao)) {
+										
+										k = grafico.size();
+										
+									}
+									
+								}else if(verificaSeOperacaoChegouNoSegundoAlvoMasNaoNoTerceiro(operacao)) {
+									
+									if(verificaSeMinimaChegouTerceiroAlvoVenda(grafico.get(k), operacao)) {
+										
+										operacao.setTerceiroAlvoAtingido(true);
+										operacao.setPorcentagemOperacaoFinal(operacao.getPorcentagemOperacaoFinal() + calculaPorcentagemTerceiroAlvo(operacao));
+										k = grafico.size();
+										
+									}else if(verificaSeOperacaoChegouNoPrimeiroAlvoAposChegarNoSegundoAlvoVenda(grafico.get(k), operacao)) {
+										
+										operacao.setPorcentagemOperacaoFinal(operacao.getPorcentagemOperacaoFinal() + calculaPorcentagemPrimeiroAlvo(operacao));
+										k = grafico.size();
+										
+									}
+									
+								}
+								
+							}
+							
+						}else {
+							
+							if (verificaSeOperacaoCompra(operacao)) {
+
+								if (verificaSeMaximaChegouAoPrecoDeEntradaCompra(grafico.get(k), operacao)) {
+									operacao.setStart(true);
+									k--;
+								} else if (verificaSeMinimaChegouPrecoLossCompra(grafico.get(k), operacao)) {
+									k = grafico.size();
+								}
+
+							} else if (verificaSeOperacaoVenda(operacao)) {
+
+								if (verificaSeOperacaoChegouAoPrecoDeEntradaVenda(grafico.get(k), operacao)) {
+									operacao.setStart(true);
+									k--;
+								} else if (verificaSeMaximaChegouPrecoLossVenda(grafico.get(k), operacao)) {
+									k = grafico.size();
 								}
 
 							}
-
-							OperacaoService.adicionaOperacao(operacoes.get(i));
-
+							
 						}
+						
 					}
+					
+					OperacaoService.adicionaOperacao(operacao);
+					
 				}
-
-				dataUltimaOperacao = operacoes.get(operacoes.size() - 1).getData();
 			}
+			
+
 		}
+		
+		System.out.println("Finalizando...");
 	}
-	
+
+	private static Double calculaPorcentagemStop(Operacao operacao) {
+		return Math.abs((((operacao.getPrecoStop()/operacao.getPrecoEntrada()) - 1)*100));
+	}
+
+	private static boolean verificaSeOperacaoChegouNoPrimeiroAlvoAposChegarNoSegundoAlvoVenda(InfoCandle infoCandle, Operacao operacao) {
+		return infoCandle.getMaxima() >= operacao.getPrecoPrimeiroAlvoFibonacci();
+	}
+
+	private static boolean verificaSeMinimaChegouTerceiroAlvoVenda(InfoCandle infoCandle, Operacao operacao) {
+		return infoCandle.getMinima() <= operacao.getPrecoTerceiroAlvoFibonacci();
+	}
+
+	private static boolean verificaSeOperacaoChegouAoPrecoEntradaAposPrimeiroAlvoVenda(InfoCandle infoCandle, Operacao operacao) {
+		return infoCandle.getMaxima() >= operacao.getPrecoEntrada();
+	}
+
+	private static boolean verificaSeMinimaChegouSegundoAlvoVenda(InfoCandle infoCandle, Operacao operacao) {
+		return infoCandle.getMinima() <= operacao.getPrecoSegundoAlvoFibonacci();
+	}
+
+	private static boolean verificaSeOperacaoChegouAoPrecoLossVenda(InfoCandle infoCandle, Operacao operacao) {
+		return infoCandle.getMaxima() >= operacao.getPrecoStop();
+	}
+
+	private static boolean verificaSeOperacaoChegouNoPrimeiroAlvoAposChegarNoSegundoAlvoCompra(InfoCandle infoCandle, Operacao operacao) {
+		return infoCandle.getMinima() <= operacao.getPrecoPrimeiroAlvoFibonacci();
+	}
+
+	private static Double calculaPorcentagemTerceiroAlvo(Operacao operacao) {
+		return Math.abs((((operacao.getPrecoTerceiroAlvoFibonacci()/operacao.getPrecoEntrada()) - 1)*100)/3);
+	}
+
+	private static boolean verificaSeMaximaChegouTerceiroAlvoCompra(InfoCandle infoCandle, Operacao operacao) {
+		return infoCandle.getMaxima() >= operacao.getPrecoTerceiroAlvoFibonacci();
+	}
+
+	private static boolean verificaSeOperacaoChegouAoPrecoEntradaAposPrimeiroAlvoCompra(InfoCandle infoCandle, Operacao operacao) {
+		return infoCandle.getMinima() <= operacao.getPrecoEntrada();
+	}
+
+	private static Double calculaPorcentagemSegundoAlvo(Operacao operacao) {
+		return Math.abs((((operacao.getPrecoSegundoAlvoFibonacci()/operacao.getPrecoEntrada()) - 1)*100)/3);
+	}
+
+	private static boolean verificaSeMaximaChegouSegundoAlvoCompra(InfoCandle infoCandle, Operacao operacao) {
+		return infoCandle.getMaxima() >= operacao.getPrecoSegundoAlvoFibonacci();
+	}
+
+	private static Double calculaPorcentagemPrimeiroAlvo(Operacao operacao) {
+		return Math.abs((((operacao.getPrecoPrimeiroAlvoFibonacci()/operacao.getPrecoEntrada()) - 1)*100)/3);
+	}
+
+	private static Double calculaPorcentagemLoss(Operacao operacao) {
+		return Math.abs((operacao.getPrecoStop()/(operacao.getPrecoEntrada() - 1)) * 100);
+	}
+
+	private static boolean verificaSeOperacaoChegouNoSegundoAlvoMasNaoNoTerceiro(Operacao operacao) {
+		return operacao.getSegundoAlvoAtingido() && !operacao.getTerceiroAlvoAtingido();
+	}
+
+	private static boolean verificaSeOperacaoChegouNoPrimeiroAlvoMasNaoNoSegundo(Operacao operacao) {
+		return operacao.getPrimeiroAlvoAtingido() && !operacao.getSegundoAlvoAtingido();
+	}
+
+	private static boolean verificaSeOperacaoChegouAoPrecoLossCompra(InfoCandle infoCandle, Operacao operacao) {
+		return infoCandle.getMinima() <= operacao.getPrecoStop();
+	}
+
+	private static boolean verificaSeOperacaoAindaNaoChegouNoPrimeiroAlvo(Operacao operacao) {
+		return operacao.getPrimeiroAlvoAtingido();
+	}
+
+	private static boolean verificaSeMinimaChegouPrimeiroAlvoVenda(InfoCandle infoCandle, Operacao operacao) {
+		return infoCandle.getMinima() <= operacao.getPrecoPrimeiroAlvoFibonacci();
+	}
+
+	private static boolean verificaSeMaximaChegouPrimeiroAlvoCompra(InfoCandle infoCandle, Operacao operacao) {
+		return infoCandle.getMaxima() >= operacao.getPrecoPrimeiroAlvoFibonacci();
+	}
+
+	private static boolean verificaSeMaximaChegouPrecoLossVenda(InfoCandle infoCandle, Operacao operacao) {
+		return infoCandle.getMaxima() >= operacao.getPrecoStop();
+	}
+
+	private static boolean verificaSeOperacaoChegouAoPrecoDeEntradaVenda(InfoCandle infoCandle, Operacao operacao) {
+		return infoCandle.getMinima() <= operacao.getPrecoEntrada();
+	}
+
+	private static boolean verificaSeMinimaChegouPrecoLossCompra(InfoCandle infoCandle, Operacao operacao) {
+		return infoCandle.getMinima() <= operacao.getPrecoStop();
+	}
+
 	public static void verificaEstatistica() {
 		String nomeDoPapelOperacao = "";
 		LocalDate dataUltimaOperacao = LocalDate.parse(DATAINICIAL);
 		ArrayList<String> listaNomesPapeisOperaveis = OperacaoService.getAllPapeisOperacoesPossiveis(MIN, MAX);
-		
-		for(int i=0; i<listaNomesPapeisOperaveis.size(); i++) {
+
+		for (int i = 0; i < listaNomesPapeisOperaveis.size(); i++) {
 			nomeDoPapelOperacao = listaNomesPapeisOperaveis.get(i);
 			dataUltimaOperacao = LocalDate.parse(DATAINICIAL);
-			
+
 			ArrayList<Operacao> operacoes = new ArrayList<Operacao>();
-			
+
 		}
-		
+
 	}
-	
+
 	public static void verificaEstatisticasMartelo(Operacao operacao) {
+
+	}
+
+	private static boolean verificaSeMaximaChegouAoPrecoDeEntradaCompra(InfoCandle infoCandle, Operacao operacao) {
+		return infoCandle.getMaxima() >= operacao.getPrecoEntrada();
+	}
+
+	private static boolean verificaSeOperacaoVenda(Operacao operacao) {
+		return operacao.getEntrada().equals(Entrada.VENDA.getDescricao());
+	}
+
+	private static boolean verificaSeOperacaoCompra(Operacao operacao) {
+		return operacao.getEntrada().equals(Entrada.COMPRA.getDescricao());
+	}
+
+	private static Boolean verificaContinuidadeDoGrafico(LocalDate data, ArrayList<InfoCandle> verif) {
 		
-	}
-
-	private static boolean verificaSeMaximaChegouAoPrecoDeEntradaAposChegarPrimeiroAlvo(ArrayList<Operacao> operacoes,
-			ArrayList<InfoCandle> grafico, int i, int j) {
-		return grafico.get(j).getMaxima() >= operacoes.get(i).getPrecoEntrada();
-	}
-
-	private static boolean verificaSeMinimaChegouAoPrecoDeGainMax(ArrayList<Operacao> operacoes,
-			ArrayList<InfoCandle> grafico, int i, int j) {
-		return grafico.get(j).getMinima() <= operacoes.get(i).getPrecoGainMax();
-	}
-
-	private static boolean verificaSeMaximaChegouAoPrecoLoss(ArrayList<Operacao> operacoes,
-			ArrayList<InfoCandle> grafico, int i, int j) {
-		return grafico.get(j).getMaxima() >= operacoes.get(i).getPrecoLoss();
-	}
-
-	private static boolean verificaSeMinimaChegouNoPrimeiroAlvo(ArrayList<Operacao> operacoes,
-			ArrayList<InfoCandle> grafico, int i, int j) {
-		return grafico.get(j).getMinima() <= operacoes.get(i).getPrecoGain();
-	}
-
-	private static boolean verificaSeOperacaoChegouAoPrecoDeEntradaAposChegarAoPrimeiroAlvo(
-			ArrayList<Operacao> operacoes, ArrayList<InfoCandle> grafico, int i, int j) {
-		return grafico.get(j).getMinima() <= operacoes.get(i).getPrecoEntrada();
-	}
-
-	private static boolean verificaSeMaximaChegouAoSegundoAlvo(ArrayList<Operacao> operacoes,
-			ArrayList<InfoCandle> grafico, int i, int j) {
-		return grafico.get(j).getMaxima() >= operacoes.get(i).getPrecoGainMax();
-	}
-
-	private static boolean verificaSeMinimaChegouAoPrecoLoss(ArrayList<Operacao> operacoes,
-			ArrayList<InfoCandle> grafico, int i, int j) {
-		return grafico.get(j).getMinima() <= operacoes.get(i).getPrecoLoss();
-	}
-
-	private static boolean verificaSeMaximaChegouAoPrimeiroAlvo(ArrayList<Operacao> operacoes,
-			ArrayList<InfoCandle> grafico, int i, int j) {
-		return grafico.get(j).getMaxima() >= operacoes.get(i).getPrecoGain();
-	}
-
-	private static boolean verificaSeOperacaoDeuPrimeiroAlvoMasAindaNaoChegouNoSegundo(ArrayList<Operacao> operacoes,
-			int i) {
-		return operacoes.get(i).getLucro() && !operacoes.get(i).getLucroMax();
-	}
-
-	private static boolean verificaSeOperacaoAindaNaoDeuAlvo(ArrayList<Operacao> operacoes, int i) {
-		return !operacoes.get(i).getLucro();
-	}
-
-	private static boolean verificaSeOperacaoVenda(ArrayList<Operacao> operacoes, int i) {
-		return operacoes.get(i).getEntrada().equals(Entrada.VENDA.getDescricao());
-	}
-
-	private static boolean verificaSeOperacaoCompra(ArrayList<Operacao> operacoes, int i) {
-		return operacoes.get(i).getEntrada().equals(Entrada.COMPRA.getDescricao());
-	}
-
-	private static boolean verifPrecoDeEntradaMenorQueMin(ArrayList<Operacao> operacoes, int i) {
-		return operacoes.get(i).getPrecoEntrada() < MAX;
-	}
-
-	private static boolean verifPrecoEntradaMaiorQueMin(ArrayList<Operacao> operacoes, int i) {
-		return operacoes.get(i).getPrecoEntrada() > MIN;
-	}
-
-	private static boolean verificaContinuidadeDoGrafico(LocalDate data, ArrayList<InfoCandle> verif, int aux) {
-		return ChronoUnit.DAYS.between(data, verif.get(aux).getData()) < NUMDISTANCIAENTREDATAS;
+		if(verif.size() > 0) {
+			return ChronoUnit.DAYS.between(data, verif.get(verif.size()-1).getData()) < NUMDISTANCIAENTREDATAS;
+		}
+		return false;
 	}
 
 	/*

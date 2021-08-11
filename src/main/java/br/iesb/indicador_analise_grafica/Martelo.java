@@ -16,42 +16,38 @@ public class Martelo {
 
 	@Id
 	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long iD;
 	
 	@Column(name="tipo")
-	private final String tipo;
+	private String tipo = "";
 	
 	@Column(name="pavioSuperior")
-	private final String pavioSuperior;
+	private String pavioSuperior = "";
 	
 	@Column(name="pavioInferior")
-	private final String pavioInferior;
-	
+	private String pavioInferior = "";
+
 	@Column(name="volumeAcimaMedia20")
 	private Boolean volumeAcimaMedia20;
+	
+	@Column(name="marteloAcimaMedia200")
+	private Boolean marteloAcimaMedia200;
 	
 	@OneToOne
     @JoinColumns({@JoinColumn(name="dat"), @JoinColumn(name="nomeDoPapel"), @JoinColumn(name="padrao")})
 	private Operacao operacao = null;
 	
 	public Martelo() {
-		this.tipo = "";
-		this.pavioSuperior = "";
-		this.pavioInferior = "";
-	}
-
-	public Martelo(int iD, String tipo, String pavioSuperior,
-			String pavioInferior, Boolean volumeAcimaMedia20, Operacao operacao) {
-		this.iD = iD;
-		this.tipo = tipo;
-		this.pavioSuperior = pavioSuperior;
-		this.pavioInferior = pavioInferior;
-		this.volumeAcimaMedia20 = volumeAcimaMedia20;
-		this.operacao = operacao;
+		
 	}
 
 	public String getTipo() {
 		return tipo;
+	}
+	
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
 	}
 
 	public String getPavioSuperior() {
@@ -68,5 +64,29 @@ public class Martelo {
 
 	public Operacao getOperacao() {
 		return operacao;
+	}
+
+	public Boolean getMarteloAcimaMedia200() {
+		return marteloAcimaMedia200;
+	}
+
+	public void setMarteloAcimaMedia200(Boolean marteloAcimaMedia200) {
+		this.marteloAcimaMedia200 = marteloAcimaMedia200;
+	}
+
+	public void setVolumeAcimaMedia20(Boolean volumeAcimaMedia20) {
+		this.volumeAcimaMedia20 = volumeAcimaMedia20;
+	}
+
+	public void setOperacao(Operacao operacao) {
+		this.operacao = operacao;
+	}
+	
+	public void setPavioSuperior(String pavioSuperior) {
+		this.pavioSuperior = pavioSuperior;
+	}
+
+	public void setPavioInferior(String pavioInferior) {
+		this.pavioInferior = pavioInferior;
 	}
 }

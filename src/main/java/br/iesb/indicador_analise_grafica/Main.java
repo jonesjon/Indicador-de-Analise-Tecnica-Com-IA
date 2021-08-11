@@ -18,8 +18,9 @@ public class Main {
 		
 		//PopularBanco.inserirDados();
 		
-		TreinamentoRedeNeural.realizaTreinamentoProcurandoPadroes();
-		TreinamentoRedeNeural.confereAlvosDasOperacoes();
+		//PreencherPapeisOperaveis.preencher();
+		TreinamentoRedeNeural.realizaTreinamentoProcurandoPadroesEmPapeisOperaveis();
+		TreinamentoRedeNeural.confereAlvosDasOperacoesPossiveis();
 
 		long elapsedTime = (System.currentTimeMillis() - start);
 		System.out.println("Tempo gasto parar rodar: (segundos) " + elapsedTime / 1000F);

@@ -30,8 +30,8 @@ public class OperacaoService {
 		return  (ArrayList<Operacao>) operacaoRepository.findAll();
 	}
 	
-	public static ArrayList<Operacao> getOperacoesPossiveis(Double min, Double max, String nomeDoPapel, LocalDate dat, int limit){
-		return  (ArrayList<Operacao>) operacaoRepository.findByOperacoesPossiveis(min, max, nomeDoPapel, dat, limit);
+	public static ArrayList<Operacao> getOperacoesPossiveis(Double min, Double max, String nomeDoPapel){
+		return  (ArrayList<Operacao>) operacaoRepository.findByOperacoesPossiveis(min, max, nomeDoPapel);
 	}
 	
 	public static int getQtdOperacoesPossiveis(Double min, Double max) {

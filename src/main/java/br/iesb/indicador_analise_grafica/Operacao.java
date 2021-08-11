@@ -48,53 +48,39 @@ public class Operacao implements Serializable{
 	
 	@Column(name="precoEntrada")
 	private Double precoEntrada;
+
+	@Column(name="precoStop")
+	private Double precoStop;
 	
-	@Column(name="precoCancelarEntrada")
-	private Double precoCancelarEntrada;
+	@Column(name="precoPrimeiroAlvoFibonacci")
+	private Double precoPrimeiroAlvoFibonacci;
 	
-	@Column(name="precoGain")
-	private Double precoGain;
+	@Column(name="precoSegundoAlvoFibonacci")
+	private Double precoSegundoAlvoFibonacci;
 	
-	@Column(name="precoLoss")
-	private Double precoLoss;
+	@Column(name="precoTerceiroAlvoFibonacci")
+	private Double precoTerceiroAlvoFibonacci;
 	
-	@Column(name="precoGainMax")
-	private Double precoGainMax;
+	@Column(name="primeiroAlvoAtingido")
+	private Boolean primeiroAlvoAtingido = false;
 	
-	@Column(name="percentualGain")
-	private Double percentualGain;
+	@Column(name="segundoAlvoAtingido")
+	private Boolean segundoAlvoAtingido = false;
 	
-	@Column(name="percentualLoss")
-	private Double percentualLoss;
-	
-	@Column(name="percentualGainMax")
-	private Double percentualGainMax;
-	
-	@Column(name="lucro")
-	private Boolean lucro = false;
-	
-	@Column(name="lucroMax")
-	private Boolean lucroMax = false;
+	@Column(name="terceiroAlvoAtingido")
+	private Boolean terceiroAlvoAtingido = false;
 	
 	@Column(name="porcentagemOperacaoFinal")
-	private Double porcentagemOperacaoFinal;
+	private Double porcentagemOperacaoFinal = 0.0;
 	
 	public Operacao() {
 		
 	}
 	
-	public Operacao(LocalDate dat, String nomeDoPapel, String padrao, Double precoEntrada, Double precoCancelarEntrada, Double precoGain, Double precoLoss) {
+	public Operacao(LocalDate dat, String nomeDoPapel, String padrao) {
 		this.dat = dat;
 		this.nomeDoPapel = nomeDoPapel;
 		this.padrao = padrao;
-		this.precoEntrada = formataPreco(precoEntrada);
-		this.precoCancelarEntrada = formataPreco(precoCancelarEntrada);
-		this.precoGain = formataPreco(precoGain);
-		this.precoLoss = formataPreco(precoLoss);
-		this.precoGainMax = formataPreco(precoEntrada + ((precoGain-precoEntrada)*2));
-		this.percentualGain = Math.abs(formataPreco((100*precoGain/precoEntrada)-100));
-		this.percentualLoss = Math.abs(formataPreco((100*precoLoss/precoEntrada)-100));
-		this.percentualGainMax = Math.abs(formataPreco((100*precoGainMax/precoEntrada)-100));
 	}
 	
 	public Double formataPreco(Double num) {
@@ -130,36 +116,8 @@ public class Operacao implements Serializable{
 		return precoEntrada;
 	}
 
-	public Double getPrecoGain() {
-		return precoGain;
-	}
-
-	public Double getPrecoLoss() {
-		return precoLoss;
-	}
-
-	public Double getPercentualGain() {
-		return percentualGain;
-	}
-
-	public void setPercentualGain(Double percentualGain) {
-		this.percentualGain = percentualGain;
-	}
-
-	public Double getPercentualLoss() {
-		return percentualLoss;
-	}
-
-	public void setPercentualLoss(Double percentualLoss) {
-		this.percentualLoss = percentualLoss;
-	}
-
-	public Double getPercentualGainMax() {
-		return percentualGainMax;
-	}
-
-	public void setPercentualGainMax(Double percentualGainMax) {
-		this.percentualGainMax = percentualGainMax;
+	public Double getPrecoStop() {
+		return precoStop;
 	}
 
 	public void setStart(boolean start) {
@@ -171,43 +129,15 @@ public class Operacao implements Serializable{
 	}
 
 	public void setPrecoEntrada(Double precoEntrada) {
-		this.precoEntrada = precoEntrada;
+		this.precoEntrada = formataPreco(precoEntrada);
 	}
 
-	public void setPrecoGain(Double precoGain) {
-		this.precoGain = precoGain;
-	}
-
-	public void setPrecoLoss(Double precoLoss) {
-		this.precoLoss = precoLoss;
-	}
-
-	public Double getPrecoCancelarEntrada() {
-		return precoCancelarEntrada;
+	public void setPrecoStop(Double precoLoss) {
+		this.precoStop = formataPreco(precoLoss);
 	}
 
 	public String getPadrao() {
 		return padrao;
-	}
-
-	public Boolean getLucro() {
-		return lucro;
-	}
-
-	public void setLucro(Boolean lucro) {
-		this.lucro = lucro;
-	}
-
-	public Double getPrecoGainMax() {
-		return precoGainMax;
-	}
-
-	public Boolean getLucroMax() {
-		return lucroMax;
-	}
-
-	public void setLucroMax(Boolean lucroMax) {
-		this.lucroMax = lucroMax;
 	}
 
 	public Double getPorcentagemOperacaoFinal() {
@@ -215,7 +145,7 @@ public class Operacao implements Serializable{
 	}
 
 	public void setPorcentagemOperacaoFinal(Double porcentagemOperacaoFinal) {
-		this.porcentagemOperacaoFinal = porcentagemOperacaoFinal;
+		this.porcentagemOperacaoFinal = formataPreco(porcentagemOperacaoFinal);
 	}
 
 	public Martelo getMartelo() {
@@ -233,5 +163,74 @@ public class Operacao implements Serializable{
 	public void setMarubozu(Marubozu marubozu) {
 		this.marubozu = marubozu;
 	}
+
+	public void setNomeDoPapel(String nomeDoPapel) {
+		this.nomeDoPapel = nomeDoPapel;
+	}
+
+	public void setPadrao(String padrao) {
+		this.padrao = padrao;
+	}
+
+	public void setTipoEntrada(String tipoEntrada) {
+		this.tipoEntrada = tipoEntrada;
+	}
+
+	public Double getPrecoPrimeiroAlvoFibonacci() {
+		return precoPrimeiroAlvoFibonacci;
+	}
+
+	public void setPrecoPrimeiroAlvoFibonacci(Double precoPrimeiroAlvoFibonacci) {
+		this.precoPrimeiroAlvoFibonacci = formataPreco(precoPrimeiroAlvoFibonacci);
+	}
+
+	public Double getPrecoSegundoAlvoFibonacci() {
+		return precoSegundoAlvoFibonacci;
+	}
+
+	public void setPrecoSegundoAlvoFibonacci(Double precoSegundoAlvoFibonacci) {
+		this.precoSegundoAlvoFibonacci = formataPreco(precoSegundoAlvoFibonacci);
+	}
+
+	public Double getPrecoTerceiroAlvoFibonacci() {
+		return precoTerceiroAlvoFibonacci;
+	}
+
+	public void setPrecoTerceiroAlvoFibonacci(Double precoTerceiroAlvoFibonacci) {
+		this.precoTerceiroAlvoFibonacci = formataPreco(precoTerceiroAlvoFibonacci);
+	}
+
+	public Boolean getPrimeiroAlvoAtingido() {
+		return primeiroAlvoAtingido;
+	}
+
+	public void setPrimeiroAlvoAtingido(Boolean primeiroAlvoAtingido) {
+		this.primeiroAlvoAtingido = primeiroAlvoAtingido;
+	}
+
+	public Boolean getSegundoAlvoAtingido() {
+		return segundoAlvoAtingido;
+	}
+
+	public void setSegundoAlvoAtingido(Boolean segundoAlvoAtingido) {
+		this.segundoAlvoAtingido = segundoAlvoAtingido;
+	}
+
+	public Boolean getTerceiroAlvoAtingido() {
+		return terceiroAlvoAtingido;
+	}
+
+	public void setTerceiroAlvoAtingido(Boolean terceiroAlvoAtingido) {
+		this.terceiroAlvoAtingido = terceiroAlvoAtingido;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	public String getTipoEntrada() {
+		return tipoEntrada;
+	}
+
 
 }
