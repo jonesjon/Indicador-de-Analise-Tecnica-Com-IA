@@ -396,7 +396,7 @@ public class RedeNeural {
 
 	private static TipoCandle tipoCandle(InfoCandle infoCandle) {
 
-		TipoCandle tipo;
+		TipoCandle tipo = null;
 
 		if (infoCandle.getAbertura() < infoCandle.getFechamento()) {
 			tipo = TipoCandle.POSITIVO;
@@ -410,7 +410,6 @@ public class RedeNeural {
 			tipo = TipoCandle.NEUTRO;
 			return tipo;
 		}
-		tipo = TipoCandle.NULL;
 		return tipo;
 	}
 
@@ -491,7 +490,7 @@ public class RedeNeural {
 	}
 
 	private static PavioSuperior classificaPavioSuperior(Double pavioSuperior) {
-
+		
 		if (pavioSuperior == 0) {
 			return PavioSuperior.SEMPAVIO;
 		} else if (pavioSuperior > 0 && pavioSuperior <= 5) {
@@ -513,7 +512,7 @@ public class RedeNeural {
 		} else if (pavioSuperior > 95 && pavioSuperior <= 100) {
 			return PavioSuperior.PAVIO100PORCENTO;
 		}
-
+ 
 		return PavioSuperior.NULL;
 
 	}

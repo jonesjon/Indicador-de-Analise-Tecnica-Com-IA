@@ -117,22 +117,13 @@ public class InterpretadorDeDados {
 	
 						listaInfoCandle.clear();
 						listaInfoCandle = InfoCandleService.getListForMediaMovel(papelDaLinha.trim());
-	
-						Double media8 = Indicador.mediaMovel(8, listaInfoCandle, candle);
-						Double media20 = Indicador.mediaMovel(20, listaInfoCandle, candle);
-						Double media200 = Indicador.mediaMovel(200, listaInfoCandle, candle);
-						Double mediaVolume = Indicador.mediaMovelVolume(20, listaInfoCandle, candle);
-	
-						infoCandle = new InfoCandle(candle, media8, media20, media200, mediaVolume);
-	
-						InfoCandleService.adicionaCandle(infoCandle);
 					
 				}
 
 				}
 
 				linha = leitura.readLine(); // Le a Proxima Linha
-			}
+			}  
 
 		} catch (IOException e) {
 			System.err.printf("Não foi possivel abrir o arquivo: %s.\n", e.getMessage());
