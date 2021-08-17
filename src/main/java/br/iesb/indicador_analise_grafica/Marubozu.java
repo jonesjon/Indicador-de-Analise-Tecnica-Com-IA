@@ -12,10 +12,10 @@ public class Marubozu implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-
+	
 	@Id
-	@Column(name = "id")
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column
+	@GeneratedValue
 	private long iD;
 	
 	@Column(name="tipo")
@@ -41,10 +41,9 @@ public class Marubozu implements Serializable{
 		
 	}
 	
-	public Marubozu(int iD, String tipo, String pavioSuperior,
+	public Marubozu(String tipo, String pavioSuperior,
 			String pavioInferior, Boolean volumeAcimaMedia20, String variacaoPreco, Operacao operacao) {
 		
-		this.iD = iD;
 		this.tipo = tipo;
 		this.pavioSuperior = pavioSuperior;
 		this.pavioInferior = pavioInferior;
@@ -52,10 +51,6 @@ public class Marubozu implements Serializable{
 		this.variacaoPreco = variacaoPreco;
 		this.operacao = operacao;
 		
-	}
-
-	public long getiD() {
-		return iD;
 	}
 
 	public String getTipo() {

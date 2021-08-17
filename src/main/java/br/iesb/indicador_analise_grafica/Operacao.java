@@ -40,6 +40,9 @@ public class Operacao implements Serializable{
 	@OneToOne(mappedBy = "operacao", cascade = CascadeType.PERSIST)
 	private Marubozu marubozu = null;
 	
+	@OneToOne(mappedBy = "operacao", cascade = CascadeType.PERSIST)
+	private Engolfo engolfo = null;
+
 	@Column(name="start")
 	private boolean start = false;
 	
@@ -94,6 +97,14 @@ public class Operacao implements Serializable{
 		}
 		
 		return 1000000.0;
+	}
+	
+	public Engolfo getEngolfo() {
+		return engolfo;
+	}
+
+	public void setEngolfo(Engolfo engolfo) {
+		this.engolfo = engolfo;
 	}
 	
 	public String getNomeDoPapel() {

@@ -12,11 +12,10 @@ import br.iesb.indicador_analise_grafica.primary_key.MarteloPK;
 @Entity
 @Table(name = "MARTELO")
 public class Martelo {
-
-
+	
 	@Id
-	@Column(name = "id")
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@Column
+	@GeneratedValue
 	private long iD;
 	
 	@Column(name="tipo")
