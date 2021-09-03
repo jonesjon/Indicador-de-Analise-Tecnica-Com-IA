@@ -14,7 +14,6 @@ import br.iesb.indicador_analise_grafica.primary_key.OperacaoPK;
 
 @Entity
 @Table(name = "OPERACAO")
-@IdClass(OperacaoPK.class)
 public class Operacao implements Serializable{
 	
 	/**
@@ -22,15 +21,12 @@ public class Operacao implements Serializable{
 	 */
 	private static final long serialVersionUID = 1L;
 	
-	@Id
-	@Column(name="dat")
-	private LocalDate dat;
 	
 	@Id
-	@Column(name="nomeDoPapel")
-	private String nomeDoPapel;
+	@Column
+	@GeneratedValue
+	private Long id;
 	
-	@Id
 	@Column(name="padrao")
 	private String padrao;
 	
@@ -42,6 +38,13 @@ public class Operacao implements Serializable{
 	
 	@OneToOne(mappedBy = "operacao", cascade = CascadeType.PERSIST)
 	private Engolfo engolfo = null;
+	
+	@OneToOne(mappedBy = "operacao", cascade = CascadeType.PERSIST)
+	private Doji doji = null;
+	
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumns({@JoinColumn(name="dat"), @JoinColumn(name="nomeDoPapel")})
+	private InfoCandle infoCandle;
 
 	@Column(name="start")
 	private boolean start = false;
@@ -80,12 +83,6 @@ public class Operacao implements Serializable{
 		
 	}
 	
-	public Operacao(LocalDate dat, String nomeDoPapel, String padrao) {
-		this.dat = dat;
-		this.nomeDoPapel = nomeDoPapel;
-		this.padrao = padrao;
-	}
-	
 	public Double formataPreco(Double num) {
 		
 		
@@ -107,13 +104,13 @@ public class Operacao implements Serializable{
 		this.engolfo = engolfo;
 	}
 	
-	public String getNomeDoPapel() {
-		return nomeDoPapel;
-	}
-
-	public LocalDate getData() {
-		return dat;
-	}
+//	public String getNomeDoPapel() {
+//		return nomeDoPapel;
+//	}
+//
+//	public LocalDate getData() {
+//		return dat;
+//	}
 
 	public boolean isStart() {
 		return start;
@@ -175,9 +172,9 @@ public class Operacao implements Serializable{
 		this.marubozu = marubozu;
 	}
 
-	public void setNomeDoPapel(String nomeDoPapel) {
-		this.nomeDoPapel = nomeDoPapel;
-	}
+//	public void setNomeDoPapel(String nomeDoPapel) {
+//		this.nomeDoPapel = nomeDoPapel;
+//	}
 
 	public void setPadrao(String padrao) {
 		this.padrao = padrao;
@@ -241,6 +238,22 @@ public class Operacao implements Serializable{
 
 	public String getTipoEntrada() {
 		return tipoEntrada;
+	}
+
+	public InfoCandle getInfoCandle() {
+		return infoCandle;
+	}
+
+	public void setInfoCandle(InfoCandle infoCandle) {
+		this.infoCandle = infoCandle;
+	}
+
+	public Doji getDoji() {
+		return doji;
+	}
+
+	public void setDoji(Doji doji) {
+		this.doji = doji;
 	}
 
 

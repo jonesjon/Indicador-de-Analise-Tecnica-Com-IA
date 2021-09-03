@@ -4,7 +4,9 @@ public enum Padroes {
 	
 	MARTELO("Martelo"),
 	MARUBOZU("Marubozu"),
-	ENGOLFO("Engolfo");
+	ENGOLFO("Engolfo"),
+	DOJI("Doji");
+	
 	
 	
 	private String descricao;

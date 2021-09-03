@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.persistence.*;
+import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,6 +17,7 @@ import br.iesb.indicador_analise_grafica.repository.InfoCandleRepository;
 import net.bytebuddy.implementation.Implementation.Context;
 
 @Service
+@Transactional
 public class InfoCandleService {
 
 	@Autowired

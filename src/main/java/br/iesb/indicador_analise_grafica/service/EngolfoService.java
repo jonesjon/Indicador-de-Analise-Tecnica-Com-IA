@@ -16,7 +16,7 @@ public class EngolfoService {
 	private static EngolfoRepository engolfoRepository;
 
 	@PostConstruct
-	public void getMarubozuRepository() {
+	public void getEngolfoRepository() {
 		engolfoRepository = engolfo;
 	}
 	

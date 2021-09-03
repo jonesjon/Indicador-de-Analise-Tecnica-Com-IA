@@ -2,6 +2,8 @@ package br.iesb.indicador_analise_grafica;
 
 import java.io.IOException;
 
+import javax.activation.DataSource;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -12,14 +14,14 @@ import org.springframework.stereotype.Controller;
 public class Main {
 
 	public static void main(String[] args) throws IOException {
-
+		
 		SpringApplication.run(Main.class, args);
 		long start = System.currentTimeMillis();
 		
 		//PopularBanco.inserirDados();
 		
 		//PreencherPapeisOperaveis.preencher();
-		TreinamentoRedeNeural.realizaTreinamentoProcurandoPadroesEmPapeisOperaveis();
+		//TreinamentoRedeNeural.realizaTreinamentoProcurandoPadroesEmPapeisOperaveis();
 		TreinamentoRedeNeural.confereAlvosDasOperacoesPossiveis();
 
 		long elapsedTime = (System.currentTimeMillis() - start);

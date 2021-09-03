@@ -15,7 +15,7 @@ public class Marubozu implements Serializable{
 	
 	@Id
 	@Column
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private long iD;
 	
 	@Column(name="tipo")
@@ -34,7 +34,11 @@ public class Marubozu implements Serializable{
 	private Boolean volumeAcimaMedia20;
 	
 	@OneToOne
-    @JoinColumns({@JoinColumn(name="dat"), @JoinColumn(name="nomeDoPapel"), @JoinColumn(name="padrao")})
+	@JoinColumns({@JoinColumn(name="dat"), @JoinColumn(name="nomeDoPapel")})
+	private InfoCandle infoCandle;
+	
+	@OneToOne
+	@JoinColumn(name="padrao")
 	private Operacao operacao = null;
 	
 	public Marubozu() {
@@ -75,6 +79,14 @@ public class Marubozu implements Serializable{
 	
 	public void setOperacao(Operacao operacao) {
 		this.operacao = operacao;
+	}
+
+	public InfoCandle getInfoCandle() {
+		return infoCandle;
+	}
+
+	public void setInfoCandle(InfoCandle infoCandle) {
+		this.infoCandle = infoCandle;
 	}
 	
 

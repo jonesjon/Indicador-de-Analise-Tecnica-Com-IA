@@ -2,6 +2,8 @@ package br.iesb.indicador_analise_grafica;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.List;
+
 import javax.persistence.*;
 
 import br.iesb.indicador_analise_grafica.primary_key.InfoCandlePK;
@@ -51,10 +53,14 @@ public class InfoCandle implements Serializable {
 
 	@Column(name = "volumeMedia20")
 	private Double volumeMedia20;
+	
+	@OneToMany(mappedBy = "infoCandle", fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+	private List<Operacao> operacoes;
 
 	public InfoCandle() {
 
 	}
+	
 	public InfoCandle(Candle candle, Double precoMedia8, Double precoMedia20, Double precoMedia200,
 			Double volumeMedia20) {
 
@@ -136,6 +142,16 @@ public class InfoCandle implements Serializable {
 
 	public Double getVolume() {
 		return volume;
+	}
+	public List<Operacao> getOperacoes() {
+		return operacoes;
+	}
+	public void setOperacoes(List<Operacao> operacoes) {
+		this.operacoes = operacoes;
+	}
+	
+	public void setOperacao(Operacao operacao) {
+		this.operacoes.add(operacao);
 	}
 
 }

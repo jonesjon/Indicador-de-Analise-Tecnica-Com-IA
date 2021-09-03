@@ -1,9 +1,16 @@
 package br.iesb.indicador_analise_grafica;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+
+import javax.activation.DataSource;
+
+import org.apache.logging.log4j.CloseableThreadContext.Instance;
 
 import br.iesb.indicador_analise_grafica.service.InfoCandleService;
 import br.iesb.indicador_analise_grafica.service.OperacaoService;
@@ -24,6 +31,11 @@ public class TreinamentoRedeNeural {
 	private final static String DATAINICIAL = "2000-01-01";
 	public static final int LIMITDECANDLEMARUBOZU = 5;
 	public static final int LIMITDECANDLEENGOLFO = 2;
+	
+	
+	public static void realizaTreinamentoWekaNaiveBayes() {
+		
+	}
 
 	public static void adicionarOperacao(Operacao operacao) {
 		operacoesAtivas.add(operacao);
@@ -87,10 +99,10 @@ public class TreinamentoRedeNeural {
 //						grafico.get(j).getData(), LIMITDECANDLEMARUBOZU);
 //				RedeNeural.procuraPadraoMarubozu(listaUltimosCandlesMarubozu);
 				
-				ArrayList<InfoCandle> listaUltimosCandlesEngolfo = InfoCandleService.getUltimosInfoCandle(nomeDoPapel,
-						grafico.get(j).getData(), LIMITDECANDLEENGOLFO);
-				RedeNeural.procuraPadraoEngolfo(listaUltimosCandlesEngolfo);
-				
+//				ArrayList<InfoCandle> listaUltimosCandlesEngolfo = InfoCandleService.getUltimosInfoCandle(nomeDoPapel,
+//						grafico.get(j).getData(), LIMITDECANDLEENGOLFO);
+//				RedeNeural.procuraPadraoEngolfo(listaUltimosCandlesEngolfo);
+				RedeNeural.procuraPadraoDoji(grafico.get(j));
 				
 			}
 
@@ -110,16 +122,17 @@ public class TreinamentoRedeNeural {
 		for (int i = 0; i < po.size(); i++) {
 			
 			ArrayList<Operacao> operacoes = new ArrayList<Operacao>();
-			operacoes = OperacaoService.getOperacoesPossiveis(MIN, MAX, po.get(i).getNomeDoPapel());
+			operacoes = OperacaoService.getAllOperacoesPossiveis(po.get(i).getNomeDoPapel());
 			
 			for(int j=0;j<operacoes.size();j++) {
 				Operacao operacao = operacoes.get(j);
 				ArrayList<InfoCandle> verificaContinuidade = new ArrayList<InfoCandle>();
-				verificaContinuidade = InfoCandleService.verificaGraficoContinuo(operacao.getData(), operacao.getNomeDoPapel(), LIMITVERIFICACONTINUIDADE);
 				
-				if(verificaContinuidadeDoGrafico(operacao.getData(), verificaContinuidade)) {
+				verificaContinuidade = InfoCandleService.verificaGraficoContinuo(operacao.getInfoCandle().getData(), operacao.getInfoCandle().getNomeDoPapel(), LIMITVERIFICACONTINUIDADE);
+				
+				if(verificaContinuidadeDoGrafico(operacao.getInfoCandle().getData(), verificaContinuidade)) {
 					ArrayList<InfoCandle> grafico = new ArrayList<InfoCandle>();
-					grafico = InfoCandleService.getGraficoAPartirDaData(operacao.getData(), operacao.getNomeDoPapel());
+					grafico = InfoCandleService.getGraficoAPartirDaData(operacao.getInfoCandle().getData(), operacao.getInfoCandle().getNomeDoPapel());
 					
 					for(int k=0; k<grafico.size(); k++) {
 						
@@ -281,6 +294,26 @@ public class TreinamentoRedeNeural {
 									k = grafico.size();
 								}
 
+							} else if(verificaSeOperacaoIndefinido(operacao)) {
+								if (grafico.get(k).getMaxima()>=operacao.getInfoCandle().getMaxima()) {
+									operacao.setStart(true);
+									operacao.setEntrada(Entrada.COMPRA.getDescricao());
+									operacao.setPrecoEntrada(RedeNeural.setPrecoEntradaCompra(operacao.getInfoCandle()));
+									operacao.setPrecoStop(RedeNeural.setPrecoStopCompra(operacao.getInfoCandle()));
+									operacao.setPrecoPrimeiroAlvoFibonacci(RedeNeural.calculaPrecoPrimeiroAlvoFibonacci(operacao.getInfoCandle(), Entrada.COMPRA));
+									operacao.setPrecoSegundoAlvoFibonacci(RedeNeural.calculaPrecoSegundoAlvoFibonacci(operacao.getInfoCandle(), Entrada.COMPRA));
+									operacao.setPrecoTerceiroAlvoFibonacci(RedeNeural.calculaPrecoTerceiroAlvoFibonacci(operacao.getInfoCandle(), Entrada.COMPRA));
+									k--;
+								} else if(grafico.get(k).getMinima()<=operacao.getInfoCandle().getMinima()) {
+									operacao.setStart(true);
+									operacao.setEntrada(Entrada.VENDA.getDescricao());
+									operacao.setPrecoEntrada(RedeNeural.setPrecoEntradaVenda(operacao.getInfoCandle()));
+									operacao.setPrecoStop(RedeNeural.setPrecoStopVenda(operacao.getInfoCandle()));
+									operacao.setPrecoPrimeiroAlvoFibonacci(RedeNeural.calculaPrecoPrimeiroAlvoFibonacci(operacao.getInfoCandle(), Entrada.VENDA));
+									operacao.setPrecoSegundoAlvoFibonacci(RedeNeural.calculaPrecoSegundoAlvoFibonacci(operacao.getInfoCandle(), Entrada.VENDA));
+									operacao.setPrecoTerceiroAlvoFibonacci(RedeNeural.calculaPrecoTerceiroAlvoFibonacci(operacao.getInfoCandle(), Entrada.VENDA));
+									k--;
+								}
 							}
 							
 						}
@@ -419,6 +452,10 @@ public class TreinamentoRedeNeural {
 
 	private static boolean verificaSeOperacaoCompra(Operacao operacao) {
 		return operacao.getEntrada().equals(Entrada.COMPRA.getDescricao());
+	}
+	
+	private static boolean verificaSeOperacaoIndefinido(Operacao operacao) {
+		return operacao.getEntrada().equals(Entrada.INDEFINIDO.getDescricao());
 	}
 
 	private static Boolean verificaContinuidadeDoGrafico(LocalDate data, ArrayList<InfoCandle> verif) {
