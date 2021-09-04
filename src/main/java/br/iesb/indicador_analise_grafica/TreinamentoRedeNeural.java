@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import javax.activation.DataSource;
 
 import org.apache.logging.log4j.CloseableThreadContext.Instance;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import br.iesb.indicador_analise_grafica.service.InfoCandleService;
 import br.iesb.indicador_analise_grafica.service.OperacaoService;
@@ -21,7 +22,7 @@ public class TreinamentoRedeNeural {
 	DateTimeFormatter formato = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 	static ArrayList<Operacao> operacoesAtivas = new ArrayList<Operacao>();
 	static ArrayList<Operacao> operacoesFinalizadas = new ArrayList<Operacao>();
-	static RedeNeural redeNeural = new RedeNeural();
+	private RedeNeural redeNeural = new RedeNeural();
 	static ArrayList<InfoCandle> grafico = new ArrayList<InfoCandle>();
 	private final static Double MIN = 10.0;
 	private final static Double MAX = 100.0;
@@ -31,6 +32,9 @@ public class TreinamentoRedeNeural {
 	private final static String DATAINICIAL = "2000-01-01";
 	public static final int LIMITDECANDLEMARUBOZU = 5;
 	public static final int LIMITDECANDLEENGOLFO = 2;
+	
+	@Autowired
+	private OperacaoService operacaoService = new OperacaoService();
 	
 	
 	public static void realizaTreinamentoWekaNaiveBayes() {
@@ -78,7 +82,7 @@ public class TreinamentoRedeNeural {
 
 	}
 
-	public static void realizaTreinamentoProcurandoPadroesEmPapeisOperaveis() {
+	public void realizaTreinamentoProcurandoPadroesEmPapeisOperaveis() {
 
 		System.out.println("Iniciando busca por padroes...");
 
@@ -102,7 +106,7 @@ public class TreinamentoRedeNeural {
 //				ArrayList<InfoCandle> listaUltimosCandlesEngolfo = InfoCandleService.getUltimosInfoCandle(nomeDoPapel,
 //						grafico.get(j).getData(), LIMITDECANDLEENGOLFO);
 //				RedeNeural.procuraPadraoEngolfo(listaUltimosCandlesEngolfo);
-				RedeNeural.procuraPadraoDoji(grafico.get(j));
+				redeNeural.procuraPadraoDoji(grafico.get(j));
 				
 			}
 
@@ -112,7 +116,7 @@ public class TreinamentoRedeNeural {
 
 	}
 
-	public static void confereAlvosDasOperacoesPossiveis() {
+	public void confereAlvosDasOperacoesPossiveis() {
 		
 		System.out.println("Conferindo alvos...");
 		
@@ -122,13 +126,18 @@ public class TreinamentoRedeNeural {
 		for (int i = 0; i < po.size(); i++) {
 			
 			ArrayList<Operacao> operacoes = new ArrayList<Operacao>();
-			operacoes = OperacaoService.getAllOperacoesPossiveis(po.get(i).getNomeDoPapel());
+			operacoes = operacaoService.getAllOperacoesPossiveis(po.get(i).getNomeDoPapel());
 			
 			for(int j=0;j<operacoes.size();j++) {
 				Operacao operacao = operacoes.get(j);
 				ArrayList<InfoCandle> verificaContinuidade = new ArrayList<InfoCandle>();
 				
-				verificaContinuidade = InfoCandleService.verificaGraficoContinuo(operacao.getInfoCandle().getData(), operacao.getInfoCandle().getNomeDoPapel(), LIMITVERIFICACONTINUIDADE);
+				InfoCandle infoCandle = operacao.getInfoCandle();
+				
+				LocalDate dataOperacao = infoCandle.getData();
+				String nomePapelOperacao = infoCandle.getNomeDoPapel();
+				
+				verificaContinuidade = InfoCandleService.verificaGraficoContinuo(dataOperacao, nomePapelOperacao, LIMITVERIFICACONTINUIDADE);
 				
 				if(verificaContinuidadeDoGrafico(operacao.getInfoCandle().getData(), verificaContinuidade)) {
 					ArrayList<InfoCandle> grafico = new ArrayList<InfoCandle>();
@@ -320,7 +329,7 @@ public class TreinamentoRedeNeural {
 						
 					}
 					
-					OperacaoService.adicionaOperacao(operacao);
+					operacaoService.adicionaOperacao(operacao);
 					
 				}
 			}
@@ -423,10 +432,10 @@ public class TreinamentoRedeNeural {
 		return infoCandle.getMinima() <= operacao.getPrecoStop();
 	}
 
-	public static void verificaEstatistica() {
+	public void verificaEstatistica() {
 		String nomeDoPapelOperacao = "";
 		LocalDate dataUltimaOperacao = LocalDate.parse(DATAINICIAL);
-		ArrayList<String> listaNomesPapeisOperaveis = OperacaoService.getAllPapeisOperacoesPossiveis(MIN, MAX);
+		ArrayList<String> listaNomesPapeisOperaveis = operacaoService.getAllPapeisOperacoesPossiveis(MIN, MAX);
 
 		for (int i = 0; i < listaNomesPapeisOperaveis.size(); i++) {
 			nomeDoPapelOperacao = listaNomesPapeisOperaveis.get(i);

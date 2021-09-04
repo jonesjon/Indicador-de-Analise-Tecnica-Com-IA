@@ -3,12 +3,17 @@ package br.iesb.indicador_analise_grafica;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Controller;
+
 import br.iesb.indicador_analise_grafica.service.DojiService;
 import br.iesb.indicador_analise_grafica.service.EngolfoService;
 import br.iesb.indicador_analise_grafica.service.InfoCandleService;
 import br.iesb.indicador_analise_grafica.service.MarteloService;
 import br.iesb.indicador_analise_grafica.service.MarubozuService;
 import br.iesb.indicador_analise_grafica.service.OperacaoService;
+
 
 public class RedeNeural {
 
@@ -26,8 +31,11 @@ public class RedeNeural {
 	private final static int PORCENTAGEMMAXIMAENGOLFO = 10;
 	private final static int PORCENTAGEMMAXIMAPAVIODOJI = 60;
 	private final static int PORCENTAGEMMINIMAPAVIODOJI = 40;
+	
+	@Autowired
+	private OperacaoService operacaoService;
 
-	public static Operacao procuraPadraoMartelo(InfoCandle infoCandle) {
+	public Operacao procuraPadraoMartelo(InfoCandle infoCandle) {
 
 		if (infoCandle != null) {
 
@@ -58,7 +66,7 @@ public class RedeNeural {
 				martelo.setOperacao(operacao);
 				
 				operacao.setMartelo(martelo);
-				OperacaoService.adicionaOperacao(operacao);
+				operacaoService.adicionaOperacao(operacao);
 				MarteloService.adicionaMartelo(martelo);
 
 				return operacao;
@@ -69,7 +77,7 @@ public class RedeNeural {
 
 	}
 	
-	public static Boolean procuraPadraoEngolfo(ArrayList<InfoCandle> listInfoCandle) {
+	public Boolean procuraPadraoEngolfo(ArrayList<InfoCandle> listInfoCandle) {
 
 		if (listInfoCandle != null && listInfoCandle.size() >= TreinamentoRedeNeural.LIMITDECANDLEENGOLFO) {
 
@@ -101,7 +109,7 @@ public class RedeNeural {
 				
 				operacao.setEngolfo(engolfo);
 	
-				OperacaoService.adicionaOperacao(operacao);
+				operacaoService.adicionaOperacao(operacao);
 				EngolfoService.adicionaEngolfo(engolfo);
 				 
 				 
@@ -133,7 +141,7 @@ public class RedeNeural {
 				
 				operacao.setEngolfo(engolfo);
 	
-				OperacaoService.adicionaOperacao(operacao);
+				operacaoService.adicionaOperacao(operacao);
 				EngolfoService.adicionaEngolfo(engolfo);
 				
 			}
@@ -144,7 +152,7 @@ public class RedeNeural {
 
 	}
 
-	public static Boolean procuraPadraoMarubozu(ArrayList<InfoCandle> listInfoCandle) {
+	public Boolean procuraPadraoMarubozu(ArrayList<InfoCandle> listInfoCandle) {
 
 		if (listInfoCandle != null && listInfoCandle.size() >= TreinamentoRedeNeural.LIMITDECANDLEMARUBOZU) {
 
@@ -192,7 +200,7 @@ public class RedeNeural {
 							classificaVariacaoPreco(calculaVariacao).getDescricao(), operacao);
 
 					operacao.setMarubozu(marubozu);
-					OperacaoService.adicionaOperacao(operacao);
+					operacaoService.adicionaOperacao(operacao);
 					MarubozuService.adicionaMarubozu(marubozu);
 
 					return true;
@@ -212,7 +220,7 @@ public class RedeNeural {
 							classificaVariacaoPreco(calculaVariacao).getDescricao(), operacao);
 					
 					operacao.setMarubozu(marubozu);
-					OperacaoService.adicionaOperacao(operacao);
+					operacaoService.adicionaOperacao(operacao);
 					MarubozuService.adicionaMarubozu(marubozu);
 
 					return true;
@@ -225,7 +233,7 @@ public class RedeNeural {
 
 	}
 	
-	public static Boolean procuraPadraoDoji(InfoCandle infoCandle) {
+	public Boolean procuraPadraoDoji(InfoCandle infoCandle) {
 
 		if (infoCandle != null) {
 			
@@ -251,7 +259,7 @@ public class RedeNeural {
 				doji.setOperacao(operacao);
 				operacao.setDoji(doji);
 				
-				OperacaoService.adicionaOperacao(operacao);
+				operacaoService.adicionaOperacao(operacao);
 				DojiService.adicionaDoji(doji);
 				
 			}
