@@ -38,10 +38,16 @@ public class Operacao implements Serializable{
 	private Martelo martelo = null;
 	
 	@OneToOne(mappedBy = "operacao", cascade = CascadeType.PERSIST)
+	private MarteloInvertido marteloInvertido = null;
+	
+	@OneToOne(mappedBy = "operacao", cascade = CascadeType.PERSIST)
 	private Marubozu marubozu = null;
 	
 	@OneToOne(mappedBy = "operacao", cascade = CascadeType.PERSIST)
 	private Engolfo engolfo = null;
+	
+	@OneToOne(mappedBy = "operacao", cascade = CascadeType.PERSIST)
+	private Doji doji = null;
 
 	@Column(name="start")
 	private boolean start = false;
@@ -241,6 +247,30 @@ public class Operacao implements Serializable{
 
 	public String getTipoEntrada() {
 		return tipoEntrada;
+	}
+
+	public Doji getDoji() {
+		return doji;
+	}
+
+	public void setDoji(Doji doji) {
+		this.doji = doji;
+	}
+
+	public LocalDate getDat() {
+		return dat;
+	}
+
+	public void setDat(LocalDate dat) {
+		this.dat = dat;
+	}
+
+	public MarteloInvertido getMarteloInvertido() {
+		return marteloInvertido;
+	}
+
+	public void setMarteloInvertido(MarteloInvertido marteloInvertido) {
+		this.marteloInvertido = marteloInvertido;
 	}
 
 

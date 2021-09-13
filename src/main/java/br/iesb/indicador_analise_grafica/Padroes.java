@@ -3,8 +3,11 @@ package br.iesb.indicador_analise_grafica;
 public enum Padroes {
 	
 	MARTELO("Martelo"),
+	MARTELOINVERTIDO("Martelo Invertido"),
 	MARUBOZU("Marubozu"),
-	ENGOLFO("Engolfo");
+	ENGOLFO("Engolfo"),
+	DOJICOMPRA("Doji de Compra"),
+	DOJIVENDA("Doji de Venda");
 	
 	
 	private String descricao;
