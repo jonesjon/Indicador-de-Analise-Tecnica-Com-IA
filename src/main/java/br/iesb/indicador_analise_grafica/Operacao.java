@@ -48,6 +48,9 @@ public class Operacao implements Serializable{
 	
 	@OneToOne(mappedBy = "operacao", cascade = CascadeType.PERSIST)
 	private Doji doji = null;
+	
+	@OneToOne(mappedBy = "operacao", cascade = CascadeType.PERSIST)
+	private PiercingLine piercingLine = null;
 
 	@Column(name="start")
 	private boolean start = false;
@@ -82,6 +85,14 @@ public class Operacao implements Serializable{
 	@Column(name="porcentagemOperacaoFinal")
 	private Double porcentagemOperacaoFinal = 0.0;
 	
+	public PiercingLine getPiercingLine() {
+		return piercingLine;
+	}
+
+	public void setPiercingLine(PiercingLine piercingLine) {
+		this.piercingLine = piercingLine;
+	}
+
 	public Operacao() {
 		
 	}

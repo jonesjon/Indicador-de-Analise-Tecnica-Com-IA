@@ -9,6 +9,7 @@ import br.iesb.indicador_analise_grafica.service.MarteloInvertidoService;
 import br.iesb.indicador_analise_grafica.service.MarteloService;
 import br.iesb.indicador_analise_grafica.service.MarubozuService;
 import br.iesb.indicador_analise_grafica.service.OperacaoService;
+import br.iesb.indicador_analise_grafica.service.PiercingLineService;
 
 public class RedeNeural {
 
@@ -107,7 +108,7 @@ public class RedeNeural {
 
 	}
 
-	private static boolean condicaoParaMarteloInvertido(InfoCandle infoCandle, Double pavioSuperior,
+	private static Boolean condicaoParaMarteloInvertido(InfoCandle infoCandle, Double pavioSuperior,
 			Double pavioInferior) {
 		return pavioSuperior >= 67 && pavioInferior <= 10
 				&& tendenciaMediaCurta(infoCandle) == TendenciaMediaCurta.ALTA;
@@ -203,6 +204,136 @@ public class RedeNeural {
 
 		return false;
 
+	}
+
+	public static Boolean procuraPadraoPiercingLine(ArrayList<InfoCandle> grafico) {
+		
+		if(grafico == null) {
+			return false;
+		}
+		
+		for(int i=0; i<grafico.size()-1; i++) {
+			
+			InfoCandle primeiroCandle = grafico.get(i);
+			InfoCandle segundoCandle = grafico.get(i+1);
+			
+			if(tipoCandle(primeiroCandle) == TipoCandle.POSITIVO) {
+				
+				if(condicaoPiercingLineDeBaixa(primeiroCandle, segundoCandle)) {
+					
+					int perfuracao = calculoPerfuracao(primeiroCandle, segundoCandle);
+					
+					Operacao operacao = new Operacao();
+					operacao.setDat(segundoCandle.getData());
+					operacao.setNomeDoPapel(segundoCandle.getNomeDoPapel());
+					operacao.setPadrao(Padroes.DARKCLOUD.getDescricao());
+					operacao.setTipoEntrada(Entrada.VENDA.getDescricao());
+					operacao.setPrecoEntrada(setPrecoEntradaVenda(segundoCandle));
+					operacao.setPrecoStop(setPrecoStopVenda(segundoCandle));
+					operacao.setPrecoPrimeiroAlvoFibonacci(calculaPrecoPrimeiroAlvoFibonacci(segundoCandle, Entrada.VENDA));
+					operacao.setPrecoSegundoAlvoFibonacci(calculaPrecoSegundoAlvoFibonacci(segundoCandle, Entrada.VENDA));
+					operacao.setPrecoTerceiroAlvoFibonacci(calculaPrecoTerceiroAlvoFibonacci(segundoCandle, Entrada.VENDA));
+					
+					PiercingLine piercingLine = new PiercingLine();
+					
+					piercingLine.setTipo(tipoCandle(segundoCandle).getTipo());
+					piercingLine.setVolumeAcimaMedia20(volumeAcimaMedia20(segundoCandle));
+					piercingLine.setPerfuracao(perfuracao);
+					piercingLine.setPrecoAcimaMedia8(verificaSePrecoFechamentoAcimaMedia(segundoCandle, MEDIACURTA));
+					piercingLine.setPrecoAcimaMedia20(verificaSePrecoFechamentoAcimaMedia(segundoCandle, MEDIA));
+					piercingLine.setPrecoAcimaMedia200(verificaSePrecoFechamentoAcimaMedia(segundoCandle, MEDIALONGA));
+					piercingLine.setOperacao(operacao);
+					operacao.setPiercingLine(piercingLine);
+					
+					OperacaoService.adicionaOperacao(operacao);
+					PiercingLineService.adicionaPiercingLine(piercingLine);
+					
+					
+				}
+				
+			}else if(tipoCandle(primeiroCandle) == TipoCandle.NEGATIVO) {
+				
+				if(condicaoPiercingLineDeAlta(primeiroCandle, segundoCandle)) {
+					
+					int perfuracao = calculoPerfuracao(primeiroCandle, segundoCandle);
+					
+					Operacao operacao = new Operacao();
+					operacao.setDat(segundoCandle.getData());
+					operacao.setNomeDoPapel(segundoCandle.getNomeDoPapel());
+					operacao.setPadrao(Padroes.PIERCINGLINE.getDescricao());
+					operacao.setTipoEntrada(Entrada.COMPRA.getDescricao());
+					operacao.setPrecoEntrada(setPrecoEntradaCompra(segundoCandle));
+					operacao.setPrecoStop(setPrecoStopCompra(segundoCandle));
+					operacao.setPrecoPrimeiroAlvoFibonacci(calculaPrecoPrimeiroAlvoFibonacci(segundoCandle, Entrada.COMPRA));
+					operacao.setPrecoSegundoAlvoFibonacci(calculaPrecoSegundoAlvoFibonacci(segundoCandle, Entrada.COMPRA));
+					operacao.setPrecoTerceiroAlvoFibonacci(calculaPrecoTerceiroAlvoFibonacci(segundoCandle, Entrada.COMPRA));
+					
+					PiercingLine piercingLine = new PiercingLine();
+					
+					piercingLine.setTipo(tipoCandle(segundoCandle).getTipo());
+					piercingLine.setVolumeAcimaMedia20(volumeAcimaMedia20(segundoCandle));
+					piercingLine.setPerfuracao(perfuracao);
+					piercingLine.setPrecoAcimaMedia8(verificaSePrecoFechamentoAcimaMedia(segundoCandle, MEDIACURTA));
+					piercingLine.setPrecoAcimaMedia20(verificaSePrecoFechamentoAcimaMedia(segundoCandle, MEDIA));
+					piercingLine.setPrecoAcimaMedia200(verificaSePrecoFechamentoAcimaMedia(segundoCandle, MEDIALONGA));
+					piercingLine.setOperacao(operacao);
+					operacao.setPiercingLine(piercingLine);
+					
+					OperacaoService.adicionaOperacao(operacao);
+					PiercingLineService.adicionaPiercingLine(piercingLine);
+					
+				}
+				
+			}
+			
+			
+		
+		}
+		
+		return null;
+	}
+
+	private static int calculoPerfuracao(InfoCandle primeiroCandle, InfoCandle segundoCandle) {
+		Double variacaoTotal = Math.abs(primeiroCandle.getFechamento()-primeiroCandle.getAbertura());
+		Double variacaoPerfuracao = Math.abs(primeiroCandle.getFechamento()-segundoCandle.getFechamento());
+		
+		Double variacao = Math.abs(variacaoPerfuracao/(variacaoTotal-1)*100);
+		return variacao.intValue();
+	}
+
+	private static boolean condicaoPiercingLineDeAlta(InfoCandle primeiroCandle, InfoCandle segundoCandle) {
+		return segundoCandle.getAbertura() < primeiroCandle.getFechamento() && 
+				precoMetadeCorpoCandle(primeiroCandle) < segundoCandle.getFechamento() && 
+				segundoCandle.getFechamento() < primeiroCandle.getAbertura() &&
+				pavioSuperiorEmPorcentagem(primeiroCandle) < 20 && 
+				pavioInferiorEmPorcentagem(primeiroCandle) < 20 && 
+				segundoCandle.getMaxima() < primeiroCandle.getMaxima();
+	}
+
+	private static boolean condicaoPiercingLineDeBaixa(InfoCandle primeiroCandle, InfoCandle segundoCandle) {
+		return segundoCandle.getAbertura() > primeiroCandle.getFechamento() && 
+				precoMetadeCorpoCandle(primeiroCandle) > segundoCandle.getFechamento()&& 
+				segundoCandle.getFechamento() > primeiroCandle.getAbertura() &&
+				pavioSuperiorEmPorcentagem(primeiroCandle) < 20 && 
+				pavioInferiorEmPorcentagem(primeiroCandle) < 20 &&
+				segundoCandle.getMinima() < primeiroCandle.getMinima();
+	}
+	
+	private static Double precoMetadeCorpoCandle(InfoCandle candle) {
+		
+		if(candle == null) {
+			return null;
+		}
+		
+		Double dif = Math.abs((candle.getFechamento() - candle.getAbertura())/2);
+		
+		if(tipoCandle(candle) == TipoCandle.POSITIVO) {
+			return candle.getAbertura() + dif;
+		}else if(tipoCandle(candle) == TipoCandle.NEGATIVO){
+			return candle.getFechamento() + dif;
+		}
+		
+		return 0.0;
 	}
 
 	private static Double setPrecoStopVenda(InfoCandle infoCandle) {
@@ -679,7 +810,7 @@ public class RedeNeural {
 			return PavioSuperior.PAVIO90PORCENTO;
 		} else if (pavioSuperior > 90 && pavioSuperior <= 95) {
 			return PavioSuperior.PAVIO95PORCENTO;
-		} else if (pavioSuperior > 95 && pavioSuperior <= 100) {
+		} else if (pavioSuperior > 95 && pavioSuperior.compareTo(100.0) == 0 || pavioSuperior.compareTo(100.0) == -1) {
 			return PavioSuperior.PAVIO100PORCENTO;
 		}
 

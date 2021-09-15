@@ -14,6 +14,7 @@ import br.iesb.indicador_analise_grafica.primary_key.InfoCandlePK;
 @Repository
 public interface InfoCandleRepository extends CrudRepository<InfoCandle, InfoCandlePK> {
 
+	@Query(value = "select * from INFO_CANDLE where nomeDoPapel = ?1 order by dat", nativeQuery = true)
 	ArrayList<InfoCandle> findByNomeDoPapel(String nomeDoPapel);
 
 	int countByNomeDoPapel(String name);

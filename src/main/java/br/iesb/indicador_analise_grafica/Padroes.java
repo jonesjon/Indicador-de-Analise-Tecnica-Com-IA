@@ -6,6 +6,8 @@ public enum Padroes {
 	MARTELOINVERTIDO("Martelo Invertido"),
 	MARUBOZU("Marubozu"),
 	ENGOLFO("Engolfo"),
+	PIERCINGLINE("Piercing Line"),
+	DARKCLOUD("Dark Cloud"),
 	DOJICOMPRA("Doji de Compra"),
 	DOJIVENDA("Doji de Venda");
 	

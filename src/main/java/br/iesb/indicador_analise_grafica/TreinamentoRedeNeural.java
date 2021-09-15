@@ -24,6 +24,7 @@ public class TreinamentoRedeNeural {
 	private final static String DATAINICIAL = "2000-01-01";
 	public static final int LIMITDECANDLEMARUBOZU = 5;
 	public static final int LIMITDECANDLEENGOLFO = 2;
+	public static final int CANDLESPIECINGLINE = 2;
 
 	public static void adicionarOperacao(Operacao operacao) {
 		operacoesAtivas.add(operacao);
@@ -76,13 +77,17 @@ public class TreinamentoRedeNeural {
 		for (int i = 0; i < po.size(); i++) {
 
 			String nomeDoPapel = po.get(i).getNomeDoPapel();
-
+			
 			grafico.clear();
 			grafico = InfoCandleService.getInfoCandlePeloNome(nomeDoPapel);
-
+		
+			RedeNeural.procuraPadraoPiercingLine(grafico);
+			
 			for (int j = 0; j < grafico.size(); j++) {
 				
-				InfoCandle infoCandle = grafico.get(j);
+//				InfoCandle infoCandle = grafico.get(j);
+				
+				
 				
 //				RedeNeural.procuraPadraoMartelo(infoCandle);
 //				
@@ -94,7 +99,8 @@ public class TreinamentoRedeNeural {
 //						grafico.get(j).getData(), LIMITDECANDLEENGOLFO);
 //				RedeNeural.procuraPadraoEngolfo(listaUltimosCandlesEngolfo);
 //				RedeNeural.procuraPadraoDoji(grafico.get(j));
-				RedeNeural.procuraPadraoMarteloInvertido(infoCandle);
+//				RedeNeural.procuraPadraoMarteloInvertido(infoCandle);
+				
 				
 			}
 
