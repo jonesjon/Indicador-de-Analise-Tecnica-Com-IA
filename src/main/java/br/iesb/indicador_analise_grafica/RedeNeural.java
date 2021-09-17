@@ -10,6 +10,7 @@ import br.iesb.indicador_analise_grafica.service.MarteloService;
 import br.iesb.indicador_analise_grafica.service.MarubozuService;
 import br.iesb.indicador_analise_grafica.service.OperacaoService;
 import br.iesb.indicador_analise_grafica.service.PiercingLineService;
+import br.iesb.indicador_analise_grafica.service.TresSoldadosService;
 
 public class RedeNeural {
 
@@ -293,6 +294,123 @@ public class RedeNeural {
 		return null;
 	}
 
+	public static Boolean procuraPadraoTresSoldados(ArrayList<InfoCandle> grafico) {
+		
+		if(grafico == null) {
+			return null;
+		}
+		
+		for(int i=0; i<grafico.size()-2;i++) {
+			
+			InfoCandle primeiroCandle = grafico.get(i);
+			InfoCandle segundoCandle = grafico.get(i+1);
+			InfoCandle terceiroCandle = grafico.get(i+2);
+			
+			if(condicaoParaTresSoldadosDeAlta(primeiroCandle, segundoCandle, terceiroCandle)) {
+				
+				//juntando todos os candles em um unico candle
+				InfoCandle todosCandles = new InfoCandle();
+				//Na compra, a maxima vai ficar com o valor do ultimo Candle. A minima vai ficar com o valor do primeiro Candle
+				
+				todosCandles.setMaxima(terceiroCandle.getMaxima());
+				todosCandles.setMinima(primeiroCandle.getMinima());
+				
+				Operacao operacao = new Operacao();
+				
+				operacao.setDat(terceiroCandle.getData());
+				operacao.setNomeDoPapel(terceiroCandle.getNomeDoPapel());
+				operacao.setPadrao(Padroes.TRESSOLDADOSDEALTA.getDescricao());
+				operacao.setTipoEntrada(Entrada.COMPRA.getDescricao());
+				operacao.setPrecoEntrada(setPrecoEntradaCompra(terceiroCandle));
+				operacao.setPrecoStop(setPrecoStopCompra(primeiroCandle));
+				operacao.setPrecoPrimeiroAlvoFibonacci(calculaPrecoPrimeiroAlvoFibonacci(todosCandles, Entrada.COMPRA));
+				operacao.setPrecoSegundoAlvoFibonacci(calculaPrecoSegundoAlvoFibonacci(todosCandles, Entrada.COMPRA));
+				operacao.setPrecoTerceiroAlvoFibonacci(calculaPrecoTerceiroAlvoFibonacci(todosCandles, Entrada.COMPRA));
+				
+				TresSoldados tresSoldados = new TresSoldados();
+				
+				tresSoldados.setPavioInferiorPrimeiroCandle(pavioInferiorEmPorcentagem(primeiroCandle).intValue());
+				tresSoldados.setPavioSuperiorPrimeiroCandle(pavioSuperiorEmPorcentagem(primeiroCandle).intValue());
+				tresSoldados.setPavioInferiorSegundoCandle(pavioInferiorEmPorcentagem(segundoCandle).intValue());
+				tresSoldados.setPavioSuperiorSegundoCandle(pavioSuperiorEmPorcentagem(segundoCandle).intValue());
+				tresSoldados.setPavioInferiorTerceiroCandle(pavioInferiorEmPorcentagem(terceiroCandle).intValue());
+				tresSoldados.setPavioSuperiorTerceiroCandle(pavioSuperiorEmPorcentagem(terceiroCandle).intValue());
+				tresSoldados.setPrecoAcimaMedia8(verificaSePrecoFechamentoAcimaMedia(terceiroCandle, MEDIACURTA));
+				tresSoldados.setPrecoAcimaMedia20(verificaSePrecoFechamentoAcimaMedia(terceiroCandle, MEDIA));
+				tresSoldados.setPrecoAcimaMedia200(verificaSePrecoFechamentoAcimaMedia(terceiroCandle, MEDIALONGA));
+				
+				tresSoldados.setOperacao(operacao);
+				operacao.setTresSoldados(tresSoldados);
+				
+				OperacaoService.adicionaOperacao(operacao);
+				TresSoldadosService.adicionaTresSoldados(tresSoldados);
+				
+				
+				
+			}else if(condicaoParaTresSoldadosDeBaixa(primeiroCandle, segundoCandle, terceiroCandle)) {
+				
+				//juntando todos os candles em um unico candle
+				InfoCandle todosCandles = new InfoCandle();
+				//Na Venda, a maxima vai ficar com o valor do primeiro Candle. A minima vai ficar com o valor do terceiro Candle
+				
+				todosCandles.setMaxima(primeiroCandle.getMaxima());
+				todosCandles.setMinima(terceiroCandle.getMinima());
+				
+				Operacao operacao = new Operacao();
+				
+				operacao.setDat(terceiroCandle.getData());
+				operacao.setNomeDoPapel(terceiroCandle.getNomeDoPapel());
+				operacao.setPadrao(Padroes.TRESSOLDADOSDEBAIXA.getDescricao());
+				operacao.setTipoEntrada(Entrada.VENDA.getDescricao());
+				operacao.setPrecoEntrada(setPrecoEntradaVenda(terceiroCandle));
+				operacao.setPrecoStop(setPrecoStopVenda(primeiroCandle));
+				operacao.setPrecoPrimeiroAlvoFibonacci(calculaPrecoPrimeiroAlvoFibonacci(todosCandles, Entrada.VENDA));
+				operacao.setPrecoSegundoAlvoFibonacci(calculaPrecoSegundoAlvoFibonacci(todosCandles, Entrada.VENDA));
+				operacao.setPrecoTerceiroAlvoFibonacci(calculaPrecoTerceiroAlvoFibonacci(todosCandles, Entrada.VENDA));
+				
+				TresSoldados tresSoldados = new TresSoldados();
+				
+				tresSoldados.setPavioInferiorPrimeiroCandle(pavioInferiorEmPorcentagem(primeiroCandle).intValue());
+				tresSoldados.setPavioSuperiorPrimeiroCandle(pavioSuperiorEmPorcentagem(primeiroCandle).intValue());
+				tresSoldados.setPavioInferiorSegundoCandle(pavioInferiorEmPorcentagem(segundoCandle).intValue());
+				tresSoldados.setPavioSuperiorSegundoCandle(pavioSuperiorEmPorcentagem(segundoCandle).intValue());
+				tresSoldados.setPavioInferiorTerceiroCandle(pavioInferiorEmPorcentagem(terceiroCandle).intValue());
+				tresSoldados.setPavioSuperiorTerceiroCandle(pavioSuperiorEmPorcentagem(terceiroCandle).intValue());
+				tresSoldados.setPrecoAcimaMedia8(verificaSePrecoFechamentoAcimaMedia(terceiroCandle, MEDIACURTA));
+				tresSoldados.setPrecoAcimaMedia20(verificaSePrecoFechamentoAcimaMedia(terceiroCandle, MEDIA));
+				tresSoldados.setPrecoAcimaMedia200(verificaSePrecoFechamentoAcimaMedia(terceiroCandle, MEDIALONGA));
+				tresSoldados.setVolumeAcimaMedia20(volumeAcimaMedia20(terceiroCandle));
+				
+				tresSoldados.setOperacao(operacao);
+				operacao.setTresSoldados(tresSoldados);
+				
+				OperacaoService.adicionaOperacao(operacao);
+				TresSoldadosService.adicionaTresSoldados(tresSoldados);
+				
+			}
+			
+			
+		}
+		
+		return null;
+	}
+
+	private static boolean condicaoParaTresSoldadosDeBaixa(InfoCandle primeiroCandle, InfoCandle segundoCandle,
+			InfoCandle terceiroCandle) {
+		return tipoCandle(primeiroCandle) == TipoCandle.NEGATIVO && pavioSuperiorEmPorcentagem(primeiroCandle) < 40 && pavioInferiorEmPorcentagem(primeiroCandle) < 40 &&
+				    	tipoCandle(segundoCandle) == TipoCandle.NEGATIVO && pavioSuperiorEmPorcentagem(segundoCandle) < 40 && pavioInferiorEmPorcentagem(segundoCandle) < 40 &&
+							tipoCandle(terceiroCandle) == TipoCandle.NEGATIVO && pavioSuperiorEmPorcentagem(terceiroCandle) < 40 && pavioInferiorEmPorcentagem(terceiroCandle) < 40 && 
+								tendenciaMediaCurta(terceiroCandle) == TendenciaMediaCurta.ALTA;
+	}
+
+	private static boolean condicaoParaTresSoldadosDeAlta(InfoCandle primeiroCandle, InfoCandle segundoCandle,
+			InfoCandle terceiroCandle) {
+		return tipoCandle(primeiroCandle) == TipoCandle.POSITIVO && pavioSuperiorEmPorcentagem(primeiroCandle) < 40 && pavioInferiorEmPorcentagem(primeiroCandle) < 40 &&
+				tipoCandle(segundoCandle) == TipoCandle.POSITIVO && pavioSuperiorEmPorcentagem(segundoCandle) < 40 && pavioInferiorEmPorcentagem(segundoCandle) < 40 &&
+					tipoCandle(terceiroCandle) == TipoCandle.POSITIVO && pavioSuperiorEmPorcentagem(terceiroCandle) < 40 && pavioInferiorEmPorcentagem(terceiroCandle) < 40 &&
+						tendenciaMediaCurta(terceiroCandle) == TendenciaMediaCurta.BAIXA;
+	}
+	
 	private static int calculoPerfuracao(InfoCandle primeiroCandle, InfoCandle segundoCandle) {
 		Double variacaoTotal = Math.abs(primeiroCandle.getFechamento()-primeiroCandle.getAbertura());
 		Double variacaoPerfuracao = Math.abs(primeiroCandle.getFechamento()-segundoCandle.getFechamento());

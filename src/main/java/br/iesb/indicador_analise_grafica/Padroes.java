@@ -9,6 +9,8 @@ public enum Padroes {
 	PIERCINGLINE("Piercing Line"),
 	DARKCLOUD("Dark Cloud"),
 	DOJICOMPRA("Doji de Compra"),
+	TRESSOLDADOSDEALTA("Tres Soldados de Alta"),
+	TRESSOLDADOSDEBAIXA("Tres soldados de Baixa"),
 	DOJIVENDA("Doji de Venda");
 	
 	

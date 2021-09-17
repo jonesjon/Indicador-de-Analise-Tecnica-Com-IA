@@ -137,5 +137,26 @@ public class InfoCandle implements Serializable {
 	public Double getVolume() {
 		return volume;
 	}
+	public void setNomeDoPapel(String nomeDoPapel) {
+		this.nomeDoPapel = nomeDoPapel;
+	}
+	public void setData(LocalDate data) {
+		this.data = data;
+	}
+	public void setAbertura(Double abertura) {
+		this.abertura = abertura;
+	}
+	public void setFechamento(Double fechamento) {
+		this.fechamento = fechamento;
+	}
+	public void setMaxima(Double maxima) {
+		this.maxima = maxima;
+	}
+	public void setMinima(Double minima) {
+		this.minima = minima;
+	}
+	public void setVolume(Double volume) {
+		this.volume = volume;
+	}
 
 }

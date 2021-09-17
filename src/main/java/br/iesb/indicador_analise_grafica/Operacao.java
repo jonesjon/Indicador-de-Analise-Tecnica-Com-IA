@@ -51,6 +51,9 @@ public class Operacao implements Serializable{
 	
 	@OneToOne(mappedBy = "operacao", cascade = CascadeType.PERSIST)
 	private PiercingLine piercingLine = null;
+	
+	@OneToOne(mappedBy = "operacao", cascade = CascadeType.PERSIST)
+	private TresSoldados tresSoldados = null;
 
 	@Column(name="start")
 	private boolean start = false;
@@ -282,6 +285,14 @@ public class Operacao implements Serializable{
 
 	public void setMarteloInvertido(MarteloInvertido marteloInvertido) {
 		this.marteloInvertido = marteloInvertido;
+	}
+
+	public TresSoldados getTresSoldados() {
+		return tresSoldados;
+	}
+
+	public void setTresSoldados(TresSoldados tresSoldados) {
+		this.tresSoldados = tresSoldados;
 	}
 
 

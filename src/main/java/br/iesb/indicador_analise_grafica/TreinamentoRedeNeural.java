@@ -81,7 +81,8 @@ public class TreinamentoRedeNeural {
 			grafico.clear();
 			grafico = InfoCandleService.getInfoCandlePeloNome(nomeDoPapel);
 		
-			RedeNeural.procuraPadraoPiercingLine(grafico);
+//			RedeNeural.procuraPadraoPiercingLine(grafico);
+			RedeNeural.procuraPadraoTresSoldados(grafico);
 			
 			for (int j = 0; j < grafico.size(); j++) {
 				
