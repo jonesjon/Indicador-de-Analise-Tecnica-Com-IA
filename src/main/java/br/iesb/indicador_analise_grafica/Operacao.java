@@ -54,6 +54,9 @@ public class Operacao implements Serializable{
 	
 	@OneToOne(mappedBy = "operacao", cascade = CascadeType.PERSIST)
 	private TresSoldados tresSoldados = null;
+	
+	@OneToOne(mappedBy = "operacao", cascade = CascadeType.PERSIST)
+	private BebeAbandonado bebeAbandonado = null;
 
 	@Column(name="start")
 	private boolean start = false;
@@ -293,6 +296,14 @@ public class Operacao implements Serializable{
 
 	public void setTresSoldados(TresSoldados tresSoldados) {
 		this.tresSoldados = tresSoldados;
+	}
+
+	public BebeAbandonado getBebeAbandonado() {
+		return bebeAbandonado;
+	}
+
+	public void setBebeAbandonado(BebeAbandonado bebeAbandonado) {
+		this.bebeAbandonado = bebeAbandonado;
 	}
 
 

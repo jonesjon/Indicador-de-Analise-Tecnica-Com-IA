@@ -3,6 +3,7 @@ package br.iesb.indicador_analise_grafica;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import br.iesb.indicador_analise_grafica.service.BebeAbandonadoService;
 import br.iesb.indicador_analise_grafica.service.DojiService;
 import br.iesb.indicador_analise_grafica.service.EngolfoService;
 import br.iesb.indicador_analise_grafica.service.MarteloInvertidoService;
@@ -395,6 +396,113 @@ public class RedeNeural {
 		return null;
 	}
 
+	public static Boolean procuraPadraoBebeAbandonado(ArrayList<InfoCandle> grafico) {
+		
+		if(grafico == null) {
+			return null;
+		}
+		
+		for(int i = 0; i<grafico.size()-2;i++) {
+			
+			InfoCandle primeiroCandle = grafico.get(i);
+			InfoCandle segundoCandle = grafico.get(i+1);
+			InfoCandle terceiroCandle = grafico.get(i+2);
+			
+			if(condicaoParaBebeAbandonadoDeBaixa(primeiroCandle, segundoCandle, terceiroCandle)) {
+				
+				InfoCandle todosCandles = new InfoCandle();
+				
+				todosCandles.setMaxima(segundoCandle.getMaxima());
+				todosCandles.setMinima(terceiroCandle.getMinima());
+				
+				Operacao operacao = new Operacao();
+				
+				operacao.setDat(terceiroCandle.getData());
+				operacao.setNomeDoPapel(terceiroCandle.getNomeDoPapel());
+				operacao.setPadrao(Padroes.BEBEABANDONADODEBAIXA.getDescricao());
+				operacao.setTipoEntrada(Entrada.VENDA.getDescricao());
+				operacao.setPrecoEntrada(setPrecoEntradaVenda(terceiroCandle));
+				operacao.setPrecoStop(setPrecoStopVenda(segundoCandle));
+				operacao.setPrecoPrimeiroAlvoFibonacci(calculaPrecoPrimeiroAlvoFibonacci(todosCandles, Entrada.VENDA));
+				operacao.setPrecoSegundoAlvoFibonacci(calculaPrecoSegundoAlvoFibonacci(todosCandles, Entrada.VENDA));
+				operacao.setPrecoTerceiroAlvoFibonacci(calculaPrecoTerceiroAlvoFibonacci(todosCandles, Entrada.VENDA));
+				
+				BebeAbandonado bebeAbandonado = new BebeAbandonado();
+				
+				bebeAbandonado.setPrimeiroCandleMarubozu(condicaoParaMarubozuSimples(primeiroCandle));
+				bebeAbandonado.setSegundoCandleDoji(condicaoParaDoji(pavioSuperiorEmPorcentagem(segundoCandle), pavioInferiorEmPorcentagem(segundoCandle)));
+				bebeAbandonado.setTerceiroCandleMarubozu(condicaoParaMarubozuSimples(terceiroCandle));
+				bebeAbandonado.setPrecoAcimaMedia8(verificaSePrecoFechamentoAcimaMedia(terceiroCandle, MEDIACURTA));
+				bebeAbandonado.setPrecoAcimaMedia20(verificaSePrecoFechamentoAcimaMedia(terceiroCandle, MEDIA));
+				bebeAbandonado.setPrecoAcimaMedia200(verificaSePrecoFechamentoAcimaMedia(terceiroCandle, MEDIALONGA));
+				
+				bebeAbandonado.setOperacao(operacao);
+				operacao.setBebeAbandonado(bebeAbandonado);
+				
+				OperacaoService.adicionaOperacao(operacao);
+				BebeAbandonadoService.adicionaBebeAbandonado(bebeAbandonado);
+			
+			}else if(condicaoParaBebeAbandonadoDeAlta(primeiroCandle, segundoCandle, terceiroCandle)) {
+				
+				InfoCandle todosCandles = new InfoCandle();
+				
+				todosCandles.setMinima(segundoCandle.getMinima());
+				todosCandles.setMaxima(terceiroCandle.getMaxima());
+				
+				Operacao operacao = new Operacao();
+				
+				operacao.setDat(terceiroCandle.getData());
+				operacao.setNomeDoPapel(terceiroCandle.getNomeDoPapel());
+				operacao.setPadrao(Padroes.BEBEABANDONADODEALTA.getDescricao());
+				operacao.setTipoEntrada(Entrada.COMPRA.getDescricao());
+				operacao.setPrecoEntrada(setPrecoEntradaCompra(terceiroCandle));
+				operacao.setPrecoStop(setPrecoStopCompra(segundoCandle));
+				operacao.setPrecoPrimeiroAlvoFibonacci(calculaPrecoPrimeiroAlvoFibonacci(todosCandles, Entrada.COMPRA));
+				operacao.setPrecoSegundoAlvoFibonacci(calculaPrecoSegundoAlvoFibonacci(todosCandles, Entrada.COMPRA));
+				operacao.setPrecoTerceiroAlvoFibonacci(calculaPrecoTerceiroAlvoFibonacci(todosCandles, Entrada.COMPRA));
+				
+				BebeAbandonado bebeAbandonado = new BebeAbandonado();
+				
+				bebeAbandonado.setPrimeiroCandleMarubozu(condicaoParaMarubozuSimples(primeiroCandle));
+				bebeAbandonado.setSegundoCandleDoji(condicaoParaDoji(pavioSuperiorEmPorcentagem(segundoCandle), pavioInferiorEmPorcentagem(segundoCandle)));
+				bebeAbandonado.setTerceiroCandleMarubozu(condicaoParaMarubozuSimples(terceiroCandle));
+				bebeAbandonado.setPrecoAcimaMedia8(verificaSePrecoFechamentoAcimaMedia(terceiroCandle, MEDIACURTA));
+				bebeAbandonado.setPrecoAcimaMedia20(verificaSePrecoFechamentoAcimaMedia(terceiroCandle, MEDIA));
+				bebeAbandonado.setPrecoAcimaMedia200(verificaSePrecoFechamentoAcimaMedia(terceiroCandle, MEDIALONGA));
+				
+				bebeAbandonado.setOperacao(operacao);
+				operacao.setBebeAbandonado(bebeAbandonado);
+				
+				OperacaoService.adicionaOperacao(operacao);
+				BebeAbandonadoService.adicionaBebeAbandonado(bebeAbandonado);
+				
+			}
+			
+		}
+		return null;
+	}
+
+	private static boolean condicaoParaBebeAbandonadoDeAlta(InfoCandle primeiroCandle, InfoCandle segundoCandle,
+			InfoCandle terceiroCandle) {
+
+		return tipoCandle(primeiroCandle) == TipoCandle.NEGATIVO && 
+				segundoCandle.getMaxima() < primeiroCandle.getMinima() && 
+					terceiroCandle.getMinima() > segundoCandle.getMaxima() && 
+						tipoCandle(terceiroCandle) == TipoCandle.POSITIVO;
+	}
+
+	private static boolean condicaoParaMarubozuSimples(InfoCandle primeiroCandle) {
+		return pavioSuperiorEmPorcentagem(primeiroCandle) < 10 && pavioInferiorEmPorcentagem(primeiroCandle) < 10;
+	}
+
+	private static boolean condicaoParaBebeAbandonadoDeBaixa(InfoCandle primeiroCandle, InfoCandle segundoCandle,
+			InfoCandle terceiroCandle) {
+		return tipoCandle(primeiroCandle) == TipoCandle.POSITIVO && 
+				segundoCandle.getMinima() > primeiroCandle.getMaxima() && 
+					terceiroCandle.getMaxima() < segundoCandle.getMinima() && 
+						tipoCandle(terceiroCandle) == TipoCandle.NEGATIVO;
+	}
+	
 	private static boolean condicaoParaTresSoldadosDeBaixa(InfoCandle primeiroCandle, InfoCandle segundoCandle,
 			InfoCandle terceiroCandle) {
 		return tipoCandle(primeiroCandle) == TipoCandle.NEGATIVO && pavioSuperiorEmPorcentagem(primeiroCandle) < 40 && pavioInferiorEmPorcentagem(primeiroCandle) < 40 &&
