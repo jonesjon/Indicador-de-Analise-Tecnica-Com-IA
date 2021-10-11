@@ -1,5 +1,8 @@
 package br.iesb.indicador_analise_grafica;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public enum PavioInferior {
 
 	SEMPAVIO("Sem Pavio Inferior", 1), 
@@ -27,6 +30,18 @@ public enum PavioInferior {
 	
 	public int getID() {
 		return id;
+	}
+	
+	public static List<PavioInferior> getPavioInferiorMartelo(){
+		List<PavioInferior> list = new ArrayList<PavioInferior>();
+		
+		list.add(PAVIO80PORCENTO);
+		list.add(PAVIO90PORCENTO);
+		list.add(PAVIO95PORCENTO);
+		list.add(PAVIO100PORCENTO);
+		list.add(NULL);
+		
+		return list;
 	}
 	
 }
