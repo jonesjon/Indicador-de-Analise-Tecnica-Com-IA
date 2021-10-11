@@ -19,7 +19,7 @@ public class ConexaoBancoDeDados {
 			String mydatabase = "indicadordeanalisetecnicacomia"; // nome do seu banco de dados
 			String url = "jdbc:mysql://" + serverName + "/" + mydatabase;
 			String username = "root"; // nome de um usuário de seu BD
-			String password = ""; // sua senha de acesso
+			String password = "1122334455"; // sua senha de acesso
 
 			connection = DriverManager.getConnection(url, username, password);
 
