@@ -24,13 +24,39 @@ public interface OperacaoRepository extends CrudRepository<Operacao, OperacaoPK>
 	ArrayList<String> findDistinctNomeDosPapeisOperacoesPossiveis(Double min, Double max);
 	
 	@Query(value = "select count(*) from OPERACAO o inner join MARTELO m "
-						+ "on o.nomeDoPapel = m.nomeDopapel and  o.dat = m.dat and o.padrao = m.padrao "
-							+ "where o.start = 1 and tipo = ?1 and pavioSuperior = ?2 and pavioInferior = ?3 "
-								+ "and volumeAcimaMedia20 = ?4 and marteloAcimaMedia200 = ?5 and o.dat < 2021-01-01", nativeQuery = true)
-	int countMarteloEspecificoIniciadoGeral(String tipo, String pavioSuperior, String pavioInferior, String volumeAcimaMedia20, String marteloAcimaMedia200);
+			+ "on o.nomeDoPapel = m.nomeDopapel and  o.dat = m.dat and o.padrao = m.padrao "
+				+ "where o.start = 1 and tipo = ?1 and pavioSuperior = ?2 and pavioInferior = ?3 "
+					+ "and volumeAcimaMedia20 = ?4 and marteloAcimaMedia200 = ?5 and o.dat < '2021-01-01'", nativeQuery = true)
+	Double countMarteloEspecificoIniciadoGeral(String tipo, String pavioSuperior, String pavioInferior, int volumeAcimaMedia20, int marteloAcimaMedia200);
 	
+	@Query(value = "select count(*) from OPERACAO o inner join MARTELO m "
+			+ "on o.nomeDoPapel = m.nomeDopapel and  o.dat = m.dat and o.padrao = m.padrao "
+				+ "where o.start = 1 and o.primeiroAlvoAtingido = 0 and tipo = ?1 and pavioSuperior = ?2 and pavioInferior = ?3 "
+					+ "and volumeAcimaMedia20 = ?4 and marteloAcimaMedia200 = ?5 and o.dat < '2021-01-01'", nativeQuery = true)
+	Double countMarteloEspecificoIniciadoGeralNaoChegouAlvo(String tipo, String pavioSuperior, String pavioInferior, int volumeAcimaMedia20, int marteloAcimaMedia200);
 	
+	@Query(value = "select count(*) from OPERACAO o inner join MARTELO m "
+			+ "on o.nomeDoPapel = m.nomeDopapel and  o.dat = m.dat and o.padrao = m.padrao "
+				+ "where o.start = 1 and tipo = ?1 and pavioSuperior = ?2 and pavioInferior = ?3 "
+					+ "and volumeAcimaMedia20 = ?4 and marteloAcimaMedia200 = ?5 and o.dat < '2021-01-01' and o.dat > '2016-01-01'", nativeQuery = true)
+	Double countMarteloEspecificoIniciadoUltimosCincoAnos(String tipo, String pavioSuperior, String pavioInferior, int volumeAcimaMedia20, int marteloAcimaMedia200);
 	
+	@Query(value = "select count(*) from OPERACAO o inner join MARTELO m "
+			+ "on o.nomeDoPapel = m.nomeDopapel and  o.dat = m.dat and o.padrao = m.padrao "
+				+ "where o.start = 1 and o.primeiroAlvoAtingido = 0 and tipo = ?1 and pavioSuperior = ?2 and pavioInferior = ?3 "
+					+ "and volumeAcimaMedia20 = ?4 and marteloAcimaMedia200 = ?5 and o.dat < '2021-01-01' and o.dat > '2016-01-01'", nativeQuery = true)
+	Double countMarteloEspecificoIniciadoUltimosCincoAnosNaoChegouAlvo(String tipo, String pavioSuperior, String pavioInferior, int volumeAcimaMedia20, int marteloAcimaMedia200);
 	
+	@Query(value = "select count(*) from OPERACAO o inner join MARTELO m "
+			+ "on o.nomeDoPapel = m.nomeDopapel and  o.dat = m.dat and o.padrao = m.padrao "
+				+ "where o.start = 1 and tipo = ?1 and pavioSuperior = ?2 and pavioInferior = ?3 "
+					+ "and volumeAcimaMedia20 = ?4 and marteloAcimaMedia200 = ?5 and o.dat < '2021-01-01' and o.dat >= '2020-01-01'", nativeQuery = true)
+	Double countMarteloEspecificoIniciadoUltimoAno(String tipo, String pavioSuperior, String pavioInferior, int volumeAcimaMedia20, int marteloAcimaMedia200);
+	
+	@Query(value = "select count(*) from OPERACAO o inner join MARTELO m "
+			+ "on o.nomeDoPapel = m.nomeDopapel and  o.dat = m.dat and o.padrao = m.padrao "
+				+ "where o.start = 1 and o.primeiroAlvoAtingido = 0 and tipo = ?1 and pavioSuperior = ?2 and pavioInferior = ?3 "
+					+ "and volumeAcimaMedia20 = ?4 and marteloAcimaMedia200 = ?5 and o.dat < '2021-01-01' and o.dat >= '2020-01-01'", nativeQuery = true)
+	Double countMarteloEspecificoIniciadoUltimoAnoNaoChegouAlvo(String tipo, String pavioSuperior, String pavioInferior, int volumeAcimaMedia20, int marteloAcimaMedia200);
 	
 }

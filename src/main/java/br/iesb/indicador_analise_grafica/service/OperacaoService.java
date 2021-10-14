@@ -42,10 +42,45 @@ public class OperacaoService {
 		return operacaoRepository.findDistinctNomeDosPapeisOperacoesPossiveis(min, max);
 	}
 
-	public static int contaMarteloEspecificoInciado(String tipo, String pavioSuperior, String pavioInferior,
-			String volumeAcimaMedia20, String marteloAcimaMedia200) {
+	public static Double contaMarteloEspecificoInciado(String tipo, String pavioSuperior, String pavioInferior,
+			int volumeAcimaMedia20, int marteloAcimaMedia200) {
 
 		return operacaoRepository.countMarteloEspecificoIniciadoGeral(tipo, pavioSuperior, pavioInferior,
+				volumeAcimaMedia20, marteloAcimaMedia200);
+	}
+	
+	public static Double contaMarteloEspecificoInciadoNaoChegouAlvo(String tipo, String pavioSuperior, String pavioInferior,
+			int volumeAcimaMedia20, int marteloAcimaMedia200) {
+
+		return operacaoRepository.countMarteloEspecificoIniciadoGeralNaoChegouAlvo(tipo, pavioSuperior, pavioInferior,
+				volumeAcimaMedia20, marteloAcimaMedia200);
+	}
+	
+	public static Double contaMarteloEspecificoInciadoUltimosCincoAnos(String tipo, String pavioSuperior, String pavioInferior,
+			int volumeAcimaMedia20, int marteloAcimaMedia200) {
+
+		return operacaoRepository.countMarteloEspecificoIniciadoUltimosCincoAnos(tipo, pavioSuperior, pavioInferior,
+				volumeAcimaMedia20, marteloAcimaMedia200);
+	}
+	
+	public static Double contaMarteloEspecificoInciadoUltimosCincoAnosNaoChegouAlvo(String tipo, String pavioSuperior, String pavioInferior,
+			int volumeAcimaMedia20, int marteloAcimaMedia200) {
+
+		return operacaoRepository.countMarteloEspecificoIniciadoUltimosCincoAnosNaoChegouAlvo(tipo, pavioSuperior, pavioInferior,
+				volumeAcimaMedia20, marteloAcimaMedia200);
+	}
+	
+	public static Double contaMarteloEspecificoInciadoUltimoAno(String tipo, String pavioSuperior, String pavioInferior,
+			int volumeAcimaMedia20, int marteloAcimaMedia200) {
+
+		return operacaoRepository.countMarteloEspecificoIniciadoUltimoAno(tipo, pavioSuperior, pavioInferior,
+				volumeAcimaMedia20, marteloAcimaMedia200);
+	}
+	
+	public static Double contaMarteloEspecificoInciadoUltimoAnoNaoChegouAlvo(String tipo, String pavioSuperior, String pavioInferior,
+			int volumeAcimaMedia20, int marteloAcimaMedia200) {
+
+		return operacaoRepository.countMarteloEspecificoIniciadoUltimoAnoNaoChegouAlvo(tipo, pavioSuperior, pavioInferior,
 				volumeAcimaMedia20, marteloAcimaMedia200);
 	}
 

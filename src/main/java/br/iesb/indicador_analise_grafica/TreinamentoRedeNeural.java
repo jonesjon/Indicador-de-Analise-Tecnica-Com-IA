@@ -81,30 +81,10 @@ public class TreinamentoRedeNeural {
 			grafico.clear();
 			grafico = InfoCandleService.getInfoCandlePeloNome(nomeDoPapel);
 		
+			RedeNeural.procuraPadraoMartelo(grafico);
 //			RedeNeural.procuraPadraoPiercingLine(grafico);
 //			RedeNeural.procuraPadraoTresSoldados(grafico);
-			RedeNeural.procuraPadraoBebeAbandonado(grafico);
-			
-			for (int j = 0; j < grafico.size(); j++) {
-				
-//				InfoCandle infoCandle = grafico.get(j);
-				
-				
-				
-//				RedeNeural.procuraPadraoMartelo(infoCandle);
-//				
-//				ArrayList<InfoCandle> listaUltimosCandlesMarubozu = InfoCandleService.getUltimosInfoCandle(nomeDoPapel,
-//						grafico.get(j).getData(), LIMITDECANDLEMARUBOZU);
-//				RedeNeural.procuraPadraoMarubozu(listaUltimosCandlesMarubozu);
-				
-//				ArrayList<InfoCandle> listaUltimosCandlesEngolfo = InfoCandleService.getUltimosInfoCandle(nomeDoPapel,
-//						grafico.get(j).getData(), LIMITDECANDLEENGOLFO);
-//				RedeNeural.procuraPadraoEngolfo(listaUltimosCandlesEngolfo);
-//				RedeNeural.procuraPadraoDoji(grafico.get(j));
-//				RedeNeural.procuraPadraoMarteloInvertido(infoCandle);
-				
-				
-			}
+//			RedeNeural.procuraPadraoBebeAbandonado(grafico);
 
 		}
 

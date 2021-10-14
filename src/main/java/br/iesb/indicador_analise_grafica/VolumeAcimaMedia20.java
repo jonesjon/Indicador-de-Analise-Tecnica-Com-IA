@@ -5,15 +5,21 @@ import java.util.List;
 
 public enum VolumeAcimaMedia20 {
 	
-	SIM("1"), NAO("0"), NULL("null");
+	SIM("1", 1), NAO("0", 0), NULL("null", -1);
 	
-	VolumeAcimaMedia20(String variavel) {
-		this.valor = variavel;
+	private String nome;
+	private int valor;
+	
+	VolumeAcimaMedia20(String nome, int valor) {
+		this.nome = nome;
+		this.valor = valor;
 	}
 	
-	private String valor;
+	public String getString() {
+		return nome;
+	}
 	
-	public String getValor() {
+	public int getValor() {
 		return valor;
 	}
 	
