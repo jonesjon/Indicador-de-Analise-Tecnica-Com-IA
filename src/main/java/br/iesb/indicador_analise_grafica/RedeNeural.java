@@ -2,7 +2,11 @@ package br.iesb.indicador_analise_grafica;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
+import com.mysql.cj.util.EscapeTokenizer;
+
+import br.iesb.indicador_analise_grafica.estatistica.EstatisticaMartelo;
 import br.iesb.indicador_analise_grafica.service.BebeAbandonadoService;
 import br.iesb.indicador_analise_grafica.service.DojiService;
 import br.iesb.indicador_analise_grafica.service.EngolfoService;
@@ -480,6 +484,62 @@ public class RedeNeural {
 			
 		}
 		return null;
+	}
+	
+	private static ArrayList<PossibilidadeMartelo> todasAsPossibilidadesMartelo() {
+		
+		List<TipoCandle> tipos = TipoCandle.retornaTipos();
+		List<PavioSuperior> pavioS = PavioSuperior.getPavioSuperiorMartelo();
+		List<PavioInferior> pavioInf = PavioInferior.getPavioInferiorMartelo();
+		List<VolumeAcimaMedia20> vol = VolumeAcimaMedia20.getListVolumeAcimaMedia20();
+		List<PrecoAcimaMedia200> precos = PrecoAcimaMedia200.getListPrecoAcimaMedia200();
+
+		ArrayList<PossibilidadeMartelo> possibilidades = new ArrayList<PossibilidadeMartelo>();
+
+		tipos.stream().forEach(tipo -> {
+			pavioS.stream().forEach(pavioSuperior -> {
+				pavioInf.stream().forEach(pavioInferior -> {
+					vol.stream().forEach(volume -> {
+						precos.stream().forEach(preco -> {
+							
+							PossibilidadeMartelo possibilidade = new PossibilidadeMartelo(tipo, pavioSuperior, pavioInferior, volume,
+									preco);
+							
+							if(possibilidade.tipoCandle != TipoCandle.NULL && possibilidade.pavioSuperior != PavioSuperior.NULL 
+									&& possibilidade.pavioInferior != PavioInferior.NULL && possibilidade.volumeAcimaMedia20 != VolumeAcimaMedia20.NULL
+										&& possibilidade.precoAcimaMedia200 != PrecoAcimaMedia200.NULL) {
+								
+								possibilidades.add(possibilidade);
+								
+							}
+							
+
+						});
+					});
+				});
+			});
+		});
+		
+		return possibilidades;
+		
+	}
+	
+	private static void preenchendoEstatisticaMartelo(ArrayList<PossibilidadeMartelo> todasPossibilidades) {
+
+		EstatisticaMartelo estatisticaMartelo = new EstatisticaMartelo();
+		ArrayList<EstatisticaMartelo> estatisticasMartelo = new ArrayList<EstatisticaMartelo>();
+		String tipoCandle = "";
+		String pavioInferior = "";
+		String pavioSuperior = "";
+		String volumeAcimaMedia20 = "";
+		String marteloAcimaMedia200 = "";
+
+		todasPossibilidades.stream().forEach(p -> {
+
+//			tipoCandle = p.tipoCandle.getTipo();
+
+		});
+		
 	}
 
 	private static boolean condicaoParaBebeAbandonadoDeAlta(InfoCandle primeiroCandle, InfoCandle segundoCandle,

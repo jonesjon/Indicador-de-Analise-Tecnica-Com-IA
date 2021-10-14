@@ -23,7 +23,13 @@ public interface OperacaoRepository extends CrudRepository<Operacao, OperacaoPK>
 	@Query(value = "select distinct(nomeDoPapel) from OPERACAO where precoEntrada > ?1 and precoEntrada < ?2", nativeQuery = true)
 	ArrayList<String> findDistinctNomeDosPapeisOperacoesPossiveis(Double min, Double max);
 	
-
+	@Query(value = "select count(*) from OPERACAO o inner join MARTELO m "
+						+ "on o.nomeDoPapel = m.nomeDopapel and  o.dat = m.dat and o.padrao = m.padrao "
+							+ "where o.start = 1 and tipo = ?1 and pavioSuperior = ?2 and pavioInferior = ?3 "
+								+ "and volumeAcimaMedia20 = ?4 and marteloAcimaMedia200 = ?5 and o.dat < 2021-01-01", nativeQuery = true)
+	int countMarteloEspecificoIniciadoGeral(String tipo, String pavioSuperior, String pavioInferior, String volumeAcimaMedia20, String marteloAcimaMedia200);
+	
+	
 	
 	
 	

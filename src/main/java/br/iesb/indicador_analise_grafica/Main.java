@@ -2,19 +2,14 @@ package br.iesb.indicador_analise_grafica;
 
 import java.io.IOException;
 import java.sql.Connection;
-import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.boot.autoconfigure.batch.BatchProperties.Jdbc;
-import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.stereotype.Controller;
 
 
 @SpringBootApplication
@@ -40,7 +35,7 @@ public class Main {
 		List<VolumeAcimaMedia20> vol = VolumeAcimaMedia20.getListVolumeAcimaMedia20();
 		List<PrecoAcimaMedia200> precos = PrecoAcimaMedia200.getListPrecoAcimaMedia200();
 
-		ArrayList<Possibilidade> possibilidades = new ArrayList<Possibilidade>();
+		ArrayList<PossibilidadeMartelo> possibilidades = new ArrayList<PossibilidadeMartelo>();
 
 		tipos.stream().forEach(tipo -> {
 			pavioS.stream().forEach(pavioSuperior -> {
@@ -50,7 +45,7 @@ public class Main {
 							System.out.println(tipo.getTipo() + "||" + pavioSuperior.getDescricao() + "||"
 									+ pavioInferior.getDescricao() + "||" + volume.getValor() + "||" + preco.getValor()
 									+ "\n\n");
-							Possibilidade possibilidade = new Possibilidade(tipo, pavioSuperior, pavioInferior, volume,
+							PossibilidadeMartelo possibilidade = new PossibilidadeMartelo(tipo, pavioSuperior, pavioInferior, volume,
 									preco);
 							possibilidades.add(possibilidade);
 
@@ -74,14 +69,17 @@ public class Main {
 		while (rs.next()) {
 			System.out.println(rs.getInt("abc"));
 		}
+		
+		conexao.close();
 
 	}
 
-	private static void queryDeTodasPossibilidades(ArrayList<Possibilidade> todasPossibilidades) {
+	private static void queryDeTodasPossibilidades(ArrayList<PossibilidadeMartelo> todasPossibilidades) {
 
 		System.out.println("\n\nQueries de diferentes combinações\n\n");
 
-		String queryComeco = "select count(*) as abc from MARTELO where ";
+		String queryComeco = "select count(*) from OPERACAO o inner join MARTELO m on o.nomeDoPapel = m.nomeDopapel and  o.dat = m.dat and o.padrao = m.padrao "
+				+ "where o.start = 1";
 		
 		final String tipoCandle = " tipoCandle = ";
 		final String pavioInferior = " pavioInferior = ";
@@ -98,6 +96,7 @@ public class Main {
 			String queryFinal = queryComeco;
 
 			if (p.tipoCandle != TipoCandle.NULL) {
+				queryFinal += AND_BANCO;
 				queryFinal += tipoCandle;
 				queryFinal += p.tipoCandle.getTipo();
 			}

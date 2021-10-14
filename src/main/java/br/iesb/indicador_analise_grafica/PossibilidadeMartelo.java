@@ -1,6 +1,6 @@
 package br.iesb.indicador_analise_grafica;
 
-public class Possibilidade {
+public class PossibilidadeMartelo {
 	
 	TipoCandle tipoCandle;
 	PavioSuperior pavioSuperior;
@@ -9,7 +9,7 @@ public class Possibilidade {
 	PrecoAcimaMedia200 precoAcimaMedia200;
 	
 	
-	public Possibilidade(TipoCandle tipoCandle, PavioSuperior pavioSuperior, PavioInferior pavioInferior,
+	public PossibilidadeMartelo(TipoCandle tipoCandle, PavioSuperior pavioSuperior, PavioInferior pavioInferior,
 			VolumeAcimaMedia20 volumeAcimaMedia20, PrecoAcimaMedia200 precoAcimaMedia200) {
 		this.tipoCandle = tipoCandle;
 		this.pavioSuperior = pavioSuperior;
