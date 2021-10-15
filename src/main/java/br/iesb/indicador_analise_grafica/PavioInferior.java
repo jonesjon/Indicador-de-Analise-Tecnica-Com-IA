@@ -18,10 +18,11 @@ public enum PavioInferior {
 	NULL("null", -1);
 	
 	private String descricao;
-	private int id;
+	private int ID;
 	
 	PavioInferior(String descricao, int id){
 		this.descricao = descricao;
+		this.ID = id;
 	}
 	
 	public String getDescricao() {
@@ -29,7 +30,7 @@ public enum PavioInferior {
 	}
 	
 	public int getID() {
-		return id;
+		return ID;
 	}
 	
 	public static List<PavioInferior> getPavioInferiorMartelo(){

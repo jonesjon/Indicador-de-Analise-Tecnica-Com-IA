@@ -1,5 +1,8 @@
 package br.iesb.indicador_analise_grafica;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -34,15 +37,16 @@ public class RedeNeural {
 	private final static int PORCENTAGEMMAXIMAENGOLFO = 10;
 	private static final Double PORCENTAGEMMAXIMAPAVIODOJI = 60.0;
 	private static final Double PORCENTAGEMMINIMAPAVIODOJI = 40.0;
+	private static final Double PORCENTAGEMMINIMAPARAESTATISTICA = 70.0;
 
 	public static Operacao procuraPadraoMartelo(ArrayList<InfoCandle> listInfoCandle) {
 
-		if(listInfoCandle == null) {
+		if (listInfoCandle == null) {
 			return null;
 		}
-		
+
 		for (int i = 0; i < listInfoCandle.size(); i++) {
-			
+
 			InfoCandle infoCandle = listInfoCandle.get(i);
 
 			if (infoCandle != null) {
@@ -78,7 +82,7 @@ public class RedeNeural {
 					operacao.setMartelo(martelo);
 					OperacaoService.adicionaOperacao(operacao);
 					MarteloService.adicionaMartelo(martelo);
-					
+
 				}
 			}
 
@@ -119,7 +123,7 @@ public class RedeNeural {
 				operacao.setMarteloInvertido(marteloInvertido);
 				OperacaoService.adicionaOperacao(operacao);
 				MarteloInvertidoService.adicionaMarteloInvertido(marteloInvertido);
-				
+
 			}
 		}
 
@@ -547,9 +551,9 @@ public class RedeNeural {
 		ArrayList<PossibilidadeMartelo> todasPossibilidades = todasAsPossibilidadesMartelo();
 
 		todasPossibilidades.stream().forEach(p -> {
-			
+
 			EstatisticaMartelo estatisticaMartelo = new EstatisticaMartelo();
-			
+
 			estatisticaMartelo.setConfiguracaoMartelo(p);
 
 			Double numeradorGeral = OperacaoService.contaMarteloEspecificoInciadoNaoChegouAlvo(p.tipoCandle.getTipo(),
@@ -559,48 +563,98 @@ public class RedeNeural {
 			Double denominadorGeral = OperacaoService.contaMarteloEspecificoInciado(p.tipoCandle.getTipo(),
 					p.pavioSuperior.getDescricao(), p.pavioInferior.getDescricao(), p.volumeAcimaMedia20.getValor(),
 					p.precoAcimaMedia200.getValor());
-			
-			estatisticaMartelo.setFrequenciaGeral(denominadorGeral.intValue());
-			
-			Double numeradorUltimosCincoAnos = OperacaoService.contaMarteloEspecificoInciadoUltimosCincoAnosNaoChegouAlvo(p.tipoCandle.getTipo(),
-					p.pavioSuperior.getDescricao(), p.pavioInferior.getDescricao(), p.volumeAcimaMedia20.getValor(),
-					p.precoAcimaMedia200.getValor());
 
-			Double denominadorUltimosCincoAnos = OperacaoService.contaMarteloEspecificoInciadoUltimosCincoAnos(p.tipoCandle.getTipo(),
-					p.pavioSuperior.getDescricao(), p.pavioInferior.getDescricao(), p.volumeAcimaMedia20.getValor(),
-					p.precoAcimaMedia200.getValor());
-			
+			estatisticaMartelo.setFrequenciaGeral(denominadorGeral.intValue());
+
+			Double numeradorUltimosCincoAnos = OperacaoService
+					.contaMarteloEspecificoInciadoUltimosCincoAnosNaoChegouAlvo(p.tipoCandle.getTipo(),
+							p.pavioSuperior.getDescricao(), p.pavioInferior.getDescricao(),
+							p.volumeAcimaMedia20.getValor(), p.precoAcimaMedia200.getValor());
+
+			Double denominadorUltimosCincoAnos = OperacaoService.contaMarteloEspecificoInciadoUltimosCincoAnos(
+					p.tipoCandle.getTipo(), p.pavioSuperior.getDescricao(), p.pavioInferior.getDescricao(),
+					p.volumeAcimaMedia20.getValor(), p.precoAcimaMedia200.getValor());
+
 			estatisticaMartelo.setFrequenciaUltimosCincoAnos(denominadorUltimosCincoAnos.intValue());
-			
-			Double numeradorUltimoAno = OperacaoService.contaMarteloEspecificoInciadoUltimoAnoNaoChegouAlvo(p.tipoCandle.getTipo(),
-					p.pavioSuperior.getDescricao(), p.pavioInferior.getDescricao(), p.volumeAcimaMedia20.getValor(),
-					p.precoAcimaMedia200.getValor());
+
+			Double numeradorUltimoAno = OperacaoService.contaMarteloEspecificoInciadoUltimoAnoNaoChegouAlvo(
+					p.tipoCandle.getTipo(), p.pavioSuperior.getDescricao(), p.pavioInferior.getDescricao(),
+					p.volumeAcimaMedia20.getValor(), p.precoAcimaMedia200.getValor());
 
 			Double denominadorUltimoAno = OperacaoService.contaMarteloEspecificoInciadoUltimoAno(p.tipoCandle.getTipo(),
 					p.pavioSuperior.getDescricao(), p.pavioInferior.getDescricao(), p.volumeAcimaMedia20.getValor(),
 					p.precoAcimaMedia200.getValor());
-			
+
 			estatisticaMartelo.setFrequenciaUltimoAno(denominadorUltimoAno.intValue());
-			
-			if(denominadorGeral != 0) {
-				Double estatisticaGeral = 100.0 - ((numeradorGeral / denominadorGeral)*100);
+
+			if (denominadorGeral != 0) {
+				Double estatisticaGeral = 100.0 - ((numeradorGeral / denominadorGeral) * 100);
 				estatisticaMartelo.setAssertividadeGeral(estatisticaGeral);
 			}
-			
-			if(denominadorUltimosCincoAnos != 0) {
-				Double estatisticaUltimosCincoAnos = 100.0 - ((numeradorUltimosCincoAnos / denominadorUltimosCincoAnos)*100);
+
+			if (denominadorUltimosCincoAnos != 0) {
+				Double estatisticaUltimosCincoAnos = 100.0
+						- ((numeradorUltimosCincoAnos / denominadorUltimosCincoAnos) * 100);
 				estatisticaMartelo.setAssertividadeUltimosCincoAnos(estatisticaUltimosCincoAnos);
 			}
-			
-			if(denominadorUltimoAno != 0) {
-				Double estatisticaUltimoAno = 100.0 - ((numeradorUltimoAno / denominadorUltimoAno)*100);
+
+			if (denominadorUltimoAno != 0) {
+				Double estatisticaUltimoAno = 100.0 - ((numeradorUltimoAno / denominadorUltimoAno) * 100);
 				estatisticaMartelo.setAssertividadeUltimoAno(estatisticaUltimoAno);
 			}
-			
+
 			estatisticasMartelo.add(estatisticaMartelo);
-			
+
+			try {
+				preencherTxtTreinamentoRedeNeuralMartelo();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+
 		});
 
+	}
+
+	private static void preencherTxtTreinamentoRedeNeuralMartelo() throws IOException {
+
+		FileWriter arq = new FileWriter("resource\\ArquivoTreinamentoMartelo.txt");
+		PrintWriter gravarArq = new PrintWriter(arq);
+
+		estatisticasMartelo.stream().forEach(estatisticaMartelo -> {
+			Double assertividadeComPeso = calculaAssertividadeComPeso(estatisticaMartelo);
+
+			gravarArq.printf(estatisticaMartelo.getConfiguracaoMartelo().tipoCandle.getID() + ";"
+					+ estatisticaMartelo.getConfiguracaoMartelo().pavioSuperior.getID() + ";"
+					+ estatisticaMartelo.getConfiguracaoMartelo().pavioInferior.getID() + ";"
+					+ estatisticaMartelo.getConfiguracaoMartelo().volumeAcimaMedia20.getValor() + ";"
+					+ estatisticaMartelo.getConfiguracaoMartelo().precoAcimaMedia200.getValor() + ";");
+
+			if (condicaoParaCompraMartelo(assertividadeComPeso)) {
+				
+				gravarArq.printf(1 + ";");
+				
+			} else {
+				
+				gravarArq.printf(0 + ";");
+
+			}
+			
+			gravarArq.println();
+
+		});
+		
+		arq.close();
+
+	}
+
+	private static boolean condicaoParaCompraMartelo(Double assertividadeComPeso) {
+		return assertividadeComPeso.compareTo(PORCENTAGEMMINIMAPARAESTATISTICA) == 0
+				|| assertividadeComPeso > PORCENTAGEMMINIMAPARAESTATISTICA;
+	}
+
+	private static double calculaAssertividadeComPeso(EstatisticaMartelo estatisticaMartelo) {
+		return (estatisticaMartelo.getAssertividadeGeral() + (estatisticaMartelo.getAssertividadeUltimosCincoAnos() * 2)
+				+ (estatisticaMartelo.getAssertividadeUltimoAno() * 3)) / 6;
 	}
 
 	private static boolean condicaoParaBebeAbandonadoDeAlta(InfoCandle primeiroCandle, InfoCandle segundoCandle,

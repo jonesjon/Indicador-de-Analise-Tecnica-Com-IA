@@ -6,11 +6,11 @@ public class EstatisticaMartelo {
 	
 	private PossibilidadeMartelo configuracaoMartelo;
 	
-	private int frequenciaGeral;
+	private int frequenciaGeral = 0;
 	
-	private int frequenciaUltimoAno;
+	private int frequenciaUltimoAno = 0;
 	
-	private int frequenciaUltimosCincoAnos;
+	private int frequenciaUltimosCincoAnos = 0;
 	
 	private Double assertividadeGeralPrimeiroAlvo = 0.0;
 	
