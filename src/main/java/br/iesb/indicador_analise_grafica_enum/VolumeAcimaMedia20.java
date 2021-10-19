@@ -1,4 +1,4 @@
-package br.iesb.indicador_analise_grafica;
+package br.iesb.indicador_analise_grafica_enum;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +31,19 @@ public enum VolumeAcimaMedia20 {
 		list.add(NULL);
 		
 		return list;
+	}
+	
+	public static VolumeAcimaMedia20 comparaVolumeAcimaMedia20(Boolean valor) {
+		VolumeAcimaMedia20 volRetorno = NULL;
+		
+		if(valor == true) {
+			volRetorno = VolumeAcimaMedia20.SIM;
+		}else {
+			volRetorno = VolumeAcimaMedia20.NAO;
+		}
+		
+		return volRetorno;
+		
 	}
 
 }

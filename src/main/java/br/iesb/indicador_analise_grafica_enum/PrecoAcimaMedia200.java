@@ -1,4 +1,4 @@
-package br.iesb.indicador_analise_grafica;
+package br.iesb.indicador_analise_grafica_enum;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -31,6 +31,20 @@ public enum PrecoAcimaMedia200 {
 		list.add(NULL);
 		
 		return list;
+	}
+	
+	public static PrecoAcimaMedia200 comparaPrecoAcimaMedia200(Boolean valor) {
+		
+		PrecoAcimaMedia200 precoRetorno = NULL;
+		
+		if(valor == true) {
+			precoRetorno = PrecoAcimaMedia200.SIM;
+		}else {
+			precoRetorno = PrecoAcimaMedia200.NAO;
+		}
+		
+		return precoRetorno;
+		
 	}
 
 }

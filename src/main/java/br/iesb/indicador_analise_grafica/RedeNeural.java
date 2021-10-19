@@ -1,5 +1,6 @@
 package br.iesb.indicador_analise_grafica;
 
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -7,7 +8,17 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mysql.cj.util.EscapeTokenizer;
+import org.joone.engine.FullSynapse;
+import org.joone.engine.LinearLayer;
+import org.joone.engine.Monitor;
+import org.joone.engine.NeuralNetEvent;
+import org.joone.engine.NeuralNetListener;
+import org.joone.engine.SigmoidLayer;
+import org.joone.engine.learning.TeachingSynapse;
+import org.joone.io.FileInputSynapse;
+import org.joone.io.FileOutputSynapse;
+import org.joone.io.MemoryOutputSynapse;
+import org.joone.net.NeuralNet;
 
 import br.iesb.indicador_analise_grafica.estatistica.EstatisticaMartelo;
 import br.iesb.indicador_analise_grafica.service.BebeAbandonadoService;
@@ -19,8 +30,17 @@ import br.iesb.indicador_analise_grafica.service.MarubozuService;
 import br.iesb.indicador_analise_grafica.service.OperacaoService;
 import br.iesb.indicador_analise_grafica.service.PiercingLineService;
 import br.iesb.indicador_analise_grafica.service.TresSoldadosService;
+import br.iesb.indicador_analise_grafica_enum.Entrada;
+import br.iesb.indicador_analise_grafica_enum.Padroes;
+import br.iesb.indicador_analise_grafica_enum.PavioInferior;
+import br.iesb.indicador_analise_grafica_enum.PavioSuperior;
+import br.iesb.indicador_analise_grafica_enum.PrecoAcimaMedia200;
+import br.iesb.indicador_analise_grafica_enum.TendenciaMediaCurta;
+import br.iesb.indicador_analise_grafica_enum.TipoCandle;
+import br.iesb.indicador_analise_grafica_enum.VariacaoPreco;
+import br.iesb.indicador_analise_grafica_enum.VolumeAcimaMedia20;
 
-public class RedeNeural {
+public class RedeNeural implements NeuralNetListener {
 
 	ArrayList<Candle> ultimosCandles = new ArrayList<Candle>();
 	static ArrayList<Martelo> listaMartelo = new ArrayList<Martelo>();
@@ -28,6 +48,8 @@ public class RedeNeural {
 
 	static int cont1 = 0;
 	static int cont2 = 0;
+	private final static Double MIN = 10.0;
+	private final static Double MAX = 100.0;
 	private final static int MEDIACURTA = 8;
 	private final static int MEDIA = 20;
 	private final static int MEDIALONGA = 200;
@@ -630,22 +652,174 @@ public class RedeNeural {
 					+ estatisticaMartelo.getConfiguracaoMartelo().precoAcimaMedia200.getValor() + ";");
 
 			if (condicaoParaCompraMartelo(assertividadeComPeso)) {
-				
+
 				gravarArq.printf(1 + ";");
-				
+
 			} else {
-				
+
 				gravarArq.printf(0 + ";");
 
 			}
-			
+
 			gravarArq.println();
 
 		});
-		
+
 		arq.close();
 
 	}
+	
+	public static void preencherTxtValidacaoRedeNeuralMartelo() throws IOException {
+
+		FileWriter arq = new FileWriter("resource\\ArquivoValidacaoMartelo.txt");
+		PrintWriter gravarArq = new PrintWriter(arq);
+
+		LocalDate data = LocalDate.parse("2021-01-01");
+		
+		ArrayList<Operacao> operacoes = OperacaoService.getOperacoesUltimoAno(MIN, MAX, data);
+		ArrayList<Martelo> martelos = new ArrayList<Martelo>();
+		
+		operacoes.stream().forEach(operacao -> {
+			if(Padroes.comparaPadrao(operacao.getPadrao()) == Padroes.MARTELO) {
+				martelos.add(operacao.getMartelo());
+			}
+		});
+		
+		martelos.stream().forEach(martelo -> {
+			gravarArq.printf(TipoCandle.comparaTipoCandle(martelo.getTipo()).getID() + ";"
+					+ PavioSuperior.comparaPavioSuperior(martelo.getPavioSuperior()).getID() + ";"
+					+ PavioInferior.comparaPavioInferior(martelo.getPavioInferior()).getID() + ";"
+					+ VolumeAcimaMedia20.comparaVolumeAcimaMedia20(martelo.getVolumeAcimaMedia20()).getValor() + ";"
+					+ PrecoAcimaMedia200.comparaPrecoAcimaMedia200(martelo.getMarteloAcimaMedia200()).getValor() + ";");
+			gravarArq.println();
+			
+		});
+
+		arq.close();
+
+	}
+
+	public static void realizaTreinamentoRedeNeural() {
+
+		
+		String inputFile = "resource\\ArquivoTreinamentoMartelo.txt";
+		String inputFileValidacao = "resource\\\\ArquivoValidacaoMartelo.txt";
+		
+		String outputFile = "resource\\ArquivoTreinamentoMarteloSaida.txt";
+		  
+	    
+		LinearLayer input = new LinearLayer();
+	    
+		SigmoidLayer hidden = new SigmoidLayer();
+	    
+		LinearLayer output = new LinearLayer();
+	    
+	    
+		input.setLayerName("input");
+		
+		hidden.setLayerName("hidden");
+		
+		output.setLayerName("output");
+
+			    
+	    
+		input.setRows(5);
+		hidden.setRows(4);
+		output.setRows(1);
+
+	   
+		FullSynapse synapse_IH = new FullSynapse();
+		
+		FullSynapse synapse_HO = new FullSynapse();
+
+	    
+		synapse_IH.setName("IH");
+		
+		synapse_HO.setName("HO");
+		
+	
+		input.addOutputSynapse(synapse_IH);
+		hidden.addInputSynapse(synapse_IH);
+		
+		hidden.addOutputSynapse(synapse_HO);
+		output.addInputSynapse(synapse_HO);
+
+		
+		FileInputSynapse inputStream = new FileInputSynapse();
+		inputStream.setAdvancedColumnSelector("1,2,3,4,5");
+		inputStream.setInputFile(new File(inputFile));
+	    
+		input.addInputSynapse(inputStream);
+
+		TeachingSynapse trainer = new TeachingSynapse();
+		
+		FileInputSynapse samples = new FileInputSynapse();
+		
+		samples.setInputFile(new File(inputFile));
+		
+		samples.setAdvancedColumnSelector("6");
+
+		trainer.setDesired(samples);
+
+		FileOutputSynapse error = new FileOutputSynapse();
+		error.setFileName(outputFile);
+	   	trainer.addResultSynapse(error);
+		output.addOutputSynapse(trainer);
+
+		
+		NeuralNet nnet = new NeuralNet();
+
+		
+		nnet.addLayer(input, NeuralNet.INPUT_LAYER);
+		
+		nnet.addLayer(hidden, NeuralNet.HIDDEN_LAYER);
+		
+		nnet.addLayer(output, NeuralNet.OUTPUT_LAYER);
+
+		nnet.setTeacher(trainer);
+
+		Monitor monitor = nnet.getMonitor();
+		monitor.setLearningRate(0.8);
+		monitor.setMomentum(0.3);
+
+		
+		monitor.addNeuralNetListener(nnet);
+
+		monitor.setTrainingPatterns(144);
+		monitor.setTotCicles(2000);
+		monitor.setLearning(true);
+		nnet.go();
+
+		while (nnet.isRunning()) {
+			
+		}
+
+		
+		FileInputSynapse inputStreamValidacao = new FileInputSynapse();
+		inputStreamValidacao.setAdvancedColumnSelector("1,2,3,4,5");
+		inputStreamValidacao.setInputFile(new File(inputFileValidacao));
+	    input.addInputSynapse(inputStreamValidacao);
+	    
+		nnet.addLayer(input, NeuralNet.INPUT_LAYER);
+		MemoryOutputSynapse memOut = new MemoryOutputSynapse();
+		output.removeAllOutputs();
+		output.addOutputSynapse(memOut);
+		nnet.getMonitor().setTotCicles(1);
+		nnet.getMonitor().setLearning(false);
+		
+		nnet.go();
+
+		for(int i=0; i<185; i++) {
+			double[] pattern = memOut.getNextPattern();
+			
+			System.out.println("Saida " + i+1 + ": " + pattern[0]);
+			System.out.println();
+		}
+		
+
+	}
+	
+	
 
 	private static boolean condicaoParaCompraMartelo(Double assertividadeComPeso) {
 		return assertividadeComPeso.compareTo(PORCENTAGEMMINIMAPARAESTATISTICA) == 0
@@ -1245,6 +1419,45 @@ public class RedeNeural {
 		}
 
 		return PavioInferior.NULL;
+
+	}
+
+	@Override
+	public void netStarted(NeuralNetEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void cicleTerminated(NeuralNetEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void netStopped(NeuralNetEvent e) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void errorChanged(NeuralNetEvent e) {
+
+		Monitor mon = (Monitor)e.getSource();
+	    
+	    // Imprimir o erro a cada 200 ciclos de treinamento
+	    if (mon.getCurrentCicle() % 200 == 0)
+	    {
+	      // Imprimir o ciclo de treinamento atual, bem como o erro global da rede neural
+	      System.out.println(mon.getCurrentCicle() + " epochs remaining - RMSE = " + mon.getGlobalError());
+	    }
+
+		
+	}
+
+	@Override
+	public void netStoppedError(NeuralNetEvent e, String error) {
+		// TODO Auto-generated method stub
 
 	}
 

@@ -17,6 +17,9 @@ public interface OperacaoRepository extends CrudRepository<Operacao, OperacaoPK>
 	@Query(value = "select * from OPERACAO where precoEntrada > ?1 and precoEntrada < ?2 and nomeDoPapel = ?3 order by dat asc", nativeQuery = true)
 	ArrayList<Operacao> findByOperacoesPossiveis(Double min, Double max, String nomeDoPapel);
 	
+	@Query(value = "select * from OPERACAO where precoEntrada > ?1 and precoEntrada < ?2 and dat >= ?3 order by dat asc", nativeQuery = true)
+	ArrayList<Operacao> findByOperacoesPossiveisUltimoAno(Double min, Double max, LocalDate data);
+	
 	@Query(value = "select count(*) from OPERACAO where precoEntrada > ?1 and precoEntrada < ?2", nativeQuery = true)
 	int findCountOperacoesPossiveis(Double min, Double max);
 	

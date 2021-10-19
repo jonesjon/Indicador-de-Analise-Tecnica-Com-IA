@@ -83,5 +83,9 @@ public class OperacaoService {
 		return operacaoRepository.countMarteloEspecificoIniciadoUltimoAnoNaoChegouAlvo(tipo, pavioSuperior, pavioInferior,
 				volumeAcimaMedia20, marteloAcimaMedia200);
 	}
+	
+	public static ArrayList<Operacao> getOperacoesUltimoAno(Double min, Double max, LocalDate data){
+		return operacaoRepository.findByOperacoesPossiveisUltimoAno(min, max, data);
+	}
 
 }

@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import br.iesb.indicador_analise_grafica.service.InfoCandleService;
 import br.iesb.indicador_analise_grafica.service.OperacaoService;
 import br.iesb.indicador_analise_grafica.service.PapeisOperaveisService;
+import br.iesb.indicador_analise_grafica_enum.Entrada;
 
 public class TreinamentoRedeNeural {
 

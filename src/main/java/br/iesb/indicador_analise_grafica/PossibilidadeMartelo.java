@@ -1,5 +1,11 @@
 package br.iesb.indicador_analise_grafica;
 
+import br.iesb.indicador_analise_grafica_enum.PavioInferior;
+import br.iesb.indicador_analise_grafica_enum.PavioSuperior;
+import br.iesb.indicador_analise_grafica_enum.PrecoAcimaMedia200;
+import br.iesb.indicador_analise_grafica_enum.TipoCandle;
+import br.iesb.indicador_analise_grafica_enum.VolumeAcimaMedia20;
+
 public class PossibilidadeMartelo {
 	
 	TipoCandle tipoCandle;

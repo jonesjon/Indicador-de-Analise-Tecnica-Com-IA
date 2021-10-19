@@ -1,4 +1,4 @@
-package br.iesb.indicador_analise_grafica;
+package br.iesb.indicador_analise_grafica_enum;
 
 public enum VariacaoPreco {
 
