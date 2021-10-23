@@ -11,6 +11,8 @@ import java.util.List;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import br.iesb.indicador_analise_grafica_enum.Perfil;
+
 
 @SpringBootApplication
 public class Main {
@@ -20,13 +22,15 @@ public class Main {
 		SpringApplication.run(Main.class, args);
 		long start = System.currentTimeMillis();
 
+		Perfil perfil = Perfil.ARROJADO;
+		
 		//TreinamentoRedeNeural.realizaTreinamentoProcurandoPadroesEmPapeisOperaveis();
 		//TreinamentoRedeNeural.confereAlvosDasOperacoesPossiveis();
-		//RedeNeural.preenchendoEstatisticaMartelo();
+		//RedeNeural.preenchendoEstatisticaMartelo(perfil);
 		//RedeNeural.preencherTxtValidacaoRedeNeuralMartelo();
 		
-		//RedeNeural.realizaTreinamentoRedeNeural();
-		RedeNeural.testaRedeNeuralMarteloNaPratica();
+		//RedeNeural.realizaTreinamentoRedeNeuralMartelo(perfil);
+		RedeNeural.testaRedeNeuralMarteloNaPratica(perfil);
 
 		long elapsedTime = (System.currentTimeMillis() - start);
 		System.out.println("Tempo gasto parar rodar: (segundos) " + elapsedTime / 1000F);

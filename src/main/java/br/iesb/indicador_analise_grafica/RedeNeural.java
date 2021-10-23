@@ -42,6 +42,7 @@ import br.iesb.indicador_analise_grafica_enum.Entrada;
 import br.iesb.indicador_analise_grafica_enum.Padroes;
 import br.iesb.indicador_analise_grafica_enum.PavioInferior;
 import br.iesb.indicador_analise_grafica_enum.PavioSuperior;
+import br.iesb.indicador_analise_grafica_enum.Perfil;
 import br.iesb.indicador_analise_grafica_enum.PrecoAcimaMedia200;
 import br.iesb.indicador_analise_grafica_enum.TendenciaMediaCurta;
 import br.iesb.indicador_analise_grafica_enum.TipoCandle;
@@ -576,7 +577,7 @@ public class RedeNeural implements NeuralNetListener {
 
 	}
 
-	public static void preenchendoEstatisticaMartelo() {
+	public static void preenchendoEstatisticaMartelo(Perfil perfil) {
 
 		ArrayList<PossibilidadeMartelo> todasPossibilidades = todasAsPossibilidadesMartelo();
 
@@ -636,7 +637,7 @@ public class RedeNeural implements NeuralNetListener {
 			estatisticasMartelo.add(estatisticaMartelo);
 
 			try {
-				preencherTxtTreinamentoRedeNeuralMartelo();
+				preencherTxtTreinamentoRedeNeuralMartelo(perfil);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
@@ -645,9 +646,9 @@ public class RedeNeural implements NeuralNetListener {
 
 	}
 
-	private static void preencherTxtTreinamentoRedeNeuralMartelo() throws IOException {
+	private static void preencherTxtTreinamentoRedeNeuralMartelo(Perfil perfil) throws IOException {
 
-		FileWriter arq = new FileWriter("resource\\ArquivoTreinamentoMartelo.txt");
+		FileWriter arq = new FileWriter("resource\\ArquivoTreinamentoMarteloPerfil" + perfil.getNome() + ".txt");
 		PrintWriter gravarArq = new PrintWriter(arq);
 
 		estatisticasMartelo.stream().forEach(estatisticaMartelo -> {
@@ -686,7 +687,7 @@ public class RedeNeural implements NeuralNetListener {
 					+ estatisticaMartelo.getConfiguracaoMartelo().volumeAcimaMedia20.getValor() + ";"
 					+ estatisticaMartelo.getConfiguracaoMartelo().precoAcimaMedia200.getValor() + ";");
 
-			if (condicaoParaCompraMartelo(assertividadeComPeso)) {
+			if (condicaoParaCompraMartelo(assertividadeComPeso, perfil)) {
 
 				gravarArq.printf(1 + ";");
 
@@ -762,20 +763,19 @@ public class RedeNeural implements NeuralNetListener {
 
 	}
 
-	public static void testaRedeNeuralMarteloNaPratica() {
+	public static void testaRedeNeuralMarteloNaPratica(Perfil perfil) {
 
 		LocalDate data = LocalDate.parse("2021-01-01");
 		ArrayList<Operacao> operacoes = OperacaoService.getOperacoesUltimoAno(MIN, MAX, data);
 
-		String inputFile = "resource\\ArquivoTreinamentoMartelo.txt";
-		String inputFileValidacao = "resource\\\\ArquivoValidacaoMartelo.txt";
-		String outputFile = "resource\\ArquivoTreinamentoMarteloSaida.txt";
+		String inputFileValidacao = "resource\\ArquivoValidacaoMartelo.txt";
+		
 		
 		Double assertividade = 0.0;
 		Double acerto = 0.0;
 		Double compra = 0.0;
 		
-		NeuralNetLoader loader = new NeuralNetLoader("resource\\RedeNeuralMartelo.snet");
+		NeuralNetLoader loader = new NeuralNetLoader("resource\\RedeNeuralMarteloPerfil"+ perfil.getNome() + ".snet");
 		NeuralNet nnet = loader.getNeuralNet();
 
 		Monitor monitor = nnet.getMonitor();
@@ -829,17 +829,17 @@ public class RedeNeural implements NeuralNetListener {
 		
 	}
 
-	public static void realizaTreinamentoRedeNeural() throws IOException {
+	public static void realizaTreinamentoRedeNeuralMartelo(Perfil perfil) throws IOException {
 
 		Double acerto = 0.0;
 
 		ArrayList<Integer> valoresValidacao = new ArrayList<>();
 
-		String inputFile = "resource\\ArquivoTreinamentoMartelo.txt";
+		String inputFile = "resource\\ArquivoTreinamentoMarteloPerfil" + perfil.getNome() + ".txt";
 
-		String outputFile = "resource\\ArquivoTreinamentoMarteloSaida.txt";
+		String outputFile = "resource\\ArquivoTreinamentoMarteloSaidaPerfil" + perfil.getNome() + ".txt";
 
-		String saveMartelo = "resource\\RedeNeuralMartelo.snet";
+		String saveMartelo = "resource\\RedeNeuralMarteloPerfil" + perfil.getNome() + ".snet";
 
 		LinearLayer input = new LinearLayer();
 
@@ -959,14 +959,14 @@ public class RedeNeural implements NeuralNetListener {
 				acerto += 1.0;
 			}
 
-			System.out.println("O valor do pattern da posicao " + (i + 1) + ": " + pattern[0]);
-
 		}
 
 		Double assertividade = (acerto / 144.0) * 100;
 
+		System.out.println();
 		System.out.println("Assertividade da Rede Neural = " + assertividade + "%");
-
+		System.out.println();
+		
 		if (assertividade.compareTo(100.0) == 0) {
 			saveNeuralNet(saveMartelo, nnet);
 		}
@@ -988,9 +988,9 @@ public class RedeNeural implements NeuralNetListener {
 		}
 	}
 
-	private static boolean condicaoParaCompraMartelo(Double assertividadeComPeso) {
+	private static boolean condicaoParaCompraMartelo(Double assertividadeComPeso, Perfil perfil) {
 		return assertividadeComPeso.compareTo(PORCENTAGEMMINIMAPARAESTATISTICA) == 0
-				|| assertividadeComPeso > PORCENTAGEMMINIMAPARAESTATISTICA;
+				|| assertividadeComPeso > perfil.getValor();
 	}
 
 	private static double calculaAssertividadeComPeso(EstatisticaMartelo estatisticaMartelo) {
