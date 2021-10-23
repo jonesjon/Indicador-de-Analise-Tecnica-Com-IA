@@ -25,7 +25,8 @@ public class Main {
 		//RedeNeural.preenchendoEstatisticaMartelo();
 		//RedeNeural.preencherTxtValidacaoRedeNeuralMartelo();
 		
-		RedeNeural.realizaTreinamentoRedeNeural();
+		//RedeNeural.realizaTreinamentoRedeNeural();
+		RedeNeural.testaRedeNeuralMarteloNaPratica();
 
 		long elapsedTime = (System.currentTimeMillis() - start);
 		System.out.println("Tempo gasto parar rodar: (segundos) " + elapsedTime / 1000F);

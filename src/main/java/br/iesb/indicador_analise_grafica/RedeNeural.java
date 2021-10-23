@@ -1,12 +1,18 @@
 package br.iesb.indicador_analise_grafica;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
 
 import org.joone.engine.FullSynapse;
 import org.joone.engine.LinearLayer;
@@ -18,7 +24,9 @@ import org.joone.engine.learning.TeachingSynapse;
 import org.joone.io.FileInputSynapse;
 import org.joone.io.FileOutputSynapse;
 import org.joone.io.MemoryOutputSynapse;
+import org.joone.io.StreamInputSynapse;
 import org.joone.net.NeuralNet;
+import org.joone.net.NeuralNetLoader;
 
 import br.iesb.indicador_analise_grafica.estatistica.EstatisticaMartelo;
 import br.iesb.indicador_analise_grafica.service.BebeAbandonadoService;
@@ -644,10 +652,37 @@ public class RedeNeural implements NeuralNetListener {
 
 		estatisticasMartelo.stream().forEach(estatisticaMartelo -> {
 			Double assertividadeComPeso = calculaAssertividadeComPeso(estatisticaMartelo);
+			String tipoCandleString = "";
+			String pavioSuperiorString = "";
+			String pavioInferiorString = "";
 
-			gravarArq.printf(estatisticaMartelo.getConfiguracaoMartelo().tipoCandle.getID() + ";"
-					+ estatisticaMartelo.getConfiguracaoMartelo().pavioSuperior.getID() + ";"
-					+ estatisticaMartelo.getConfiguracaoMartelo().pavioInferior.getID() + ";"
+			if (estatisticaMartelo.getConfiguracaoMartelo().tipoCandle.getID() == 1) {
+				tipoCandleString = "0;1;";
+			} else if (estatisticaMartelo.getConfiguracaoMartelo().tipoCandle.getID() == 2) {
+				tipoCandleString = "1;0;";
+			} else if (estatisticaMartelo.getConfiguracaoMartelo().tipoCandle.getID() == 3) {
+				tipoCandleString = "1;1;";
+			}
+
+			if (estatisticaMartelo.getConfiguracaoMartelo().pavioSuperior.getID() == 1) {
+				pavioSuperiorString = "0;1;";
+			} else if (estatisticaMartelo.getConfiguracaoMartelo().pavioSuperior.getID() == 2) {
+				pavioSuperiorString = "1;0;";
+			} else if (estatisticaMartelo.getConfiguracaoMartelo().pavioSuperior.getID() == 3) {
+				pavioSuperiorString = "1;1;";
+			}
+
+			if (estatisticaMartelo.getConfiguracaoMartelo().pavioInferior.getID() == 7) {
+				pavioInferiorString = "0;0;";
+			} else if (estatisticaMartelo.getConfiguracaoMartelo().pavioInferior.getID() == 8) {
+				pavioInferiorString = "0;1;";
+			} else if (estatisticaMartelo.getConfiguracaoMartelo().pavioInferior.getID() == 9) {
+				pavioInferiorString = "1;0;";
+			} else if (estatisticaMartelo.getConfiguracaoMartelo().pavioInferior.getID() == 10) {
+				pavioInferiorString = "1;1;";
+			}
+
+			gravarArq.printf(tipoCandleString + pavioSuperiorString + pavioInferiorString
 					+ estatisticaMartelo.getConfiguracaoMartelo().volumeAcimaMedia20.getValor() + ";"
 					+ estatisticaMartelo.getConfiguracaoMartelo().precoAcimaMedia200.getValor() + ";");
 
@@ -668,112 +703,201 @@ public class RedeNeural implements NeuralNetListener {
 		arq.close();
 
 	}
-	
+
 	public static void preencherTxtValidacaoRedeNeuralMartelo() throws IOException {
 
 		FileWriter arq = new FileWriter("resource\\ArquivoValidacaoMartelo.txt");
 		PrintWriter gravarArq = new PrintWriter(arq);
 
 		LocalDate data = LocalDate.parse("2021-01-01");
-		
+
 		ArrayList<Operacao> operacoes = OperacaoService.getOperacoesUltimoAno(MIN, MAX, data);
 		ArrayList<Martelo> martelos = new ArrayList<Martelo>();
-		
+
 		operacoes.stream().forEach(operacao -> {
-			if(Padroes.comparaPadrao(operacao.getPadrao()) == Padroes.MARTELO) {
+			if (Padroes.comparaPadrao(operacao.getPadrao()) == Padroes.MARTELO) {
 				martelos.add(operacao.getMartelo());
 			}
 		});
-		
+
 		martelos.stream().forEach(martelo -> {
-			gravarArq.printf(TipoCandle.comparaTipoCandle(martelo.getTipo()).getID() + ";"
-					+ PavioSuperior.comparaPavioSuperior(martelo.getPavioSuperior()).getID() + ";"
-					+ PavioInferior.comparaPavioInferior(martelo.getPavioInferior()).getID() + ";"
+			String tipoCandleString = "";
+			String pavioSuperiorString = "";
+			String pavioInferiorString = "";
+
+			if (TipoCandle.comparaTipoCandle(martelo.getTipo()).getID() == 1) {
+				tipoCandleString = "0;1;";
+			} else if (TipoCandle.comparaTipoCandle(martelo.getTipo()).getID() == 2) {
+				tipoCandleString = "1;0;";
+			} else if (TipoCandle.comparaTipoCandle(martelo.getTipo()).getID() == 3) {
+				tipoCandleString = "1;1;";
+			}
+
+			if (PavioSuperior.comparaPavioSuperior(martelo.getPavioSuperior()).getID() == 1) {
+				pavioSuperiorString = "0;1;";
+			} else if (PavioSuperior.comparaPavioSuperior(martelo.getPavioSuperior()).getID() == 2) {
+				pavioSuperiorString = "1;0;";
+			} else if (PavioSuperior.comparaPavioSuperior(martelo.getPavioSuperior()).getID() == 3) {
+				pavioSuperiorString = "1;1;";
+			}
+
+			if (PavioInferior.comparaPavioInferior(martelo.getPavioInferior()).getID() == 7) {
+				pavioInferiorString = "0;0;";
+			} else if (PavioInferior.comparaPavioInferior(martelo.getPavioInferior()).getID() == 8) {
+				pavioInferiorString = "0;1;";
+			} else if (PavioInferior.comparaPavioInferior(martelo.getPavioInferior()).getID() == 9) {
+				pavioInferiorString = "1;0;";
+			} else if (PavioInferior.comparaPavioInferior(martelo.getPavioInferior()).getID() == 10) {
+				pavioInferiorString = "1;1;";
+			}
+
+			gravarArq.printf(tipoCandleString + pavioSuperiorString + pavioInferiorString
 					+ VolumeAcimaMedia20.comparaVolumeAcimaMedia20(martelo.getVolumeAcimaMedia20()).getValor() + ";"
 					+ PrecoAcimaMedia200.comparaPrecoAcimaMedia200(martelo.getMarteloAcimaMedia200()).getValor() + ";");
 			gravarArq.println();
-			
+
 		});
 
 		arq.close();
 
 	}
 
-	public static void realizaTreinamentoRedeNeural() {
+	public static void testaRedeNeuralMarteloNaPratica() {
 
-		
+		LocalDate data = LocalDate.parse("2021-01-01");
+		ArrayList<Operacao> operacoes = OperacaoService.getOperacoesUltimoAno(MIN, MAX, data);
+
 		String inputFile = "resource\\ArquivoTreinamentoMartelo.txt";
 		String inputFileValidacao = "resource\\\\ArquivoValidacaoMartelo.txt";
-		
 		String outputFile = "resource\\ArquivoTreinamentoMarteloSaida.txt";
-		  
-	    
+		
+		Double assertividade = 0.0;
+		Double acerto = 0.0;
+		Double compra = 0.0;
+		
+		NeuralNetLoader loader = new NeuralNetLoader("resource\\RedeNeuralMartelo.snet");
+		NeuralNet nnet = loader.getNeuralNet();
+
+		Monitor monitor = nnet.getMonitor();
+		
+		monitor.addNeuralNetListener(nnet);
+		
+		MemoryOutputSynapse memOut = new MemoryOutputSynapse();
+		
+		nnet.getOutputLayer().removeAllOutputs();
+		nnet.getOutputLayer().addOutputSynapse(memOut);
+		
+		FileInputSynapse inputStream = new FileInputSynapse();
+		
+		inputStream = (FileInputSynapse) nnet.getInputLayer().getAllInputs().get(0);
+		
+		inputStream.setAdvancedColumnSelector("1,2,3,4,5,6,7,8");
+		inputStream.setInputFile(new File(inputFileValidacao));
+
+		nnet.getOutputLayer().addInputSynapse(inputStream);
+		
+		nnet.getMonitor().setTrainingPatterns(operacoes.size());
+		nnet.getMonitor().setTotCicles(1);
+		nnet.getMonitor().setLearning(false);
+		nnet.go();
+
+		while (nnet.isRunning()) {
+			for (int i = 0; i < operacoes.size(); i++) {
+				double[] pattern = memOut.getNextPattern();
+
+				if (pattern[0] > 0.5) {
+					if(operacoes.get(i).isStart()) {
+						compra += 1.0;
+						if(operacoes.get(i).getPrimeiroAlvoAtingido()) {
+							acerto += 1.0;
+						}
+					}
+				} 
+				
+			}
+
+		}
+
+		assertividade = (acerto / compra) * 100;
+
+		System.out.println();
+		System.out.println("Assertividade de " + assertividade + " %");
+		System.out.println();
+		System.out.println("Total de operacoes no periodo: " + compra);
+		System.out.println();
+		nnet.stop();
+		
+	}
+
+	public static void realizaTreinamentoRedeNeural() throws IOException {
+
+		Double acerto = 0.0;
+
+		ArrayList<Integer> valoresValidacao = new ArrayList<>();
+
+		String inputFile = "resource\\ArquivoTreinamentoMartelo.txt";
+
+		String outputFile = "resource\\ArquivoTreinamentoMarteloSaida.txt";
+
+		String saveMartelo = "resource\\RedeNeuralMartelo.snet";
+
 		LinearLayer input = new LinearLayer();
-	    
+
 		SigmoidLayer hidden = new SigmoidLayer();
-	    
-		LinearLayer output = new LinearLayer();
-	    
-	    
+
+		SigmoidLayer output = new SigmoidLayer();
+
 		input.setLayerName("input");
-		
+
 		hidden.setLayerName("hidden");
-		
+
 		output.setLayerName("output");
 
-			    
-	    
-		input.setRows(5);
-		hidden.setRows(4);
+		input.setRows(8);
+		hidden.setRows(8);
 		output.setRows(1);
 
-	   
 		FullSynapse synapse_IH = new FullSynapse();
-		
+
 		FullSynapse synapse_HO = new FullSynapse();
 
-	    
 		synapse_IH.setName("IH");
-		
+
 		synapse_HO.setName("HO");
-		
-	
+
 		input.addOutputSynapse(synapse_IH);
 		hidden.addInputSynapse(synapse_IH);
-		
+
 		hidden.addOutputSynapse(synapse_HO);
 		output.addInputSynapse(synapse_HO);
 
-		
 		FileInputSynapse inputStream = new FileInputSynapse();
-		inputStream.setAdvancedColumnSelector("1,2,3,4,5");
+		inputStream.setAdvancedColumnSelector("1,2,3,4,5,6,7,8");
 		inputStream.setInputFile(new File(inputFile));
-	    
+
 		input.addInputSynapse(inputStream);
 
 		TeachingSynapse trainer = new TeachingSynapse();
-		
+
 		FileInputSynapse samples = new FileInputSynapse();
-		
+
 		samples.setInputFile(new File(inputFile));
-		
-		samples.setAdvancedColumnSelector("6");
+
+		samples.setAdvancedColumnSelector("9");
 
 		trainer.setDesired(samples);
 
 		FileOutputSynapse error = new FileOutputSynapse();
 		error.setFileName(outputFile);
-	   	trainer.addResultSynapse(error);
+		trainer.addResultSynapse(error);
 		output.addOutputSynapse(trainer);
 
-		
 		NeuralNet nnet = new NeuralNet();
 
-		
 		nnet.addLayer(input, NeuralNet.INPUT_LAYER);
-		
+
 		nnet.addLayer(hidden, NeuralNet.HIDDEN_LAYER);
-		
+
 		nnet.addLayer(output, NeuralNet.OUTPUT_LAYER);
 
 		nnet.setTeacher(trainer);
@@ -781,45 +905,88 @@ public class RedeNeural implements NeuralNetListener {
 		Monitor monitor = nnet.getMonitor();
 		monitor.setLearningRate(0.8);
 		monitor.setMomentum(0.3);
+		input.setMonitor(monitor);
+		hidden.setMonitor(monitor);
+		output.setMonitor(monitor);
 
-		
 		monitor.addNeuralNetListener(nnet);
 
 		monitor.setTrainingPatterns(144);
-		monitor.setTotCicles(2000);
+		monitor.setTotCicles(10000);
 		monitor.setLearning(true);
 		nnet.go();
 
 		while (nnet.isRunning()) {
-			
+
 		}
 
-		
-		FileInputSynapse inputStreamValidacao = new FileInputSynapse();
-		inputStreamValidacao.setAdvancedColumnSelector("1,2,3,4,5");
-		inputStreamValidacao.setInputFile(new File(inputFileValidacao));
-	    input.addInputSynapse(inputStreamValidacao);
-	    
-		nnet.addLayer(input, NeuralNet.INPUT_LAYER);
 		MemoryOutputSynapse memOut = new MemoryOutputSynapse();
+
 		output.removeAllOutputs();
+
 		output.addOutputSynapse(memOut);
+
 		nnet.getMonitor().setTotCicles(1);
+
 		nnet.getMonitor().setLearning(false);
-		
 		nnet.go();
 
-		for(int i=0; i<185; i++) {
-			double[] pattern = memOut.getNextPattern();
-			
-			System.out.println("Saida " + i+1 + ": " + pattern[0]);
-			System.out.println();
+		FileReader arquivo;
+		try {
+
+			arquivo = new FileReader(inputFile);
+			BufferedReader leitura = new BufferedReader(arquivo);
+			String linha = leitura.readLine();
+
+			while (linha != null) {
+				char valor = linha.charAt(16);
+
+				valoresValidacao.add(Character.getNumericValue(valor));
+
+				linha = leitura.readLine();
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		
+
+		for (int i = 0; i < valoresValidacao.size(); i++) {
+			double[] pattern = memOut.getNextPattern();
+
+			if (pattern[0] > 0.5 && valoresValidacao.get(i).intValue() == 1) {
+				acerto += 1.0;
+			} else if (pattern[0] < 0.5 && valoresValidacao.get(i).intValue() == 0) {
+				acerto += 1.0;
+			}
+
+			System.out.println("O valor do pattern da posicao " + (i + 1) + ": " + pattern[0]);
+
+		}
+
+		Double assertividade = (acerto / 144.0) * 100;
+
+		System.out.println("Assertividade da Rede Neural = " + assertividade + "%");
+
+		if (assertividade.compareTo(100.0) == 0) {
+			saveNeuralNet(saveMartelo, nnet);
+		}
+
+		nnet.stop();
 
 	}
-	
-	
+
+	private static void saveNeuralNet(String fileName, NeuralNet nnet) {
+		try {
+
+			FileOutputStream stream = new FileOutputStream(fileName);
+			ObjectOutputStream out = new ObjectOutputStream(stream);
+			out.writeObject(nnet);
+			out.close();
+
+		} catch (Exception excp) {
+			excp.printStackTrace();
+		}
+	}
 
 	private static boolean condicaoParaCompraMartelo(Double assertividadeComPeso) {
 		return assertividadeComPeso.compareTo(PORCENTAGEMMINIMAPARAESTATISTICA) == 0
@@ -1443,16 +1610,14 @@ public class RedeNeural implements NeuralNetListener {
 	@Override
 	public void errorChanged(NeuralNetEvent e) {
 
-		Monitor mon = (Monitor)e.getSource();
-	    
-	    // Imprimir o erro a cada 200 ciclos de treinamento
-	    if (mon.getCurrentCicle() % 200 == 0)
-	    {
-	      // Imprimir o ciclo de treinamento atual, bem como o erro global da rede neural
-	      System.out.println(mon.getCurrentCicle() + " epochs remaining - RMSE = " + mon.getGlobalError());
-	    }
+		Monitor mon = (Monitor) e.getSource();
 
-		
+		// Imprimir o erro a cada 200 ciclos de treinamento
+		if (mon.getCurrentCicle() % 200 == 0) {
+			// Imprimir o ciclo de treinamento atual, bem como o erro global da rede neural
+			System.out.println(mon.getCurrentCicle() + " epochs remaining - RMSE = " + mon.getGlobalError());
+		}
+
 	}
 
 	@Override
