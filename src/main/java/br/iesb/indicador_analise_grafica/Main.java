@@ -24,13 +24,13 @@ public class Main {
 
 		Perfil perfil = Perfil.ARROJADO;
 		
-		//TreinamentoRedeNeural.realizaTreinamentoProcurandoPadroesEmPapeisOperaveis();
-		//TreinamentoRedeNeural.confereAlvosDasOperacoesPossiveis();
+		TreinamentoRedeNeural.realizaTreinamentoProcurandoPadroesEmPapeisOperaveis();
+		TreinamentoRedeNeural.confereAlvosDasOperacoesPossiveis();
 		//RedeNeural.preenchendoEstatisticaMartelo(perfil);
 		//RedeNeural.preencherTxtValidacaoRedeNeuralMartelo();
 		
 		//RedeNeural.realizaTreinamentoRedeNeuralMartelo(perfil);
-		RedeNeural.testaRedeNeuralMarteloNaPratica(perfil);
+		//RedeNeural.testaRedeNeuralMarteloNaPratica(perfil);
 
 		long elapsedTime = (System.currentTimeMillis() - start);
 		System.out.println("Tempo gasto parar rodar: (segundos) " + elapsedTime / 1000F);

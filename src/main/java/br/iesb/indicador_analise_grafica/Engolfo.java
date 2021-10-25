@@ -33,6 +33,9 @@ public class Engolfo {
 	@Column
 	private Boolean acimaMedia200;
 	
+	@Column
+	private String variacao;
+	
 	@OneToOne
     @JoinColumns({@JoinColumn(name="dat"), @JoinColumn(name="nomeDoPapel"), @JoinColumn(name="padrao")})
 	private Operacao operacao = null;
@@ -109,6 +112,16 @@ public class Engolfo {
 
 	public void setOperacao(Operacao operacao) {
 		this.operacao = operacao;
+	}
+
+
+	public String getVariacao() {
+		return variacao;
+	}
+
+
+	public void setVariacao(String variacao) {
+		this.variacao = variacao;
 	}
 	
 

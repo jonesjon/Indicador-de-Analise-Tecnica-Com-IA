@@ -83,6 +83,7 @@ public class TreinamentoRedeNeural {
 			grafico = InfoCandleService.getInfoCandlePeloNome(nomeDoPapel);
 		
 			RedeNeural.procuraPadraoMartelo(grafico);
+			RedeNeural.procuraPadraoEngolfo(grafico);
 //			RedeNeural.procuraPadraoPiercingLine(grafico);
 //			RedeNeural.procuraPadraoTresSoldados(grafico);
 //			RedeNeural.procuraPadraoBebeAbandonado(grafico);
@@ -422,50 +423,6 @@ public class TreinamentoRedeNeural {
 		return false;
 	}
 
-	/*
-	 * public void imprimeOperacoes() { for(int i=0; i<operacoesFinalizadas.size();
-	 * i++) {
-	 * 
-	 * if(operacoesFinalizadas.get(i).isStart()) {
-	 * 
-	 * System.out.println("Data da Opera��o: " +
-	 * formato.format(operacoesFinalizadas.get(i).getData()));
-	 * System.out.println(operacoesFinalizadas.get(i).getEntrada());
-	 * System.out.println("Foi lucrativa? - "+operacoesFinalizadas.get(i).getLucro()
-	 * );
-	 * System.out.println("Deu lucro 2x? - "+operacoesFinalizadas.get(i).getLucroMax
-	 * ()); System.out.println("Preco de Entrada: "+operacoesFinalizadas.get(i).
-	 * getPrecoEntrada()); System.out.println("Pre�o de Gain: " +
-	 * operacoesFinalizadas.get(i).getPrecoGain());
-	 * System.out.println("Pre�o de Loss: " +
-	 * operacoesFinalizadas.get(i).getPrecoLoss());
-	 * System.out.println("Pre�o de Gain Maximo: " +
-	 * operacoesFinalizadas.get(i).getPrecoGainMax());
-	 * System.out.println("% Lucro: "+operacoesFinalizadas.get(i).getPercentualGain(
-	 * )); System.out.println("% Prejuizo: "+operacoesFinalizadas.get(i).
-	 * getPercentualLoss());
-	 * System.out.println("% Lucro M�ximo: "+operacoesFinalizadas.get(i).
-	 * getPercentualGainMax());
-	 * System.out.println("% Da opera��o: "+operacoesFinalizadas.get(i).
-	 * getPorcentagemOperacaoFinal()); System.out.println();
-	 * 
-	 * }else {
-	 * 
-	 * System.out.println("Data da Opera��o: " +
-	 * formato.format(operacoesFinalizadas.get(i).getData()));
-	 * System.out.println("OPERA��O N�O INICIADA");
-	 * System.out.println("Pre�o de Gain: " +
-	 * operacoesFinalizadas.get(i).getPrecoGain());
-	 * System.out.println("% Lucro: "+operacoesFinalizadas.get(i).getPercentualGain(
-	 * )); System.out.println("Pre�o de Entrada: "+operacoesFinalizadas.get(i).
-	 * getPrecoEntrada()); System.out.println("Pre�o de Loss: " +
-	 * operacoesFinalizadas.get(i).getPrecoLoss());
-	 * System.out.println("% Prejuizo: "+operacoesFinalizadas.get(i).
-	 * getPercentualLoss()); System.out.println();
-	 * 
-	 * } } }
-	 */
-
 	public void percentualFinal() {
 
 		Double percentualFinal = 0.0;
@@ -479,53 +436,5 @@ public class TreinamentoRedeNeural {
 		System.out.println("Percentual Final do teste: " + percentualFinal);
 		System.out.println("Quantidade de operações realizadas: " + cont);
 	}
-
-	/*
-	 * public void percentualFinalMarteloSemPavioSuperior() { Double percentualFinal
-	 * = 0.0; int cont = 0; for(int i=0; i<operacoesFinalizadas.size(); i++) {
-	 * if(operacoesFinalizadas.get(i).isStart()) {
-	 * if(operacoesFinalizadas.get(i).getMartelo().getPavioSuperior() ==
-	 * PavioSuperior.SEMPAVIO) { percentualFinal +=
-	 * operacoesFinalizadas.get(i).getPorcentagemOperacaoFinal(); cont++; } } }
-	 * System.out.println("Percentual Final Martelo Sem Pavio Superior: "
-	 * +percentualFinal);
-	 * System.out.println("Quantidade de opera��es realizadas: "+cont); }
-	 */
-
-	/*
-	 * public void percentualGainLossMarteloSemPavioSuperior() { Double
-	 * percentualFinal = 0.0; Double operacoesGain = 1.0; Double cont = 1.0; for(int
-	 * i=0; i<operacoesFinalizadas.size(); i++) {
-	 * if(operacoesFinalizadas.get(i).isStart()) {
-	 * if(operacoesFinalizadas.get(i).getMartelo().getPavioSuperior() ==
-	 * PavioSuperior.SEMPAVIO) { if(operacoesFinalizadas.get(i).getLucro()) {
-	 * operacoesGain++; } cont++; } } }
-	 * 
-	 * percentualFinal = (operacoesGain/cont)*100;
-	 * 
-	 * System.out.println();
-	 * System.out.println("Percentual Gain Loss Martelo Sem Pavio Superior: "
-	 * +percentualFinal);
-	 * System.out.println("Quantidade de opera��es realizadas: "+cont); }
-	 */
-
-	/*
-	 * public void percentualGainLossMarteloSemPavioSuperiorPavioInferiorMax() {
-	 * Double percentualFinal = 0.0; Double operacoesGain = 1.0; Double cont = 1.0;
-	 * for(int i=0; i<operacoesFinalizadas.size(); i++) {
-	 * if(operacoesFinalizadas.get(i).isStart()) {
-	 * if(operacoesFinalizadas.get(i).getMartelo().getPavioSuperior() ==
-	 * PavioSuperior.SEMPAVIO &&
-	 * operacoesFinalizadas.get(i).getMartelo().getPavioInferior() ==
-	 * PavioInferior.PAVIO100PORCENTO) { if(operacoesFinalizadas.get(i).getLucro())
-	 * { operacoesGain++; } cont++; } } }
-	 * 
-	 * percentualFinal = (operacoesGain/cont)*100;
-	 * 
-	 * System.out.println(); System.out.
-	 * println("Percentual Gain Loss Martelo Sem Pavio Superior Pavio Inferior 95% a 100%: "
-	 * +percentualFinal);
-	 * System.out.println("Quantidade de opera��es realizadas: "+cont); }
-	 */
 
 }
