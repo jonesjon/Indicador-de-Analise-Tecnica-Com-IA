@@ -22,10 +22,26 @@ public class Main {
 		SpringApplication.run(Main.class, args);
 		long start = System.currentTimeMillis();
 
-		Perfil perfil = Perfil.ARROJADO;
+		Perfil perfil1 = Perfil.ARROJADO;
+		Perfil perfil2 = Perfil.MODERADO;
+		Perfil perfil3 = Perfil.CONSERVADOR;
 		
-		TreinamentoRedeNeural.realizaTreinamentoProcurandoPadroesEmPapeisOperaveis();
-		TreinamentoRedeNeural.confereAlvosDasOperacoesPossiveis();
+		//TreinamentoRedeNeural.realizaTreinamentoProcurandoPadroesEmPapeisOperaveis();
+		//TreinamentoRedeNeural.confereAlvosDasOperacoesPossiveis();
+		//RedeNeural.preenchendoEstatisticaPiercingLine(perfil1);
+		//RedeNeural.preencherTxtValidacaoRedeNeuralPiercingLine();
+		//RedeNeural.realizaTreinamentoRedeNeuralPiercingLine(perfil1);
+		System.out.println();
+		System.out.println("Testando Martelo Ano 2021: ");
+		RedeNeural.testaRedeNeuralMarteloNaPratica(perfil1);
+		RedeNeural.testaRedeNeuralMarteloNaPratica(perfil2);
+		RedeNeural.testaRedeNeuralMarteloNaPratica(perfil3);
+		System.out.println();
+		System.out.println();
+		System.out.println("Testando Piercing Line Ano 2021: ");
+		RedeNeural.testaRedeNeuralPiercingLineNaPratica(perfil1);
+		RedeNeural.testaRedeNeuralPiercingLineNaPratica(perfil2);
+		RedeNeural.testaRedeNeuralPiercingLineNaPratica(perfil3);
 		//RedeNeural.preenchendoEstatisticaMartelo(perfil);
 		//RedeNeural.preencherTxtValidacaoRedeNeuralMartelo();
 		

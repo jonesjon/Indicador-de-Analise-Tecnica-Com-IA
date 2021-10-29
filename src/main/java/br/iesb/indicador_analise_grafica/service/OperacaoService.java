@@ -9,6 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import br.iesb.indicador_analise_grafica.Operacao;
 import br.iesb.indicador_analise_grafica.repository.OperacaoRepository;
+import br.iesb.indicador_analise_grafica_enum.Perfuracao;
+import br.iesb.indicador_analise_grafica_enum.PrecoAcimaMedia20;
+import br.iesb.indicador_analise_grafica_enum.PrecoAcimaMedia200;
+import br.iesb.indicador_analise_grafica_enum.PrecoAcimaMedia8;
+import br.iesb.indicador_analise_grafica_enum.TipoCandle;
+import br.iesb.indicador_analise_grafica_enum.VolumeAcimaMedia20;
 
 @Service
 public class OperacaoService {
@@ -48,44 +54,92 @@ public class OperacaoService {
 		return operacaoRepository.countMarteloEspecificoIniciadoGeral(tipo, pavioSuperior, pavioInferior,
 				volumeAcimaMedia20, marteloAcimaMedia200);
 	}
-	
-	public static Double contaMarteloEspecificoInciadoNaoChegouAlvo(String tipo, String pavioSuperior, String pavioInferior,
-			int volumeAcimaMedia20, int marteloAcimaMedia200) {
+
+	public static Double contaMarteloEspecificoInciadoNaoChegouAlvo(String tipo, String pavioSuperior,
+			String pavioInferior, int volumeAcimaMedia20, int marteloAcimaMedia200) {
 
 		return operacaoRepository.countMarteloEspecificoIniciadoGeralNaoChegouAlvo(tipo, pavioSuperior, pavioInferior,
 				volumeAcimaMedia20, marteloAcimaMedia200);
 	}
-	
-	public static Double contaMarteloEspecificoInciadoUltimosCincoAnos(String tipo, String pavioSuperior, String pavioInferior,
-			int volumeAcimaMedia20, int marteloAcimaMedia200) {
+
+	public static Double contaMarteloEspecificoInciadoUltimosCincoAnos(String tipo, String pavioSuperior,
+			String pavioInferior, int volumeAcimaMedia20, int marteloAcimaMedia200) {
 
 		return operacaoRepository.countMarteloEspecificoIniciadoUltimosCincoAnos(tipo, pavioSuperior, pavioInferior,
 				volumeAcimaMedia20, marteloAcimaMedia200);
 	}
-	
-	public static Double contaMarteloEspecificoInciadoUltimosCincoAnosNaoChegouAlvo(String tipo, String pavioSuperior, String pavioInferior,
-			int volumeAcimaMedia20, int marteloAcimaMedia200) {
 
-		return operacaoRepository.countMarteloEspecificoIniciadoUltimosCincoAnosNaoChegouAlvo(tipo, pavioSuperior, pavioInferior,
-				volumeAcimaMedia20, marteloAcimaMedia200);
+	public static Double contaMarteloEspecificoInciadoUltimosCincoAnosNaoChegouAlvo(String tipo, String pavioSuperior,
+			String pavioInferior, int volumeAcimaMedia20, int marteloAcimaMedia200) {
+
+		return operacaoRepository.countMarteloEspecificoIniciadoUltimosCincoAnosNaoChegouAlvo(tipo, pavioSuperior,
+				pavioInferior, volumeAcimaMedia20, marteloAcimaMedia200);
 	}
-	
+
 	public static Double contaMarteloEspecificoInciadoUltimoAno(String tipo, String pavioSuperior, String pavioInferior,
 			int volumeAcimaMedia20, int marteloAcimaMedia200) {
 
 		return operacaoRepository.countMarteloEspecificoIniciadoUltimoAno(tipo, pavioSuperior, pavioInferior,
 				volumeAcimaMedia20, marteloAcimaMedia200);
 	}
-	
-	public static Double contaMarteloEspecificoInciadoUltimoAnoNaoChegouAlvo(String tipo, String pavioSuperior, String pavioInferior,
-			int volumeAcimaMedia20, int marteloAcimaMedia200) {
 
-		return operacaoRepository.countMarteloEspecificoIniciadoUltimoAnoNaoChegouAlvo(tipo, pavioSuperior, pavioInferior,
-				volumeAcimaMedia20, marteloAcimaMedia200);
+	public static Double contaMarteloEspecificoInciadoUltimoAnoNaoChegouAlvo(String tipo, String pavioSuperior,
+			String pavioInferior, int volumeAcimaMedia20, int marteloAcimaMedia200) {
+
+		return operacaoRepository.countMarteloEspecificoIniciadoUltimoAnoNaoChegouAlvo(tipo, pavioSuperior,
+				pavioInferior, volumeAcimaMedia20, marteloAcimaMedia200);
+	}
+
+	public static ArrayList<Operacao> getOperacoesUltimoAno(Double min, Double max, LocalDate data) {
+		return operacaoRepository.findByOperacoesPossiveisUltimoAno(min, max, data);
+	}
+
+	public static Double contaPiercingLineEspecificoInciado(TipoCandle tipoCandle, VolumeAcimaMedia20 vol,
+			Perfuracao perf, PrecoAcimaMedia8 preco8, PrecoAcimaMedia20 preco20, PrecoAcimaMedia200 preco200) {
+
+		return operacaoRepository.countPiercingLineEspecificoIniciadoGeral(tipoCandle.getTipo(), vol.getValor(),
+				perf.getMin(), perf.getMax(), preco8.getValor(), preco20.getValor(), preco200.getValor());
+
 	}
 	
-	public static ArrayList<Operacao> getOperacoesUltimoAno(Double min, Double max, LocalDate data){
-		return operacaoRepository.findByOperacoesPossiveisUltimoAno(min, max, data);
+	public static Double contaPiercingLineEspecificoInciadoNaoChegouAlvo(TipoCandle tipoCandle, VolumeAcimaMedia20 vol,
+			Perfuracao perf, PrecoAcimaMedia8 preco8, PrecoAcimaMedia20 preco20, PrecoAcimaMedia200 preco200) {
+
+		return operacaoRepository.countPiercingLineEspecificoIniciadoGeralNaoChegouAlvo(tipoCandle.getTipo(), vol.getValor(),
+				perf.getMin(), perf.getMax(), preco8.getValor(), preco20.getValor(), preco200.getValor());
+
+	}
+	
+	public static Double contaPiercingLineEspecificoInciadoUltimosCincoAnos(TipoCandle tipoCandle, VolumeAcimaMedia20 vol,
+			Perfuracao perf, PrecoAcimaMedia8 preco8, PrecoAcimaMedia20 preco20, PrecoAcimaMedia200 preco200) {
+
+		return operacaoRepository.countPiercingLineEspecificoIniciadoGeralUltimosCincoAnos(tipoCandle.getTipo(), vol.getValor(),
+				perf.getMin(), perf.getMax(), preco8.getValor(), preco20.getValor(), preco200.getValor());
+
+	}
+	
+	public static Double contaPiercingLineEspecificoInciadoUltimosCincoAnosNaoChegouAlvo(TipoCandle tipoCandle, VolumeAcimaMedia20 vol,
+			Perfuracao perf, PrecoAcimaMedia8 preco8, PrecoAcimaMedia20 preco20, PrecoAcimaMedia200 preco200) {
+
+		return operacaoRepository.countPiercingLineEspecificoIniciadoGeralUltimosCincoAnosNaoChegouAlvo(tipoCandle.getTipo(), vol.getValor(),
+				perf.getMin(), perf.getMax(), preco8.getValor(), preco20.getValor(), preco200.getValor());
+
+	}
+	
+	public static Double contaPiercingLineEspecificoInciadoUltimoAno(TipoCandle tipoCandle, VolumeAcimaMedia20 vol,
+			Perfuracao perf, PrecoAcimaMedia8 preco8, PrecoAcimaMedia20 preco20, PrecoAcimaMedia200 preco200) {
+
+		return operacaoRepository.countPiercingLineEspecificoIniciadoGeralUltimoAno(tipoCandle.getTipo(), vol.getValor(),
+				perf.getMin(), perf.getMax(), preco8.getValor(), preco20.getValor(), preco200.getValor());
+
+	}
+	
+	public static Double contaPiercingLineEspecificoInciadoUltimoAnoNaoChegouAlvo(TipoCandle tipoCandle, VolumeAcimaMedia20 vol,
+			Perfuracao perf, PrecoAcimaMedia8 preco8, PrecoAcimaMedia20 preco20, PrecoAcimaMedia200 preco200) {
+
+		return operacaoRepository.countPiercingLineEspecificoIniciadoGeralUltimoAnoNaoChegouAlvo(tipoCandle.getTipo(), vol.getValor(),
+				perf.getMin(), perf.getMax(), preco8.getValor(), preco20.getValor(), preco200.getValor());
+
 	}
 
 }

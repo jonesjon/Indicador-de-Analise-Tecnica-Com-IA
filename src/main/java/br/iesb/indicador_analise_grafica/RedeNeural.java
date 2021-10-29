@@ -29,6 +29,7 @@ import org.joone.net.NeuralNet;
 import org.joone.net.NeuralNetLoader;
 
 import br.iesb.indicador_analise_grafica.estatistica.EstatisticaMartelo;
+import br.iesb.indicador_analise_grafica.estatistica.EstatisticaPiercingLine;
 import br.iesb.indicador_analise_grafica.service.BebeAbandonadoService;
 import br.iesb.indicador_analise_grafica.service.DojiService;
 import br.iesb.indicador_analise_grafica.service.EngolfoService;
@@ -43,7 +44,10 @@ import br.iesb.indicador_analise_grafica_enum.Padroes;
 import br.iesb.indicador_analise_grafica_enum.PavioInferior;
 import br.iesb.indicador_analise_grafica_enum.PavioSuperior;
 import br.iesb.indicador_analise_grafica_enum.Perfil;
+import br.iesb.indicador_analise_grafica_enum.Perfuracao;
+import br.iesb.indicador_analise_grafica_enum.PrecoAcimaMedia20;
 import br.iesb.indicador_analise_grafica_enum.PrecoAcimaMedia200;
+import br.iesb.indicador_analise_grafica_enum.PrecoAcimaMedia8;
 import br.iesb.indicador_analise_grafica_enum.TendenciaMediaCurta;
 import br.iesb.indicador_analise_grafica_enum.TipoCandle;
 import br.iesb.indicador_analise_grafica_enum.VariacaoPreco;
@@ -54,6 +58,7 @@ public class RedeNeural implements NeuralNetListener {
 	ArrayList<Candle> ultimosCandles = new ArrayList<Candle>();
 	static ArrayList<Martelo> listaMartelo = new ArrayList<Martelo>();
 	private static ArrayList<EstatisticaMartelo> estatisticasMartelo = new ArrayList<EstatisticaMartelo>();
+	private static ArrayList<EstatisticaPiercingLine> estatisticasPiercingLine = new ArrayList<EstatisticaPiercingLine>();
 
 	static int cont1 = 0;
 	static int cont2 = 0;
@@ -70,15 +75,15 @@ public class RedeNeural implements NeuralNetListener {
 	private static final Double PORCENTAGEMMINIMAPAVIODOJI = 40.0;
 	private static final Double PORCENTAGEMMINIMAPARAESTATISTICA = 70.0;
 
-	public static Operacao procuraPadraoMartelo(ArrayList<InfoCandle> listInfoCandle) {
+	public static Boolean procuraPadraoMartelo(ArrayList<InfoCandle> grafico) {
 
-		if (listInfoCandle == null) {
-			return null;
+		if (grafico == null) {
+			return false;
 		}
 
-		for (int i = 0; i < listInfoCandle.size(); i++) {
+		for (int i = 0; i < grafico.size(); i++) {
 
-			InfoCandle infoCandle = listInfoCandle.get(i);
+			InfoCandle infoCandle = grafico.get(i);
 
 			if (infoCandle != null) {
 
@@ -123,115 +128,26 @@ public class RedeNeural implements NeuralNetListener {
 
 	}
 
-	public static Operacao procuraPadraoMarteloInvertido(InfoCandle infoCandle) {
+	public static Boolean procuraPadraoMarteloInvertido(ArrayList<InfoCandle> grafico) {
 
-		if (infoCandle != null) {
-
-			Double pavioSuperior = pavioSuperiorEmPorcentagem(infoCandle);
-			Double pavioInferior = pavioInferiorEmPorcentagem(infoCandle);
-
-			// Condicoes para Martelo
-			if (condicaoParaMarteloInvertido(infoCandle, pavioSuperior, pavioInferior)) {
-
-				Operacao operacao = new Operacao(infoCandle.getData(), infoCandle.getNomeDoPapel(),
-						Padroes.MARTELOINVERTIDO.getDescricao());
-				operacao.setEntrada(Entrada.VENDA.getDescricao());
-				operacao.setPrecoEntrada(setPrecoEntradaVenda(infoCandle));
-				operacao.setPrecoStop(setPrecoStopVenda(infoCandle));
-				operacao.setPrecoPrimeiroAlvoFibonacci(calculaPrecoPrimeiroAlvoFibonacci(infoCandle, Entrada.VENDA));
-				operacao.setPrecoSegundoAlvoFibonacci(calculaPrecoSegundoAlvoFibonacci(infoCandle, Entrada.VENDA));
-				operacao.setPrecoTerceiroAlvoFibonacci(calculaPrecoTerceiroAlvoFibonacci(infoCandle, Entrada.VENDA));
-
-				MarteloInvertido marteloInvertido = new MarteloInvertido();
-
-				marteloInvertido.setTipo(tipoCandle(infoCandle).getTipo());
-				marteloInvertido.setPavioSuperior(classificaPavioSuperior(pavioSuperior).getDescricao());
-				marteloInvertido.setPavioInferior(classificaPavioInferior(pavioInferior).getDescricao());
-				marteloInvertido.setMarteloAcimaMedia200(verificaSePrecoAcimaMedia200(infoCandle));
-				marteloInvertido.setVolumeAcimaMedia20(volumeAcimaMedia20(infoCandle));
-				marteloInvertido.setOperacao(operacao);
-
-				operacao.setMarteloInvertido(marteloInvertido);
-				OperacaoService.adicionaOperacao(operacao);
-				MarteloInvertidoService.adicionaMarteloInvertido(marteloInvertido);
-
-			}
+		if (grafico == null) {
+			return false;
 		}
 
-		return null;
+		for (int i = 0; i < grafico.size(); i++) {
 
-	}
+			InfoCandle infoCandle = grafico.get(i);
 
-	private static Boolean condicaoParaMarteloInvertido(InfoCandle infoCandle, Double pavioSuperior,
-			Double pavioInferior) {
-		return pavioSuperior >= 67 && pavioInferior <= 10
-				&& tendenciaMediaCurta(infoCandle) == TendenciaMediaCurta.ALTA;
-	}
+			if (infoCandle != null) {
 
-	private static Boolean verificaSePrecoAcimaMedia200(InfoCandle infoCandle) {
+				Double pavioSuperior = pavioSuperiorEmPorcentagem(infoCandle);
+				Double pavioInferior = pavioInferiorEmPorcentagem(infoCandle);
 
-		if (infoCandle.getPrecoMedia200() != null) {
-			return infoCandle.getMaxima() > infoCandle.getPrecoMedia200();
-		}
+				// Condicoes para Martelo
+				if (condicaoParaMarteloInvertido(infoCandle, pavioSuperior, pavioInferior)) {
 
-		return null;
-	}
-
-	public static Boolean procuraPadraoMarubozu(ArrayList<InfoCandle> listInfoCandle) {
-
-		if (listInfoCandle != null && listInfoCandle.size() >= TreinamentoRedeNeural.LIMITDECANDLEMARUBOZU) {
-
-			InfoCandle infoCandle = listInfoCandle.get(0);
-
-			Double pavioSuperior = pavioSuperiorEmPorcentagem(infoCandle);
-			Double pavioInferior = pavioInferiorEmPorcentagem(infoCandle);
-			Boolean validaMarubozu = false;
-			Double variacaoInfoCandle = 0.0;
-			Double variacaoMedia = 0.0;
-			Double variacaoSoma = 0.0;
-
-			for (int i = 1; i < listInfoCandle.size(); i++) {
-				if (verificaCandleParado(listInfoCandle.get(i))) {
-					return false;
-				}
-				variacaoSoma += calculaVariacaoCandle(listInfoCandle.get(i));
-			}
-
-			variacaoMedia = variacaoSoma / (listInfoCandle.size() - 1);
-			variacaoInfoCandle = calculaVariacaoCandle(infoCandle);
-			Double calculaVariacao = variacaoInfoCandle / variacaoMedia;
-
-			validaMarubozu = validaMarubozuPelaVariacao(calculaVariacao);
-
-			// Condicoes para Marubozu
-			if (condicaoParaMarubozu(pavioSuperior, pavioInferior, validaMarubozu)) {
-
-				Operacao operacao = new Operacao(infoCandle.getData(), infoCandle.getNomeDoPapel(),
-						Padroes.MARUBOZU.getDescricao());
-
-				if (tipoCandle(infoCandle) == TipoCandle.POSITIVO) {
-
-					operacao.setEntrada(Entrada.COMPRA.getDescricao());
-					operacao.setPrecoEntrada(setPrecoEntradaCompra(infoCandle));
-					operacao.setPrecoStop(setPrecoStopCompra(infoCandle));
-					operacao.setPrecoPrimeiroAlvoFibonacci(
-							calculaPrecoPrimeiroAlvoFibonacci(infoCandle, Entrada.COMPRA));
-					operacao.setPrecoSegundoAlvoFibonacci(calculaPrecoSegundoAlvoFibonacci(infoCandle, Entrada.COMPRA));
-					operacao.setPrecoTerceiroAlvoFibonacci(
-							calculaPrecoTerceiroAlvoFibonacci(infoCandle, Entrada.COMPRA));
-
-					Marubozu marubozu = new Marubozu(tipoCandle(infoCandle).getTipo(),
-							classificaPavioSuperior(pavioSuperior).getDescricao(),
-							classificaPavioInferior(pavioInferior).getDescricao(), volumeAcimaMedia20(infoCandle),
-							classificaVariacaoPreco(calculaVariacao).getDescricao(), operacao);
-
-					operacao.setMarubozu(marubozu);
-					OperacaoService.adicionaOperacao(operacao);
-					MarubozuService.adicionaMarubozu(marubozu);
-
-					return true;
-				} else {
-
+					Operacao operacao = new Operacao(infoCandle.getData(), infoCandle.getNomeDoPapel(),
+							Padroes.MARTELOINVERTIDO.getDescricao());
 					operacao.setEntrada(Entrada.VENDA.getDescricao());
 					operacao.setPrecoEntrada(setPrecoEntradaVenda(infoCandle));
 					operacao.setPrecoStop(setPrecoStopVenda(infoCandle));
@@ -241,21 +157,111 @@ public class RedeNeural implements NeuralNetListener {
 					operacao.setPrecoTerceiroAlvoFibonacci(
 							calculaPrecoTerceiroAlvoFibonacci(infoCandle, Entrada.VENDA));
 
-					Marubozu marubozu = new Marubozu(tipoCandle(infoCandle).getTipo(),
-							classificaPavioSuperior(pavioSuperior).getDescricao(),
-							classificaPavioInferior(pavioInferior).getDescricao(), volumeAcimaMedia20(infoCandle),
-							classificaVariacaoPreco(calculaVariacao).getDescricao(), operacao);
+					MarteloInvertido marteloInvertido = new MarteloInvertido();
 
-					operacao.setMarubozu(marubozu);
+					marteloInvertido.setTipo(tipoCandle(infoCandle).getTipo());
+					marteloInvertido.setPavioSuperior(classificaPavioSuperior(pavioSuperior).getDescricao());
+					marteloInvertido.setPavioInferior(classificaPavioInferior(pavioInferior).getDescricao());
+					marteloInvertido.setMarteloAcimaMedia200(verificaSePrecoAcimaMedia200(infoCandle));
+					marteloInvertido.setVolumeAcimaMedia20(volumeAcimaMedia20(infoCandle));
+					marteloInvertido.setOperacao(operacao);
+
+					operacao.setMarteloInvertido(marteloInvertido);
 					OperacaoService.adicionaOperacao(operacao);
-					MarubozuService.adicionaMarubozu(marubozu);
+					MarteloInvertidoService.adicionaMarteloInvertido(marteloInvertido);
 
-					return true;
 				}
-
 			}
 		}
+		return null;
 
+	}
+
+	public static Boolean procuraPadraoMarubozu(ArrayList<InfoCandle> grafico, int limitMarubozu) {
+
+		if (grafico != null && grafico.size() >= limitMarubozu) {
+
+			for (int i = 0; i < grafico.size() - limitMarubozu; i++) {
+
+				InfoCandle infoCandle = grafico.get(i + limitMarubozu);
+
+				Double pavioSuperior = pavioSuperiorEmPorcentagem(infoCandle);
+				Double pavioInferior = pavioInferiorEmPorcentagem(infoCandle);
+				Boolean validaMarubozu = false;
+				Double variacaoInfoCandle = 0.0;
+				Double variacaoMedia = 0.0;
+				Double variacaoSoma = 0.0;
+
+				for (int j = i; j < i + limitMarubozu; j++) {
+					if (verificaCandleParado(grafico.get(j))) {
+						return false;
+					}
+					variacaoSoma += calculaVariacaoCandle(grafico.get(j));
+				}
+
+				variacaoMedia = variacaoSoma / (limitMarubozu - 1);
+				variacaoInfoCandle = calculaVariacaoCandle(infoCandle);
+				Double calculaVariacao = variacaoInfoCandle / variacaoMedia;
+
+				validaMarubozu = validaMarubozuPelaVariacao(calculaVariacao);
+
+				// Condicoes para Marubozu
+				if (condicaoParaMarubozu(pavioSuperior, pavioInferior, validaMarubozu)) {
+
+					Operacao operacao = new Operacao();
+					operacao.setDat(infoCandle.getData());
+					operacao.setNomeDoPapel(infoCandle.getNomeDoPapel());
+					operacao.setPadrao(Padroes.MARUBOZU.getDescricao());
+
+					if (tipoCandle(infoCandle) == TipoCandle.POSITIVO) {
+
+						operacao.setEntrada(Entrada.COMPRA.getDescricao());
+						operacao.setPrecoEntrada(setPrecoEntradaCompra(infoCandle));
+						operacao.setPrecoStop(setPrecoStopCompra(infoCandle));
+						operacao.setPrecoPrimeiroAlvoFibonacci(
+								calculaPrecoPrimeiroAlvoFibonacci(infoCandle, Entrada.COMPRA));
+						operacao.setPrecoSegundoAlvoFibonacci(
+								calculaPrecoSegundoAlvoFibonacci(infoCandle, Entrada.COMPRA));
+						operacao.setPrecoTerceiroAlvoFibonacci(
+								calculaPrecoTerceiroAlvoFibonacci(infoCandle, Entrada.COMPRA));
+
+						Marubozu marubozu = new Marubozu(tipoCandle(infoCandle).getTipo(),
+								classificaPavioSuperior(pavioSuperior).getDescricao(),
+								classificaPavioInferior(pavioInferior).getDescricao(), volumeAcimaMedia20(infoCandle),
+								classificaVariacaoPreco(calculaVariacao).getDescricao(), operacao);
+
+						operacao.setMarubozu(marubozu);
+						OperacaoService.adicionaOperacao(operacao);
+						MarubozuService.adicionaMarubozu(marubozu);
+
+						return true;
+					} else {
+
+						operacao.setEntrada(Entrada.VENDA.getDescricao());
+						operacao.setPrecoEntrada(setPrecoEntradaVenda(infoCandle));
+						operacao.setPrecoStop(setPrecoStopVenda(infoCandle));
+						operacao.setPrecoPrimeiroAlvoFibonacci(
+								calculaPrecoPrimeiroAlvoFibonacci(infoCandle, Entrada.VENDA));
+						operacao.setPrecoSegundoAlvoFibonacci(
+								calculaPrecoSegundoAlvoFibonacci(infoCandle, Entrada.VENDA));
+						operacao.setPrecoTerceiroAlvoFibonacci(
+								calculaPrecoTerceiroAlvoFibonacci(infoCandle, Entrada.VENDA));
+
+						Marubozu marubozu = new Marubozu(tipoCandle(infoCandle).getTipo(),
+								classificaPavioSuperior(pavioSuperior).getDescricao(),
+								classificaPavioInferior(pavioInferior).getDescricao(), volumeAcimaMedia20(infoCandle),
+								classificaVariacaoPreco(calculaVariacao).getDescricao(), operacao);
+
+						operacao.setMarubozu(marubozu);
+						OperacaoService.adicionaOperacao(operacao);
+						MarubozuService.adicionaMarubozu(marubozu);
+
+						return true;
+					}
+
+				}
+			}
+		}
 		return false;
 
 	}
@@ -538,6 +544,372 @@ public class RedeNeural implements NeuralNetListener {
 		return null;
 	}
 
+	public static Boolean procuraPadraoEngolfo(ArrayList<InfoCandle> grafico, int limitEngolfo) {
+
+		if (grafico != null && grafico.size() >= limitEngolfo) {
+
+			for (int i = 0; i < grafico.size() - 1; i++) {
+
+				InfoCandle primeiroCandle = grafico.get(i);
+				InfoCandle segundoCandle = grafico.get(i + 1);
+
+				if (condicaoParaEngolfoDeAlta(primeiroCandle, segundoCandle)) {
+
+					Double variacaoUltimoCandle = calculaVariacaoCandle(segundoCandle);
+					Double variacaoPrimeiroCandle = calculaVariacaoCandle(primeiroCandle);
+					Double variacaoEngolfo = variacaoUltimoCandle / variacaoPrimeiroCandle;
+
+					Operacao operacao = new Operacao();
+					operacao.setDat(segundoCandle.getData());
+					operacao.setNomeDoPapel(segundoCandle.getNomeDoPapel());
+					operacao.setPadrao(Padroes.ENGOLFO.getDescricao());
+					operacao.setEntrada(Entrada.COMPRA.getDescricao());
+					operacao.setPrecoEntrada(setPrecoEntradaCompra(segundoCandle));
+					operacao.setPrecoStop(setPrecoStopCompra(segundoCandle));
+					operacao.setPrecoPrimeiroAlvoFibonacci(
+							calculaPrecoPrimeiroAlvoFibonacci(segundoCandle, Entrada.COMPRA));
+					operacao.setPrecoSegundoAlvoFibonacci(
+							calculaPrecoSegundoAlvoFibonacci(segundoCandle, Entrada.COMPRA));
+					operacao.setPrecoTerceiroAlvoFibonacci(
+							calculaPrecoTerceiroAlvoFibonacci(segundoCandle, Entrada.COMPRA));
+
+					Engolfo engolfo = new Engolfo();
+					engolfo.setTipo(tipoCandle(segundoCandle).getTipo());
+					engolfo.setPavioInferior(
+							classificaPavioInferior(pavioInferiorEmPorcentagem(segundoCandle)).getDescricao());
+					engolfo.setPavioSuperior(
+							classificaPavioSuperior(pavioSuperiorEmPorcentagem(segundoCandle)).getDescricao());
+					engolfo.setVolumeAcimaMedia20(volumeAcimaMedia20(segundoCandle));
+					engolfo.setAcimaMedia8(verificaSePrecoFechamentoAcimaMedia(segundoCandle, MEDIACURTA));
+					engolfo.setAcimaMedia20(verificaSePrecoFechamentoAcimaMedia(segundoCandle, MEDIA));
+					engolfo.setAcimaMedia200(verificaSePrecoFechamentoAcimaMedia(segundoCandle, MEDIALONGA));
+					engolfo.setVariacao(classificaVariacaoPreco(variacaoEngolfo).getDescricao());
+					engolfo.setOperacao(operacao);
+
+					operacao.setEngolfo(engolfo);
+
+					OperacaoService.adicionaOperacao(operacao);
+					EngolfoService.adicionaEngolfo(engolfo);
+
+				} else if (condicaoParaEngolfoDeBaixa(primeiroCandle, segundoCandle)) {
+
+					Double variacaoUltimoCandle = calculaVariacaoCandle(segundoCandle);
+					Double variacaoPrimeiroCandle = calculaVariacaoCandle(primeiroCandle);
+					Double variacaoEngolfo = variacaoUltimoCandle / variacaoPrimeiroCandle;
+
+					Operacao operacao = new Operacao();
+					operacao.setDat(segundoCandle.getData());
+					operacao.setNomeDoPapel(segundoCandle.getNomeDoPapel());
+					operacao.setPadrao(Padroes.ENGOLFO.getDescricao());
+					operacao.setEntrada(Entrada.VENDA.getDescricao());
+					operacao.setPrecoEntrada(setPrecoEntradaVenda(segundoCandle));
+					operacao.setPrecoStop(setPrecoStopVenda(segundoCandle));
+					operacao.setPrecoPrimeiroAlvoFibonacci(
+							calculaPrecoPrimeiroAlvoFibonacci(segundoCandle, Entrada.VENDA));
+					operacao.setPrecoSegundoAlvoFibonacci(
+							calculaPrecoSegundoAlvoFibonacci(segundoCandle, Entrada.VENDA));
+					operacao.setPrecoTerceiroAlvoFibonacci(
+							calculaPrecoTerceiroAlvoFibonacci(segundoCandle, Entrada.VENDA));
+
+					Engolfo engolfo = new Engolfo();
+					engolfo.setTipo(tipoCandle(segundoCandle).getTipo());
+					engolfo.setPavioInferior(
+							classificaPavioInferior(pavioInferiorEmPorcentagem(segundoCandle)).getDescricao());
+					engolfo.setPavioSuperior(
+							classificaPavioSuperior(pavioSuperiorEmPorcentagem(segundoCandle)).getDescricao());
+					engolfo.setVolumeAcimaMedia20(volumeAcimaMedia20(segundoCandle));
+					engolfo.setAcimaMedia8(verificaSePrecoFechamentoAcimaMedia(segundoCandle, MEDIACURTA));
+					engolfo.setAcimaMedia20(verificaSePrecoFechamentoAcimaMedia(segundoCandle, MEDIA));
+					engolfo.setAcimaMedia200(verificaSePrecoFechamentoAcimaMedia(segundoCandle, MEDIALONGA));
+					engolfo.setVariacao(classificaVariacaoPreco(variacaoEngolfo).getDescricao());
+
+					engolfo.setOperacao(operacao);
+
+					operacao.setEngolfo(engolfo);
+
+					OperacaoService.adicionaOperacao(operacao);
+					EngolfoService.adicionaEngolfo(engolfo);
+
+				}
+
+			}
+
+		}
+
+		return false;
+
+	}
+
+	public static Boolean procuraPadraoDoji(ArrayList<InfoCandle> grafico) {
+
+		if (grafico == null) {
+			return false;
+		}
+
+		for (int i = 0; i < grafico.size(); i++) {
+
+			InfoCandle infoCandle = grafico.get(i);
+
+			if (infoCandle != null) {
+
+				Double pavioSuperior = pavioSuperiorEmPorcentagem(infoCandle);
+				Double pavioInferior = pavioInferiorEmPorcentagem(infoCandle);
+
+				if (condicaoParaDoji(pavioSuperior, pavioInferior)) {
+					Operacao operacaoCompra = new Operacao();
+					operacaoCompra.setPadrao(Padroes.DOJICOMPRA.getDescricao());
+					operacaoCompra.setDat(infoCandle.getData());
+					operacaoCompra.setEntrada(Entrada.COMPRA.getDescricao());
+					operacaoCompra.setNomeDoPapel(infoCandle.getNomeDoPapel());
+					operacaoCompra.setPrecoEntrada(setPrecoEntradaCompra(infoCandle));
+					operacaoCompra.setPrecoStop(setPrecoStopCompra(infoCandle));
+					operacaoCompra.setPrecoPrimeiroAlvoFibonacci(
+							calculaPrecoPrimeiroAlvoFibonacci(infoCandle, Entrada.COMPRA));
+					operacaoCompra
+							.setPrecoSegundoAlvoFibonacci(calculaPrecoSegundoAlvoFibonacci(infoCandle, Entrada.COMPRA));
+					operacaoCompra.setPrecoTerceiroAlvoFibonacci(
+							calculaPrecoTerceiroAlvoFibonacci(infoCandle, Entrada.COMPRA));
+
+					Doji dojiCompra = new Doji();
+
+					dojiCompra.setTipo(tipoCandle(infoCandle).getTipo());
+					dojiCompra.setPavioInferior(pavioInferior.intValue());
+					dojiCompra.setPavioSuperior(pavioSuperior.intValue());
+					dojiCompra.setVolumeAcimaMedia20(volumeAcimaMedia20(infoCandle));
+					dojiCompra.setTamanhoPavioCorpo(tamanhoPavioCorpo(infoCandle));
+					dojiCompra.setPrecoAcimaMedia8(verificaSePrecoFechamentoAcimaMedia(infoCandle, MEDIACURTA));
+					dojiCompra.setPrecoAcimaMedia20(verificaSePrecoFechamentoAcimaMedia(infoCandle, MEDIA));
+					dojiCompra.setPrecoAcimaMedia200(verificaSePrecoFechamentoAcimaMedia(infoCandle, MEDIALONGA));
+					dojiCompra.setOperacao(operacaoCompra);
+					operacaoCompra.setDoji(dojiCompra);
+
+					OperacaoService.adicionaOperacao(operacaoCompra);
+					DojiService.adicionaDoji(dojiCompra);
+
+					Operacao operacaoVenda = new Operacao();
+					operacaoVenda.setPadrao(Padroes.DOJIVENDA.getDescricao());
+					operacaoVenda.setDat(infoCandle.getData());
+					operacaoVenda.setNomeDoPapel(infoCandle.getNomeDoPapel());
+					operacaoVenda.setEntrada(Entrada.VENDA.getDescricao());
+					operacaoVenda.setPrecoEntrada(setPrecoEntradaVenda(infoCandle));
+					operacaoVenda.setPrecoStop(setPrecoStopVenda(infoCandle));
+					operacaoVenda.setPrecoPrimeiroAlvoFibonacci(
+							calculaPrecoPrimeiroAlvoFibonacci(infoCandle, Entrada.VENDA));
+					operacaoVenda
+							.setPrecoSegundoAlvoFibonacci(calculaPrecoSegundoAlvoFibonacci(infoCandle, Entrada.VENDA));
+					operacaoVenda.setPrecoTerceiroAlvoFibonacci(
+							calculaPrecoTerceiroAlvoFibonacci(infoCandle, Entrada.VENDA));
+
+					Doji dojiVenda = new Doji();
+
+					dojiVenda.setTipo(tipoCandle(infoCandle).getTipo());
+					dojiVenda.setPavioInferior(pavioInferior.intValue());
+					dojiVenda.setPavioSuperior(pavioSuperior.intValue());
+					dojiVenda.setVolumeAcimaMedia20(volumeAcimaMedia20(infoCandle));
+					dojiVenda.setTamanhoPavioCorpo(tamanhoPavioCorpo(infoCandle));
+					dojiVenda.setPrecoAcimaMedia8(verificaSePrecoFechamentoAcimaMedia(infoCandle, MEDIACURTA));
+					dojiVenda.setPrecoAcimaMedia20(verificaSePrecoFechamentoAcimaMedia(infoCandle, MEDIA));
+					dojiVenda.setPrecoAcimaMedia200(verificaSePrecoFechamentoAcimaMedia(infoCandle, MEDIALONGA));
+					dojiVenda.setOperacao(operacaoVenda);
+					operacaoVenda.setDoji(dojiVenda);
+
+					OperacaoService.adicionaOperacao(operacaoVenda);
+					DojiService.adicionaDoji(dojiVenda);
+
+				}
+
+			}
+		}
+		return null;
+	}
+
+	private static Boolean condicaoParaMarteloInvertido(InfoCandle infoCandle, Double pavioSuperior,
+			Double pavioInferior) {
+		return pavioSuperior >= 67 && pavioInferior <= 10
+				&& tendenciaMediaCurta(infoCandle) == TendenciaMediaCurta.ALTA;
+	}
+
+	private static Boolean verificaSePrecoAcimaMedia200(InfoCandle infoCandle) {
+
+		if (infoCandle.getPrecoMedia200() != null) {
+			return infoCandle.getMaxima() > infoCandle.getPrecoMedia200();
+		}
+
+		return null;
+	}
+
+	private static ArrayList<PossibilidadePiercingLine> todasAsPossibilidadesPiercingLine() {
+
+		List<TipoCandle> tipos = TipoCandle.retornaTipos();
+		List<VolumeAcimaMedia20> vol = VolumeAcimaMedia20.getListVolumeAcimaMedia20();
+		List<Perfuracao> perf = Perfuracao.retornaPerfuracoes();
+		List<PrecoAcimaMedia8> preco8 = PrecoAcimaMedia8.getListPrecoAcimaMedia8();
+		List<PrecoAcimaMedia20> preco20 = PrecoAcimaMedia20.getListPrecoAcimaMedia20();
+		List<PrecoAcimaMedia200> preco200 = PrecoAcimaMedia200.getListPrecoAcimaMedia200();
+
+		ArrayList<PossibilidadePiercingLine> possibilidades = new ArrayList<PossibilidadePiercingLine>();
+
+		tipos.stream().forEach(tipo -> {
+			vol.stream().forEach(volume -> {
+				perf.stream().forEach(perfuracao -> {
+					preco8.stream().forEach(precoCurto -> {
+						preco20.stream().forEach(precoMedio -> {
+							preco200.stream().forEach(precoLongo -> {
+
+								PossibilidadePiercingLine possibilidade = new PossibilidadePiercingLine(tipo, volume,
+										perfuracao, precoCurto, precoMedio, precoLongo);
+
+								if (possibilidade.tipoCandle != TipoCandle.NULL
+										&& possibilidade.tipoCandle != TipoCandle.NEUTRO
+										&& possibilidade.volumeAcimaMedia20 != VolumeAcimaMedia20.NULL
+										&& possibilidade.perfuracao != Perfuracao.NULL
+										&& possibilidade.precoAcimaMedia8 != PrecoAcimaMedia8.NULL
+										&& possibilidade.precoAcimaMedia20 != PrecoAcimaMedia20.NULL
+										&& possibilidade.precoAcimaMedia200 != PrecoAcimaMedia200.NULL) {
+
+									possibilidades.add(possibilidade);
+
+								}
+
+							});
+						});
+					});
+				});
+			});
+		});
+
+		return possibilidades;
+
+	}
+
+	public static void preenchendoEstatisticaPiercingLine(Perfil perfil) {
+
+		ArrayList<PossibilidadePiercingLine> todasPossibilidades = todasAsPossibilidadesPiercingLine();
+
+		todasPossibilidades.stream().forEach(p -> {
+
+			EstatisticaPiercingLine estatisticaPiercingLine = new EstatisticaPiercingLine();
+
+			estatisticaPiercingLine.setConfiguracaoPiercingLine(p);
+
+			Double numeradorGeral = OperacaoService.contaPiercingLineEspecificoInciadoNaoChegouAlvo(p.tipoCandle,
+					p.volumeAcimaMedia20, p.perfuracao, p.precoAcimaMedia8, p.precoAcimaMedia20, p.precoAcimaMedia200);
+
+			Double denominadorGeral = OperacaoService.contaPiercingLineEspecificoInciado(p.tipoCandle,
+					p.volumeAcimaMedia20, p.perfuracao, p.precoAcimaMedia8, p.precoAcimaMedia20, p.precoAcimaMedia200);
+
+			estatisticaPiercingLine.setFrequenciaGeral(denominadorGeral.intValue());
+
+			Double numeradorUltimosCincoAnos = OperacaoService
+					.contaPiercingLineEspecificoInciadoUltimosCincoAnosNaoChegouAlvo(p.tipoCandle, p.volumeAcimaMedia20,
+							p.perfuracao, p.precoAcimaMedia8, p.precoAcimaMedia20, p.precoAcimaMedia200);
+
+			Double denominadorUltimosCincoAnos = OperacaoService.contaPiercingLineEspecificoInciadoUltimosCincoAnos(
+					p.tipoCandle, p.volumeAcimaMedia20, p.perfuracao, p.precoAcimaMedia8, p.precoAcimaMedia20,
+					p.precoAcimaMedia200);
+
+			estatisticaPiercingLine.setFrequenciaUltimosCincoAnos(denominadorUltimosCincoAnos.intValue());
+
+			Double numeradorUltimoAno = OperacaoService.contaPiercingLineEspecificoInciadoUltimoAnoNaoChegouAlvo(
+					p.tipoCandle, p.volumeAcimaMedia20, p.perfuracao, p.precoAcimaMedia8, p.precoAcimaMedia20,
+					p.precoAcimaMedia200);
+
+			Double denominadorUltimoAno = OperacaoService.contaPiercingLineEspecificoInciadoUltimoAno(p.tipoCandle,
+					p.volumeAcimaMedia20, p.perfuracao, p.precoAcimaMedia8, p.precoAcimaMedia20, p.precoAcimaMedia200);
+
+			estatisticaPiercingLine.setFrequenciaUltimoAno(denominadorUltimoAno.intValue());
+
+			if (denominadorGeral != 0) {
+				Double estatisticaGeral = 100.0 - ((numeradorGeral / denominadorGeral) * 100);
+				estatisticaPiercingLine.setAssertividadeGeralPrimeiroAlvo(estatisticaGeral);
+			}
+
+			if (denominadorUltimosCincoAnos != 0) {
+				Double estatisticaUltimosCincoAnos = 100.0
+						- ((numeradorUltimosCincoAnos / denominadorUltimosCincoAnos) * 100);
+				estatisticaPiercingLine.setAssertividadeUltimosCincoAnosPrimeiroAlvo(estatisticaUltimosCincoAnos);
+			}
+
+			if (denominadorUltimoAno != 0) {
+				Double estatisticaUltimoAno = 100.0 - ((numeradorUltimoAno / denominadorUltimoAno) * 100);
+				estatisticaPiercingLine.setAssertividadeUltimoAnoPrimeiroAlvo(estatisticaUltimoAno);
+			}
+
+			estatisticasPiercingLine.add(estatisticaPiercingLine);
+
+		});
+
+		try {
+			preencherTxtTreinamentoRedeNeuralPiercingLine(perfil);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
+	}
+
+	private static void preencherTxtTreinamentoRedeNeuralPiercingLine(Perfil perfil) throws IOException {
+
+		FileWriter arq = new FileWriter("resource\\ArquivoTreinamentoPiercingLinePerfil" + perfil.getNome() + ".txt");
+		PrintWriter gravarArq = new PrintWriter(arq);
+
+		estatisticasPiercingLine.stream().forEach(estatisticaPiercingLine -> {
+			Double assertividadeComPeso = calculaAssertividadeComPesoPiercingLine(estatisticaPiercingLine);
+			String tipoCandleString = "";
+			String perfuracao = "";
+
+			if (estatisticaPiercingLine.getConfiguracaoPiercingLine().tipoCandle == TipoCandle.NEGATIVO) {
+				tipoCandleString = "0;";
+			} else if (estatisticaPiercingLine.getConfiguracaoPiercingLine().tipoCandle == TipoCandle.POSITIVO) {
+				tipoCandleString = "1;";
+			}
+
+			if (estatisticaPiercingLine.getConfiguracaoPiercingLine().perfuracao == Perfuracao.POUCA) {
+				perfuracao = "0;0;";
+			} else if (estatisticaPiercingLine.getConfiguracaoPiercingLine().perfuracao == Perfuracao.MEDIANA) {
+				perfuracao = "0;1;";
+			} else if (estatisticaPiercingLine.getConfiguracaoPiercingLine().perfuracao == Perfuracao.MUITA) {
+				perfuracao = "1;0;";
+			} else if (estatisticaPiercingLine.getConfiguracaoPiercingLine().perfuracao == Perfuracao.EXTREMA) {
+				perfuracao = "1;1;";
+			}
+
+			gravarArq.printf(tipoCandleString
+					+ estatisticaPiercingLine.getConfiguracaoPiercingLine().volumeAcimaMedia20.getValor() + ";"
+					+ perfuracao + estatisticaPiercingLine.getConfiguracaoPiercingLine().precoAcimaMedia8.getValor()
+					+ ";" + estatisticaPiercingLine.getConfiguracaoPiercingLine().precoAcimaMedia20.getValor() + ";"
+					+ estatisticaPiercingLine.getConfiguracaoPiercingLine().precoAcimaMedia200.getValor() + ";");
+
+			String manter = "";
+			String direcao = "";
+
+			if (condicaoParaPiercingLine(assertividadeComPeso, perfil)) {
+
+				manter = "0;";
+
+			} else {
+				manter = "1;";
+			}
+
+			if (estatisticaPiercingLine.getConfiguracaoPiercingLine().tipoCandle == TipoCandle.POSITIVO) {
+
+				direcao = "1;";
+
+			} else if (estatisticaPiercingLine.getConfiguracaoPiercingLine().tipoCandle == TipoCandle.NEGATIVO) {
+
+				direcao = "0;";
+
+			}
+
+			gravarArq.printf(manter + direcao);
+
+			gravarArq.println();
+
+		});
+
+		arq.close();
+
+	}
+
 	private static ArrayList<PossibilidadeMartelo> todasAsPossibilidadesMartelo() {
 
 		List<TipoCandle> tipos = TipoCandle.retornaTipos();
@@ -652,7 +1024,7 @@ public class RedeNeural implements NeuralNetListener {
 		PrintWriter gravarArq = new PrintWriter(arq);
 
 		estatisticasMartelo.stream().forEach(estatisticaMartelo -> {
-			Double assertividadeComPeso = calculaAssertividadeComPeso(estatisticaMartelo);
+			Double assertividadeComPeso = calculaAssertividadeComPesoMartelo(estatisticaMartelo);
 			String tipoCandleString = "";
 			String pavioSuperiorString = "";
 			String pavioInferiorString = "";
@@ -763,16 +1135,103 @@ public class RedeNeural implements NeuralNetListener {
 
 	}
 
+	public static void preencherTxtValidacaoRedeNeuralPiercingLine() throws IOException {
+
+		FileWriter arq = new FileWriter("resource\\ArquivoValidacaoPiercingLine.txt");
+		PrintWriter gravarArq = new PrintWriter(arq);
+
+		LocalDate data = LocalDate.parse("2021-01-01");
+
+		ArrayList<Operacao> operacoes = OperacaoService.getOperacoesUltimoAno(MIN, MAX, data);
+		ArrayList<PiercingLine> piercingLine = new ArrayList<PiercingLine>();
+
+		operacoes.stream().forEach(operacao -> {
+			if (Padroes.comparaPadrao(operacao.getPadrao()) == Padroes.PIERCINGLINE
+					|| Padroes.comparaPadrao(operacao.getPadrao()) == Padroes.DARKCLOUD) {
+				piercingLine.add(operacao.getPiercingLine());
+			}
+		});
+
+		piercingLine.stream().forEach(piercing -> {
+			String tipoCandleString = "";
+			String vol = "";
+			String perfuracao = "";
+			String preco8 = "";
+			String preco20 = "";
+			String preco200 = "";
+
+			if (TipoCandle.comparaTipoCandle(piercing.getTipo()) == TipoCandle.NEGATIVO) {
+				tipoCandleString = "0;";
+			} else if (TipoCandle.comparaTipoCandle(piercing.getTipo()) == TipoCandle.POSITIVO) {
+				tipoCandleString = "1;";
+			}
+
+			if (VolumeAcimaMedia20
+					.comparaVolumeAcimaMedia20(piercing.getVolumeAcimaMedia20()) == VolumeAcimaMedia20.SIM) {
+				vol = "1;";
+			} else {
+				vol = "0;";
+			}
+
+			if (Perfuracao.comparaPerfuracaoComInteiro(piercing.getPerfuracao()) == Perfuracao.POUCA) {
+				perfuracao = "0;0;";
+			} else if (Perfuracao.comparaPerfuracaoComInteiro(piercing.getPerfuracao()) == Perfuracao.MEDIANA) {
+				perfuracao = "0;1;";
+			} else if (Perfuracao.comparaPerfuracaoComInteiro(piercing.getPerfuracao()) == Perfuracao.MUITA) {
+				perfuracao = "1;0;";
+			} else if (Perfuracao.comparaPerfuracaoComInteiro(piercing.getPerfuracao()) == Perfuracao.EXTREMA) {
+				perfuracao = "1;1;";
+			}
+
+			if (PrecoAcimaMedia8.comparaPrecoAcimaMedia8(piercing.getPrecoAcimaMedia8()) == PrecoAcimaMedia8.SIM) {
+				preco8 = "1;";
+			} else {
+				preco8 = "0;";
+			}
+
+			if (PrecoAcimaMedia20.comparaPrecoAcimaMedia20(piercing.getPrecoAcimaMedia20()) == PrecoAcimaMedia20.SIM) {
+				preco20 = "1;";
+			} else {
+				preco20 = "0;";
+			}
+
+			if (PrecoAcimaMedia200
+					.comparaPrecoAcimaMedia200(piercing.getPrecoAcimaMedia200()) == PrecoAcimaMedia200.SIM) {
+				preco200 = "1;";
+			} else {
+				preco200 = "0;";
+			}
+
+			gravarArq.printf(tipoCandleString + vol + perfuracao + preco8 + preco20 + preco200);
+
+			gravarArq.println();
+
+		});
+
+		arq.close();
+
+	}
+
 	public static void testaRedeNeuralMarteloNaPratica(Perfil perfil) {
 
 		LocalDate data = LocalDate.parse("2021-01-01");
 		ArrayList<Operacao> operacoes = OperacaoService.getOperacoesUltimoAno(MIN, MAX, data);
+		ArrayList<Martelo> martelo = new ArrayList<Martelo>();
+		ArrayList<Operacao> operacoesMartelo = new ArrayList<>();
+
+		operacoes.stream().forEach(operacao -> {
+			if (Padroes.comparaPadrao(operacao.getPadrao()) == Padroes.MARTELO) {
+				martelo.add(operacao.getMartelo());
+				operacoesMartelo.add(operacao);
+			}
+		});
+		
 
 		String inputFileValidacao = "resource\\ArquivoValidacaoMartelo.txt";
 
 		Double assertividade = 0.0;
 		Double acerto = 0.0;
-		Double compra = 0.0;
+		Double total = 0.0;
 		Double porcentagemFinal = 0.0;
 
 		NeuralNetLoader loader = new NeuralNetLoader("resource\\RedeNeuralMarteloPerfil" + perfil.getNome() + ".snet");
@@ -796,23 +1255,23 @@ public class RedeNeural implements NeuralNetListener {
 
 		nnet.getOutputLayer().addInputSynapse(inputStream);
 
-		nnet.getMonitor().setTrainingPatterns(operacoes.size());
+		nnet.getMonitor().setTrainingPatterns(operacoesMartelo.size());
 		nnet.getMonitor().setTotCicles(1);
 		nnet.getMonitor().setLearning(false);
 		nnet.go();
 
 		while (nnet.isRunning()) {
-			for (int i = 0; i < operacoes.size(); i++) {
+			for (int i = 0; i < operacoesMartelo.size(); i++) {
 				double[] pattern = memOut.getNextPattern();
 
 				if (pattern[0] > 0.5) {
-					if (operacoes.get(i).isStart()) {
-						compra += 1.0;
-						if (operacoes.get(i).getPrimeiroAlvoAtingido()) {
+					if (operacoesMartelo.get(i).isStart()) {
+						total += 1.0;
+						if (operacoesMartelo.get(i).getPrimeiroAlvoAtingido()) {
 							acerto += 1.0;
-							porcentagemFinal += operacoes.get(i).getPorcentagemOperacaoFinal();
+							porcentagemFinal += operacoesMartelo.get(i).getPorcentagemOperacaoFinal();
 						} else {
-							porcentagemFinal -= operacoes.get(i).getPorcentagemOperacaoFinal();
+							porcentagemFinal -= operacoesMartelo.get(i).getPorcentagemOperacaoFinal();
 						}
 
 					}
@@ -822,14 +1281,8 @@ public class RedeNeural implements NeuralNetListener {
 
 		}
 
-		assertividade = (acerto / compra) * 100;
+		assertividade = (acerto / total) * 100;
 
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
 		System.out.println();
 		System.out.println("__________________________________________________________________________");
 		System.out.println();
@@ -838,24 +1291,283 @@ public class RedeNeural implements NeuralNetListener {
 		System.out.println();
 		System.out.println("Assertividade de " + assertividade + "%");
 		System.out.println();
-		System.out.println("Total de operacoes no periodo de 01/01/2021 até 27/07/2021: " + compra.intValue());
+		System.out.println("Total de operacoes no periodo de 01/01/2021 até 27/07/2021: " + total.intValue());
 		System.out.println();
 		System.out.println("Porcentagem Final No Periodo: " + porcentagemFinal + "%");
 		System.out.println();
 		System.out.println();
 		System.out.println("__________________________________________________________________________");
 		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
-		System.out.println();
+		
 
 		nnet.stop();
 
 	}
 
+	public static void testaRedeNeuralPiercingLineNaPratica(Perfil perfil) {
+
+		LocalDate data = LocalDate.parse("2021-01-01");
+
+		ArrayList<Operacao> operacoes = OperacaoService.getOperacoesUltimoAno(MIN, MAX, data);
+		ArrayList<PiercingLine> piercingLine = new ArrayList<PiercingLine>();
+		ArrayList<Operacao> operacoesPiercingLine = new ArrayList<>();
+
+		operacoes.stream().forEach(operacao -> {
+			if (Padroes.comparaPadrao(operacao.getPadrao()) == Padroes.PIERCINGLINE
+					|| Padroes.comparaPadrao(operacao.getPadrao()) == Padroes.DARKCLOUD) {
+				piercingLine.add(operacao.getPiercingLine());
+				operacoesPiercingLine.add(operacao);
+			}
+		});
+
+		String inputFileValidacao = "resource\\ArquivoValidacaoPiercingLine.txt";
+
+		Double assertividade = 0.0;
+		Double acerto = 0.0;
+		Double total = 0.0;
+		Double porcentagemFinal = 0.0;
+
+		NeuralNetLoader loader = new NeuralNetLoader("resource\\RedeNeuralPiercingLinePerfil" + perfil.getNome() + ".snet");
+		NeuralNet nnet = loader.getNeuralNet();
+
+		Monitor monitor = nnet.getMonitor();
+
+		monitor.addNeuralNetListener(nnet);
+
+		MemoryOutputSynapse memOut = new MemoryOutputSynapse();
+
+		nnet.getOutputLayer().removeAllOutputs();
+		nnet.getOutputLayer().addOutputSynapse(memOut);
+
+		FileInputSynapse inputStream = new FileInputSynapse();
+
+		inputStream = (FileInputSynapse) nnet.getInputLayer().getAllInputs().get(0);
+
+		inputStream.setAdvancedColumnSelector("1,2,3,4,5,6,7");
+		inputStream.setInputFile(new File(inputFileValidacao));
+
+		nnet.getOutputLayer().addInputSynapse(inputStream);
+
+		nnet.getMonitor().setTrainingPatterns(operacoesPiercingLine.size());
+		nnet.getMonitor().setTotCicles(1);
+		nnet.getMonitor().setLearning(false);
+		nnet.go();
+
+		while (nnet.isRunning()) {
+			for (int i = 0; i < operacoesPiercingLine.size(); i++) {
+				double[] pattern = memOut.getNextPattern();
+
+				if(pattern[0] < 0.5 && pattern[1] > 0.5) {
+					if(operacoesPiercingLine.get(i).isStart()) {
+						total += 1.0;
+						if(operacoesPiercingLine.get(i).getPrimeiroAlvoAtingido()) {
+							acerto += 1.0;
+							porcentagemFinal += operacoesPiercingLine.get(i).getPorcentagemOperacaoFinal();
+						}else {
+							porcentagemFinal -= operacoesPiercingLine.get(i).getPorcentagemOperacaoFinal();
+						}
+					}
+				}else if(pattern[0] < 0.5 && pattern[1] < 0.5) {
+					if(operacoesPiercingLine.get(i).isStart()) {
+						total += 1.0;
+						if(operacoesPiercingLine.get(i).getPrimeiroAlvoAtingido()) {
+							acerto += 1.0;
+							porcentagemFinal += operacoesPiercingLine.get(i).getPorcentagemOperacaoFinal();
+						}else {
+							porcentagemFinal -= operacoesPiercingLine.get(i).getPorcentagemOperacaoFinal();
+						}
+					}
+				}
+
+			}
+
+		}
+
+		assertividade = (acerto / total) * 100;
+
+		System.out.println();
+		System.out.println("__________________________________________________________________________");
+		System.out.println();
+		System.out.println();
+		System.out.println("Perfil: " + perfil.getNome());
+		System.out.println();
+		System.out.println("Assertividade de " + assertividade + "%");
+		System.out.println();
+		System.out.println("Total de operacoes no periodo de 01/01/2021 até 27/07/2021: " + total.intValue());
+		System.out.println();
+		System.out.println("Porcentagem Final No Periodo: " + porcentagemFinal + "%");
+		System.out.println();
+		System.out.println();
+		System.out.println("__________________________________________________________________________");
+		System.out.println();
+		
+		nnet.stop();
+
+	}
+	
+	public static void realizaTreinamentoRedeNeuralPiercingLine(Perfil perfil) throws IOException {
+
+		Double acerto = 0.0;
+
+		ArrayList<Integer> valoresValidacaoManter = new ArrayList<>();
+		ArrayList<Integer> valoresValidacaoDirecao = new ArrayList<>();
+
+		String inputFile = "resource\\ArquivoTreinamentoPiercingLinePerfil" + perfil.getNome() + ".txt";
+
+		String outputFile = "resource\\ArquivoTreinamentoPiercingLineSaidaPerfil" + perfil.getNome() + ".txt";
+
+		String savePiercingLine = "resource\\RedeNeuralPiercingLinePerfil" + perfil.getNome() + ".snet";
+
+		LinearLayer input = new LinearLayer();
+
+		SigmoidLayer hidden = new SigmoidLayer();
+
+		SigmoidLayer output = new SigmoidLayer();
+
+		input.setLayerName("input");
+
+		hidden.setLayerName("hidden");
+
+		output.setLayerName("output");
+
+		input.setRows(7);
+		hidden.setRows(8);
+		output.setRows(2);
+
+		FullSynapse synapse_IH = new FullSynapse();
+
+		FullSynapse synapse_HO = new FullSynapse();
+
+		synapse_IH.setName("IH");
+
+		synapse_HO.setName("HO");
+
+		input.addOutputSynapse(synapse_IH);
+		hidden.addInputSynapse(synapse_IH);
+
+		hidden.addOutputSynapse(synapse_HO);
+		output.addInputSynapse(synapse_HO);
+
+		FileInputSynapse inputStream = new FileInputSynapse();
+		inputStream.setAdvancedColumnSelector("1,2,3,4,5,6,7");
+		inputStream.setInputFile(new File(inputFile));
+
+		input.addInputSynapse(inputStream);
+
+		TeachingSynapse trainer = new TeachingSynapse();
+
+		FileInputSynapse samples = new FileInputSynapse();
+
+		samples.setInputFile(new File(inputFile));
+
+		samples.setAdvancedColumnSelector("8,9");
+
+		trainer.setDesired(samples);
+
+		FileOutputSynapse error = new FileOutputSynapse();
+		error.setFileName(outputFile);
+		trainer.addResultSynapse(error);
+		output.addOutputSynapse(trainer);
+
+		NeuralNet nnet = new NeuralNet();
+
+		nnet.addLayer(input, NeuralNet.INPUT_LAYER);
+
+		nnet.addLayer(hidden, NeuralNet.HIDDEN_LAYER);
+
+		nnet.addLayer(output, NeuralNet.OUTPUT_LAYER);
+
+		nnet.setTeacher(trainer);
+
+		Monitor monitor = nnet.getMonitor();
+		monitor.setLearningRate(0.8);
+		monitor.setMomentum(0.3);
+		input.setMonitor(monitor);
+		hidden.setMonitor(monitor);
+		output.setMonitor(monitor);
+
+		monitor.addNeuralNetListener(nnet);
+
+		monitor.setTrainingPatterns(128);
+		monitor.setTotCicles(2000);
+		monitor.setLearning(true);
+		nnet.go();
+
+		while (nnet.isRunning()) {
+
+		}
+
+		MemoryOutputSynapse memOut = new MemoryOutputSynapse();
+
+		output.removeAllOutputs();
+
+		output.addOutputSynapse(memOut);
+
+		nnet.getMonitor().setTotCicles(1);
+
+		nnet.getMonitor().setLearning(false);
+		nnet.go();
+
+		FileReader arquivo;
+		try {
+
+			arquivo = new FileReader(inputFile);
+			BufferedReader leitura = new BufferedReader(arquivo);
+			String linha = leitura.readLine();
+
+			while (linha != null) {
+				char manter = linha.charAt(14);
+				valoresValidacaoManter.add(Character.getNumericValue(manter));
+				char direcao = linha.charAt(16);
+				valoresValidacaoDirecao.add(Character.getNumericValue(direcao));
+
+				linha = leitura.readLine();
+			}
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		for (int i = 0; i < valoresValidacaoManter.size(); i++) {
+			double[] pattern = memOut.getNextPattern();
+
+			if (pattern[0] > 0.5 && valoresValidacaoManter.get(i).intValue() == 1) {
+				if(pattern[1] > 0.5 && valoresValidacaoDirecao.get(i).intValue() == 1) {
+					acerto += 1.0;
+				}else if(pattern[1] < 0.5 && valoresValidacaoDirecao.get(i).intValue() == 0) {
+					acerto += 1.0;
+				}
+			} else if (pattern[0] < 0.5 && valoresValidacaoManter.get(i).intValue() == 0) {
+				if(pattern[1] > 0.5 && valoresValidacaoDirecao.get(i).intValue() == 1) {
+					acerto += 1.0;
+				}else if(pattern[1] < 0.5 && valoresValidacaoDirecao.get(i).intValue() == 0) {
+					acerto += 1.0;
+				}
+			}
+
+		}
+
+		Double assertividade = (acerto / 128.0) * 100;
+
+		System.out.println();
+		System.out.println("Assertividade da Rede Neural = " + assertividade + "%");
+		System.out.println();
+
+		if (assertividade.compareTo(100.0) == 0) {
+			System.out.println();
+			System.out.println("Salvando Rede Neural Piercing Line e Dark Cloud...");
+			System.out.println();
+			saveNeuralNet(savePiercingLine, nnet);
+		}
+
+		System.out.println();
+		System.out.println("Finalizando...");
+		System.out.println();
+		
+		nnet.stop();
+
+	}
+	
 	public static void realizaTreinamentoRedeNeuralMartelo(Perfil perfil) throws IOException {
 
 		Double acerto = 0.0;
@@ -1016,13 +1728,24 @@ public class RedeNeural implements NeuralNetListener {
 	}
 
 	private static boolean condicaoParaCompraMartelo(Double assertividadeComPeso, Perfil perfil) {
-		return assertividadeComPeso.compareTo(PORCENTAGEMMINIMAPARAESTATISTICA) == 0
+		return assertividadeComPeso.compareTo(perfil.getValor()) == 0
 				|| assertividadeComPeso > perfil.getValor();
 	}
 
-	private static double calculaAssertividadeComPeso(EstatisticaMartelo estatisticaMartelo) {
+	private static boolean condicaoParaPiercingLine(Double assertividadeComPeso, Perfil perfil) {
+		return assertividadeComPeso.compareTo(perfil.getValor()) == 0
+				|| assertividadeComPeso > perfil.getValor();
+	}
+
+	private static double calculaAssertividadeComPesoMartelo(EstatisticaMartelo estatisticaMartelo) {
 		return (estatisticaMartelo.getAssertividadeGeral() + (estatisticaMartelo.getAssertividadeUltimosCincoAnos() * 2)
 				+ (estatisticaMartelo.getAssertividadeUltimoAno() * 3)) / 6;
+	}
+
+	private static double calculaAssertividadeComPesoPiercingLine(EstatisticaPiercingLine estatisticaPiercingLine) {
+		return (estatisticaPiercingLine.getAssertividadeGeralPrimeiroAlvo()
+				+ (estatisticaPiercingLine.getAssertividadeUltimosCincoAnosPrimeiroAlvo() * 2)
+				+ (estatisticaPiercingLine.getAssertividadeUltimoAnoPrimeiroAlvo() * 3)) / 6;
 	}
 
 	private static boolean condicaoParaBebeAbandonadoDeAlta(InfoCandle primeiroCandle, InfoCandle segundoCandle,
@@ -1169,176 +1892,6 @@ public class RedeNeural implements NeuralNetListener {
 				return Math.abs(((infoCandle.getMaxima() - infoCandle.getMinima()) * 0.618) - infoCandle.getMinima());
 
 			}
-		}
-
-		return null;
-	}
-
-	public static Boolean procuraPadraoEngolfo(ArrayList<InfoCandle> listInfoCandle) {
-
-		if (listInfoCandle != null && listInfoCandle.size() >= TreinamentoRedeNeural.LIMITDECANDLEENGOLFO) {
-
-			for (int i = 0; i < listInfoCandle.size() - 1; i++) {
-
-				InfoCandle primeiroCandle = listInfoCandle.get(i);
-				InfoCandle segundoCandle = listInfoCandle.get(i + 1);
-
-				if (condicaoParaEngolfoDeAlta(primeiroCandle, segundoCandle)) {
-
-					Double variacaoUltimoCandle = calculaVariacaoCandle(segundoCandle);
-					Double variacaoPrimeiroCandle = calculaVariacaoCandle(primeiroCandle);
-					Double variacaoEngolfo = variacaoUltimoCandle / variacaoPrimeiroCandle;
-
-					Operacao operacao = new Operacao();
-					operacao.setDat(segundoCandle.getData());
-					operacao.setNomeDoPapel(segundoCandle.getNomeDoPapel());
-					operacao.setPadrao(Padroes.ENGOLFO.getDescricao());
-					operacao.setEntrada(Entrada.COMPRA.getDescricao());
-					operacao.setPrecoEntrada(setPrecoEntradaCompra(segundoCandle));
-					operacao.setPrecoStop(setPrecoStopCompra(segundoCandle));
-					operacao.setPrecoPrimeiroAlvoFibonacci(
-							calculaPrecoPrimeiroAlvoFibonacci(segundoCandle, Entrada.COMPRA));
-					operacao.setPrecoSegundoAlvoFibonacci(
-							calculaPrecoSegundoAlvoFibonacci(segundoCandle, Entrada.COMPRA));
-					operacao.setPrecoTerceiroAlvoFibonacci(
-							calculaPrecoTerceiroAlvoFibonacci(segundoCandle, Entrada.COMPRA));
-
-					Engolfo engolfo = new Engolfo();
-					engolfo.setTipo(tipoCandle(segundoCandle).getTipo());
-					engolfo.setPavioInferior(
-							classificaPavioInferior(pavioInferiorEmPorcentagem(segundoCandle)).getDescricao());
-					engolfo.setPavioSuperior(
-							classificaPavioSuperior(pavioSuperiorEmPorcentagem(segundoCandle)).getDescricao());
-					engolfo.setVolumeAcimaMedia20(volumeAcimaMedia20(segundoCandle));
-					engolfo.setAcimaMedia8(verificaSePrecoFechamentoAcimaMedia(segundoCandle, MEDIACURTA));
-					engolfo.setAcimaMedia20(verificaSePrecoFechamentoAcimaMedia(segundoCandle, MEDIA));
-					engolfo.setAcimaMedia200(verificaSePrecoFechamentoAcimaMedia(segundoCandle, MEDIALONGA));
-					engolfo.setVariacao(classificaVariacaoPreco(variacaoEngolfo).getDescricao());
-					engolfo.setOperacao(operacao);
-
-					operacao.setEngolfo(engolfo);
-
-					OperacaoService.adicionaOperacao(operacao);
-					EngolfoService.adicionaEngolfo(engolfo);
-
-				} else if (condicaoParaEngolfoDeBaixa(primeiroCandle, segundoCandle)) {
-
-					Double variacaoUltimoCandle = calculaVariacaoCandle(segundoCandle);
-					Double variacaoPrimeiroCandle = calculaVariacaoCandle(primeiroCandle);
-					Double variacaoEngolfo = variacaoUltimoCandle / variacaoPrimeiroCandle;
-
-					Operacao operacao = new Operacao();
-					operacao.setDat(segundoCandle.getData());
-					operacao.setNomeDoPapel(segundoCandle.getNomeDoPapel());
-					operacao.setPadrao(Padroes.ENGOLFO.getDescricao());
-					operacao.setEntrada(Entrada.VENDA.getDescricao());
-					operacao.setPrecoEntrada(setPrecoEntradaVenda(segundoCandle));
-					operacao.setPrecoStop(setPrecoStopVenda(segundoCandle));
-					operacao.setPrecoPrimeiroAlvoFibonacci(
-							calculaPrecoPrimeiroAlvoFibonacci(segundoCandle, Entrada.VENDA));
-					operacao.setPrecoSegundoAlvoFibonacci(
-							calculaPrecoSegundoAlvoFibonacci(segundoCandle, Entrada.VENDA));
-					operacao.setPrecoTerceiroAlvoFibonacci(
-							calculaPrecoTerceiroAlvoFibonacci(segundoCandle, Entrada.VENDA));
-
-					Engolfo engolfo = new Engolfo();
-					engolfo.setTipo(tipoCandle(segundoCandle).getTipo());
-					engolfo.setPavioInferior(
-							classificaPavioInferior(pavioInferiorEmPorcentagem(segundoCandle)).getDescricao());
-					engolfo.setPavioSuperior(
-							classificaPavioSuperior(pavioSuperiorEmPorcentagem(segundoCandle)).getDescricao());
-					engolfo.setVolumeAcimaMedia20(volumeAcimaMedia20(segundoCandle));
-					engolfo.setAcimaMedia8(verificaSePrecoFechamentoAcimaMedia(segundoCandle, MEDIACURTA));
-					engolfo.setAcimaMedia20(verificaSePrecoFechamentoAcimaMedia(segundoCandle, MEDIA));
-					engolfo.setAcimaMedia200(verificaSePrecoFechamentoAcimaMedia(segundoCandle, MEDIALONGA));
-					engolfo.setVariacao(classificaVariacaoPreco(variacaoEngolfo).getDescricao());
-					
-					engolfo.setOperacao(operacao);
-
-					operacao.setEngolfo(engolfo);
-
-					OperacaoService.adicionaOperacao(operacao);
-					EngolfoService.adicionaEngolfo(engolfo);
-
-				}
-
-			}
-
-		}
-
-		return false;
-
-	}
-
-	public static Boolean procuraPadraoDoji(InfoCandle infoCandle) {
-
-		if (infoCandle != null) {
-
-			Double pavioSuperior = pavioSuperiorEmPorcentagem(infoCandle);
-			Double pavioInferior = pavioInferiorEmPorcentagem(infoCandle);
-
-			if (condicaoParaDoji(pavioSuperior, pavioInferior)) {
-				Operacao operacaoCompra = new Operacao();
-				operacaoCompra.setPadrao(Padroes.DOJICOMPRA.getDescricao());
-				operacaoCompra.setDat(infoCandle.getData());
-				operacaoCompra.setEntrada(Entrada.COMPRA.getDescricao());
-				operacaoCompra.setNomeDoPapel(infoCandle.getNomeDoPapel());
-				operacaoCompra.setPrecoEntrada(setPrecoEntradaCompra(infoCandle));
-				operacaoCompra.setPrecoStop(setPrecoStopCompra(infoCandle));
-				operacaoCompra
-						.setPrecoPrimeiroAlvoFibonacci(calculaPrecoPrimeiroAlvoFibonacci(infoCandle, Entrada.COMPRA));
-				operacaoCompra
-						.setPrecoSegundoAlvoFibonacci(calculaPrecoSegundoAlvoFibonacci(infoCandle, Entrada.COMPRA));
-				operacaoCompra
-						.setPrecoTerceiroAlvoFibonacci(calculaPrecoTerceiroAlvoFibonacci(infoCandle, Entrada.COMPRA));
-
-				Doji dojiCompra = new Doji();
-
-				dojiCompra.setTipo(tipoCandle(infoCandle).getTipo());
-				dojiCompra.setPavioInferior(pavioInferior.intValue());
-				dojiCompra.setPavioSuperior(pavioSuperior.intValue());
-				dojiCompra.setVolumeAcimaMedia20(volumeAcimaMedia20(infoCandle));
-				dojiCompra.setTamanhoPavioCorpo(tamanhoPavioCorpo(infoCandle));
-				dojiCompra.setPrecoAcimaMedia8(verificaSePrecoFechamentoAcimaMedia(infoCandle, MEDIACURTA));
-				dojiCompra.setPrecoAcimaMedia20(verificaSePrecoFechamentoAcimaMedia(infoCandle, MEDIA));
-				dojiCompra.setPrecoAcimaMedia200(verificaSePrecoFechamentoAcimaMedia(infoCandle, MEDIALONGA));
-				dojiCompra.setOperacao(operacaoCompra);
-				operacaoCompra.setDoji(dojiCompra);
-
-				OperacaoService.adicionaOperacao(operacaoCompra);
-				DojiService.adicionaDoji(dojiCompra);
-
-				Operacao operacaoVenda = new Operacao();
-				operacaoVenda.setPadrao(Padroes.DOJIVENDA.getDescricao());
-				operacaoVenda.setDat(infoCandle.getData());
-				operacaoVenda.setNomeDoPapel(infoCandle.getNomeDoPapel());
-				operacaoVenda.setEntrada(Entrada.VENDA.getDescricao());
-				operacaoVenda.setPrecoEntrada(setPrecoEntradaVenda(infoCandle));
-				operacaoVenda.setPrecoStop(setPrecoStopVenda(infoCandle));
-				operacaoVenda
-						.setPrecoPrimeiroAlvoFibonacci(calculaPrecoPrimeiroAlvoFibonacci(infoCandle, Entrada.VENDA));
-				operacaoVenda.setPrecoSegundoAlvoFibonacci(calculaPrecoSegundoAlvoFibonacci(infoCandle, Entrada.VENDA));
-				operacaoVenda
-						.setPrecoTerceiroAlvoFibonacci(calculaPrecoTerceiroAlvoFibonacci(infoCandle, Entrada.VENDA));
-
-				Doji dojiVenda = new Doji();
-
-				dojiVenda.setTipo(tipoCandle(infoCandle).getTipo());
-				dojiVenda.setPavioInferior(pavioInferior.intValue());
-				dojiVenda.setPavioSuperior(pavioSuperior.intValue());
-				dojiVenda.setVolumeAcimaMedia20(volumeAcimaMedia20(infoCandle));
-				dojiVenda.setTamanhoPavioCorpo(tamanhoPavioCorpo(infoCandle));
-				dojiVenda.setPrecoAcimaMedia8(verificaSePrecoFechamentoAcimaMedia(infoCandle, MEDIACURTA));
-				dojiVenda.setPrecoAcimaMedia20(verificaSePrecoFechamentoAcimaMedia(infoCandle, MEDIA));
-				dojiVenda.setPrecoAcimaMedia200(verificaSePrecoFechamentoAcimaMedia(infoCandle, MEDIALONGA));
-				dojiVenda.setOperacao(operacaoVenda);
-				operacaoVenda.setDoji(dojiVenda);
-
-				OperacaoService.adicionaOperacao(operacaoVenda);
-				DojiService.adicionaDoji(dojiVenda);
-
-			}
-
 		}
 
 		return null;

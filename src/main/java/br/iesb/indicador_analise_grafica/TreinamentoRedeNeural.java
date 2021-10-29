@@ -82,11 +82,32 @@ public class TreinamentoRedeNeural {
 			grafico.clear();
 			grafico = InfoCandleService.getInfoCandlePeloNome(nomeDoPapel);
 		
+			System.out.println();
+			System.out.println("Papel: " + nomeDoPapel);
+			System.out.println();
+			System.out.println("Procurando Marubozu...");
+			RedeNeural.procuraPadraoMarubozu(grafico, LIMITDECANDLEMARUBOZU);
+			System.out.println();
+			System.out.println("Procurando Martelo...");
 			RedeNeural.procuraPadraoMartelo(grafico);
-			RedeNeural.procuraPadraoEngolfo(grafico);
-//			RedeNeural.procuraPadraoPiercingLine(grafico);
-//			RedeNeural.procuraPadraoTresSoldados(grafico);
-//			RedeNeural.procuraPadraoBebeAbandonado(grafico);
+			System.out.println();
+			System.out.println("Procurando Martelo Invertido...");
+			RedeNeural.procuraPadraoMarteloInvertido(grafico);
+			System.out.println();
+			System.out.println("Procurando Doji...");
+			RedeNeural.procuraPadraoDoji(grafico);
+			System.out.println();
+			System.out.println("Procurando Piercing Line...");
+			RedeNeural.procuraPadraoPiercingLine(grafico);
+			System.out.println();
+			System.out.println("Procurando Engolfo...");
+			RedeNeural.procuraPadraoEngolfo(grafico, LIMITDECANDLEENGOLFO);
+			System.out.println();
+			System.out.println("Procurando Tres Soldados...");
+			RedeNeural.procuraPadraoTresSoldados(grafico);
+			System.out.println();
+			System.out.println("Procurando Bebe Abandonado...");
+			RedeNeural.procuraPadraoBebeAbandonado(grafico);
 
 		}
 
