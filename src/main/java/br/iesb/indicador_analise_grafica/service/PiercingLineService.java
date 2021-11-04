@@ -4,7 +4,8 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import br.iesb.indicador_analise_grafica.PiercingLine;
+
+import br.iesb.indicador_analise_grafica.padroes.PiercingLine;
 import br.iesb.indicador_analise_grafica.repository.PiercingLineRepository;
 
 @Service

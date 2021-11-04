@@ -3,7 +3,6 @@ package br.iesb.indicador_analise_grafica_enum;
 import java.util.Arrays;
 import java.util.List;
 
-import com.mysql.cj.x.protobuf.MysqlxDatatypes.Array;
 
 public enum Perfuracao {
 	

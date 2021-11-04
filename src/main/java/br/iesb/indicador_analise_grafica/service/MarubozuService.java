@@ -5,7 +5,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.iesb.indicador_analise_grafica.Marubozu;
+import br.iesb.indicador_analise_grafica.padroes.Marubozu;
 import br.iesb.indicador_analise_grafica.repository.MarubozuRepository;
 
 @Service

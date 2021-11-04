@@ -9,11 +9,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import br.iesb.indicador_analise_grafica.Operacao;
 import br.iesb.indicador_analise_grafica.repository.OperacaoRepository;
+import br.iesb.indicador_analise_grafica_enum.Padroes;
+import br.iesb.indicador_analise_grafica_enum.PavioInferior;
+import br.iesb.indicador_analise_grafica_enum.PavioSuperior;
 import br.iesb.indicador_analise_grafica_enum.Perfuracao;
 import br.iesb.indicador_analise_grafica_enum.PrecoAcimaMedia20;
 import br.iesb.indicador_analise_grafica_enum.PrecoAcimaMedia200;
 import br.iesb.indicador_analise_grafica_enum.PrecoAcimaMedia8;
 import br.iesb.indicador_analise_grafica_enum.TipoCandle;
+import br.iesb.indicador_analise_grafica_enum.VariacaoPreco;
 import br.iesb.indicador_analise_grafica_enum.VolumeAcimaMedia20;
 
 @Service
@@ -101,44 +105,178 @@ public class OperacaoService {
 				perf.getMin(), perf.getMax(), preco8.getValor(), preco20.getValor(), preco200.getValor());
 
 	}
-	
+
 	public static Double contaPiercingLineEspecificoInciadoNaoChegouAlvo(TipoCandle tipoCandle, VolumeAcimaMedia20 vol,
 			Perfuracao perf, PrecoAcimaMedia8 preco8, PrecoAcimaMedia20 preco20, PrecoAcimaMedia200 preco200) {
 
-		return operacaoRepository.countPiercingLineEspecificoIniciadoGeralNaoChegouAlvo(tipoCandle.getTipo(), vol.getValor(),
-				perf.getMin(), perf.getMax(), preco8.getValor(), preco20.getValor(), preco200.getValor());
+		return operacaoRepository.countPiercingLineEspecificoIniciadoGeralNaoChegouAlvo(tipoCandle.getTipo(),
+				vol.getValor(), perf.getMin(), perf.getMax(), preco8.getValor(), preco20.getValor(),
+				preco200.getValor());
 
 	}
-	
-	public static Double contaPiercingLineEspecificoInciadoUltimosCincoAnos(TipoCandle tipoCandle, VolumeAcimaMedia20 vol,
-			Perfuracao perf, PrecoAcimaMedia8 preco8, PrecoAcimaMedia20 preco20, PrecoAcimaMedia200 preco200) {
 
-		return operacaoRepository.countPiercingLineEspecificoIniciadoGeralUltimosCincoAnos(tipoCandle.getTipo(), vol.getValor(),
-				perf.getMin(), perf.getMax(), preco8.getValor(), preco20.getValor(), preco200.getValor());
+	public static Double contaPiercingLineEspecificoInciadoUltimosCincoAnos(TipoCandle tipoCandle,
+			VolumeAcimaMedia20 vol, Perfuracao perf, PrecoAcimaMedia8 preco8, PrecoAcimaMedia20 preco20,
+			PrecoAcimaMedia200 preco200) {
 
-	}
-	
-	public static Double contaPiercingLineEspecificoInciadoUltimosCincoAnosNaoChegouAlvo(TipoCandle tipoCandle, VolumeAcimaMedia20 vol,
-			Perfuracao perf, PrecoAcimaMedia8 preco8, PrecoAcimaMedia20 preco20, PrecoAcimaMedia200 preco200) {
-
-		return operacaoRepository.countPiercingLineEspecificoIniciadoGeralUltimosCincoAnosNaoChegouAlvo(tipoCandle.getTipo(), vol.getValor(),
-				perf.getMin(), perf.getMax(), preco8.getValor(), preco20.getValor(), preco200.getValor());
+		return operacaoRepository.countPiercingLineEspecificoIniciadoGeralUltimosCincoAnos(tipoCandle.getTipo(),
+				vol.getValor(), perf.getMin(), perf.getMax(), preco8.getValor(), preco20.getValor(),
+				preco200.getValor());
 
 	}
-	
+
+	public static Double contaPiercingLineEspecificoInciadoUltimosCincoAnosNaoChegouAlvo(TipoCandle tipoCandle,
+			VolumeAcimaMedia20 vol, Perfuracao perf, PrecoAcimaMedia8 preco8, PrecoAcimaMedia20 preco20,
+			PrecoAcimaMedia200 preco200) {
+
+		return operacaoRepository.countPiercingLineEspecificoIniciadoGeralUltimosCincoAnosNaoChegouAlvo(
+				tipoCandle.getTipo(), vol.getValor(), perf.getMin(), perf.getMax(), preco8.getValor(),
+				preco20.getValor(), preco200.getValor());
+
+	}
+
 	public static Double contaPiercingLineEspecificoInciadoUltimoAno(TipoCandle tipoCandle, VolumeAcimaMedia20 vol,
 			Perfuracao perf, PrecoAcimaMedia8 preco8, PrecoAcimaMedia20 preco20, PrecoAcimaMedia200 preco200) {
 
-		return operacaoRepository.countPiercingLineEspecificoIniciadoGeralUltimoAno(tipoCandle.getTipo(), vol.getValor(),
-				perf.getMin(), perf.getMax(), preco8.getValor(), preco20.getValor(), preco200.getValor());
+		return operacaoRepository.countPiercingLineEspecificoIniciadoGeralUltimoAno(tipoCandle.getTipo(),
+				vol.getValor(), perf.getMin(), perf.getMax(), preco8.getValor(), preco20.getValor(),
+				preco200.getValor());
+
+	}
+
+	public static Double contaPiercingLineEspecificoInciadoUltimoAnoNaoChegouAlvo(TipoCandle tipoCandle,
+			VolumeAcimaMedia20 vol, Perfuracao perf, PrecoAcimaMedia8 preco8, PrecoAcimaMedia20 preco20,
+			PrecoAcimaMedia200 preco200) {
+
+		return operacaoRepository.countPiercingLineEspecificoIniciadoGeralUltimoAnoNaoChegouAlvo(tipoCandle.getTipo(),
+				vol.getValor(), perf.getMin(), perf.getMax(), preco8.getValor(), preco20.getValor(),
+				preco200.getValor());
+
+	}
+
+	public static Double contaEngolfoEspecificoInciado(TipoCandle tipoCandle, PavioSuperior pavioSuperior,
+			PavioInferior pavioInferior, VolumeAcimaMedia20 vol, PrecoAcimaMedia8 preco8, PrecoAcimaMedia20 preco20,
+			PrecoAcimaMedia200 preco200, VariacaoPreco variacao) {
+
+		return operacaoRepository.countEngolfoEspecificoIniciadoGeral(tipoCandle.getTipo(),
+				pavioSuperior.getDescricao(), pavioInferior.getDescricao(), vol.getValor(), preco8.getValor(),
+				preco20.getValor(), preco200.getValor(), variacao.getDescricao());
+
+	}
+
+	public static Double contaEngolfoEspecificoInciadoNaoChegouAlvo(TipoCandle tipoCandle, PavioSuperior pavioSuperior,
+			PavioInferior pavioInferior, VolumeAcimaMedia20 vol, PrecoAcimaMedia8 preco8, PrecoAcimaMedia20 preco20,
+			PrecoAcimaMedia200 preco200, VariacaoPreco variacao) {
+
+		return operacaoRepository.countEngolfoEspecificoIniciadoGeralNaoChegouAlvo(tipoCandle.getTipo(),
+				pavioSuperior.getDescricao(), pavioInferior.getDescricao(), vol.getValor(), preco8.getValor(),
+				preco20.getValor(), preco200.getValor(), variacao.getDescricao());
+
+	}
+
+	public static Double contaEngolfoEspecificoInciadoUltimosCincoAnos(TipoCandle tipoCandle,
+			PavioSuperior pavioSuperior, PavioInferior pavioInferior, VolumeAcimaMedia20 vol, PrecoAcimaMedia8 preco8,
+			PrecoAcimaMedia20 preco20, PrecoAcimaMedia200 preco200, VariacaoPreco variacao) {
+
+		return operacaoRepository.countEngolfoEspecificoIniciadoUltimosCincoAnos(tipoCandle.getTipo(),
+				pavioSuperior.getDescricao(), pavioInferior.getDescricao(), vol.getValor(), preco8.getValor(),
+				preco20.getValor(), preco200.getValor(), variacao.getDescricao());
+
+	}
+
+	public static Double contaEngolfoEspecificoInciadoUltimosCincoAnosNaoChegouAlvo(TipoCandle tipoCandle,
+			PavioSuperior pavioSuperior, PavioInferior pavioInferior, VolumeAcimaMedia20 vol, PrecoAcimaMedia8 preco8,
+			PrecoAcimaMedia20 preco20, PrecoAcimaMedia200 preco200, VariacaoPreco variacao) {
+
+		return operacaoRepository.countEngolfoEspecificoIniciadoUltimosCincoAnosNaoChegouAlvo(tipoCandle.getTipo(),
+				pavioSuperior.getDescricao(), pavioInferior.getDescricao(), vol.getValor(), preco8.getValor(),
+				preco20.getValor(), preco200.getValor(), variacao.getDescricao());
+
+	}
+
+	public static Double contaEngolfoEspecificoInciadoUltimoAno(TipoCandle tipoCandle, PavioSuperior pavioSuperior,
+			PavioInferior pavioInferior, VolumeAcimaMedia20 vol, PrecoAcimaMedia8 preco8, PrecoAcimaMedia20 preco20,
+			PrecoAcimaMedia200 preco200, VariacaoPreco variacao) {
+
+		return operacaoRepository.countEngolfoEspecificoIniciadoUltimoAno(tipoCandle.getTipo(),
+				pavioSuperior.getDescricao(), pavioInferior.getDescricao(), vol.getValor(), preco8.getValor(),
+				preco20.getValor(), preco200.getValor(), variacao.getDescricao());
+
+	}
+
+	public static Double contaEngolfoEspecificoInciadoUltimoAnoNaoChegouAlvo(TipoCandle tipoCandle,
+			PavioSuperior pavioSuperior, PavioInferior pavioInferior, VolumeAcimaMedia20 vol, PrecoAcimaMedia8 preco8,
+			PrecoAcimaMedia20 preco20, PrecoAcimaMedia200 preco200, VariacaoPreco variacao) {
+
+		return operacaoRepository.countEngolfoEspecificoIniciadoUltimoAnoNaoChegouAlvo(tipoCandle.getTipo(),
+				pavioSuperior.getDescricao(), pavioInferior.getDescricao(), vol.getValor(), preco8.getValor(),
+				preco20.getValor(), preco200.getValor(), variacao.getDescricao());
+
+	}
+
+	public static Double contaTresSoldadosEspecificoIniciadoGeral(Padroes padrao,
+			PavioSuperior pavioSuperiorPrimeiroCandle, PavioInferior pavioInferiorPrimeiroCandle,
+			PavioSuperior pavioSuperiorTerceiroCandle, PavioInferior pavioInferiorTerceiroCandle,
+			PrecoAcimaMedia200 preco200) {
+
+		return operacaoRepository.countTresSoldadosEspecificoIniciadoGeral(padrao.getDescricao(),
+				pavioSuperiorPrimeiroCandle.getDescricao(), pavioInferiorPrimeiroCandle.getDescricao(),
+				pavioSuperiorTerceiroCandle.getDescricao(), pavioInferiorTerceiroCandle.getDescricao(), preco200.getValor());
 
 	}
 	
-	public static Double contaPiercingLineEspecificoInciadoUltimoAnoNaoChegouAlvo(TipoCandle tipoCandle, VolumeAcimaMedia20 vol,
-			Perfuracao perf, PrecoAcimaMedia8 preco8, PrecoAcimaMedia20 preco20, PrecoAcimaMedia200 preco200) {
+	public static Double contaTresSoldadosEspecificoIniciadoGeralNaoChegouAlvo(Padroes padrao,
+			PavioSuperior pavioSuperiorPrimeiroCandle, PavioInferior pavioInferiorPrimeiroCandle,
+			PavioSuperior pavioSuperiorTerceiroCandle, PavioInferior pavioInferiorTerceiroCandle,
+			PrecoAcimaMedia200 preco200) {
 
-		return operacaoRepository.countPiercingLineEspecificoIniciadoGeralUltimoAnoNaoChegouAlvo(tipoCandle.getTipo(), vol.getValor(),
-				perf.getMin(), perf.getMax(), preco8.getValor(), preco20.getValor(), preco200.getValor());
+		return operacaoRepository.countTresSoldadosEspecificoIniciadoGeralNaoChegouAlvo(padrao.getDescricao(),
+				pavioSuperiorPrimeiroCandle.getDescricao(), pavioInferiorPrimeiroCandle.getDescricao(),
+				pavioSuperiorTerceiroCandle.getDescricao(), pavioInferiorTerceiroCandle.getDescricao(), preco200.getValor());
+
+	}
+	
+	public static Double contaTresSoldadosEspecificoIniciadoUltimosCincoAnos(Padroes padrao,
+			PavioSuperior pavioSuperiorPrimeiroCandle, PavioInferior pavioInferiorPrimeiroCandle,
+			PavioSuperior pavioSuperiorTerceiroCandle, PavioInferior pavioInferiorTerceiroCandle,
+			PrecoAcimaMedia200 preco200) {
+
+		return operacaoRepository.countTresSoldadosEspecificoIniciadoUltimosCincoAnos(padrao.getDescricao(),
+				pavioSuperiorPrimeiroCandle.getDescricao(), pavioInferiorPrimeiroCandle.getDescricao(),
+				pavioSuperiorTerceiroCandle.getDescricao(), pavioInferiorTerceiroCandle.getDescricao(), preco200.getValor());
+
+	}
+	
+	public static Double contaTresSoldadosEspecificoIniciadoUltimosCincoAnosNaoChegouAlvo(Padroes padrao,
+			PavioSuperior pavioSuperiorPrimeiroCandle, PavioInferior pavioInferiorPrimeiroCandle,
+			PavioSuperior pavioSuperiorTerceiroCandle, PavioInferior pavioInferiorTerceiroCandle,
+			PrecoAcimaMedia200 preco200) {
+
+		return operacaoRepository.countTresSoldadosEspecificoIniciadoUltimosCincoAnosNaoChegouAlvo(padrao.getDescricao(),
+				pavioSuperiorPrimeiroCandle.getDescricao(), pavioInferiorPrimeiroCandle.getDescricao(),
+				pavioSuperiorTerceiroCandle.getDescricao(), pavioInferiorTerceiroCandle.getDescricao(), preco200.getValor());
+
+	}
+	
+	public static Double contaTresSoldadosEspecificoIniciadoUltimoAno(Padroes padrao,
+			PavioSuperior pavioSuperiorPrimeiroCandle, PavioInferior pavioInferiorPrimeiroCandle,
+			PavioSuperior pavioSuperiorTerceiroCandle, PavioInferior pavioInferiorTerceiroCandle,
+			PrecoAcimaMedia200 preco200) {
+
+		return operacaoRepository.countTresSoldadosEspecificoIniciadoUltimoAno(padrao.getDescricao(),
+				pavioSuperiorPrimeiroCandle.getDescricao(), pavioInferiorPrimeiroCandle.getDescricao(),
+				pavioSuperiorTerceiroCandle.getDescricao(), pavioInferiorTerceiroCandle.getDescricao(), preco200.getValor());
+
+	}
+	
+	public static Double contaTresSoldadosEspecificoIniciadoUltimoAnoNaoChegouAlvo(Padroes padrao,
+			PavioSuperior pavioSuperiorPrimeiroCandle, PavioInferior pavioInferiorPrimeiroCandle,
+			PavioSuperior pavioSuperiorTerceiroCandle, PavioInferior pavioInferiorTerceiroCandle,
+			PrecoAcimaMedia200 preco200) {
+
+		return operacaoRepository.countTresSoldadosEspecificoIniciadoUltimoAnoNaoChegouAlvo(padrao.getDescricao(),
+				pavioSuperiorPrimeiroCandle.getDescricao(), pavioInferiorPrimeiroCandle.getDescricao(),
+				pavioSuperiorTerceiroCandle.getDescricao(), pavioInferiorTerceiroCandle.getDescricao(), preco200.getValor());
 
 	}
 

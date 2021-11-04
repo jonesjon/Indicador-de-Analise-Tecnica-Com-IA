@@ -1,9 +1,12 @@
-package br.iesb.indicador_analise_grafica;
+package br.iesb.indicador_analise_grafica.padroes;
+
 import javax.persistence.*;
 
+import br.iesb.indicador_analise_grafica.Operacao;
+
 @Entity
-@Table(name = "MARTELO_INVERTIDO")
-public class MarteloInvertido {
+@Table(name = "MARTELO")
+public class Martelo {
 	
 	@Id
 	@Column
@@ -29,7 +32,7 @@ public class MarteloInvertido {
     @JoinColumns({@JoinColumn(name="dat"), @JoinColumn(name="nomeDoPapel"), @JoinColumn(name="padrao")})
 	private Operacao operacao = null;
 	
-	public MarteloInvertido() {
+	public Martelo() {
 		
 	}
 

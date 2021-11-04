@@ -2,18 +2,14 @@ package br.iesb.indicador_analise_grafica.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.annotation.PostConstruct;
-import javax.persistence.*;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.stereotype.Service;
 
 import br.iesb.indicador_analise_grafica.InfoCandle;
 import br.iesb.indicador_analise_grafica.repository.InfoCandleRepository;
-import net.bytebuddy.implementation.Implementation.Context;
 
 @Service
 public class InfoCandleService {

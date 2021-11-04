@@ -5,7 +5,7 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.iesb.indicador_analise_grafica.MarteloInvertido;
+import br.iesb.indicador_analise_grafica.padroes.MarteloInvertido;
 import br.iesb.indicador_analise_grafica.repository.MarteloInvertidoRepository;
 
 @Service

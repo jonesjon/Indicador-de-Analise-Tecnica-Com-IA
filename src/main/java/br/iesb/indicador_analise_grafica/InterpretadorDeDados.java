@@ -1,24 +1,13 @@
 package br.iesb.indicador_analise_grafica;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
-import java.text.DecimalFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import java.util.Scanner;
 
-import org.hibernate.internal.build.AllowSysOut;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import br.iesb.indicador_analise_grafica.repository.InfoCandleRepository;
 import br.iesb.indicador_analise_grafica.service.InfoCandleService;
 
 public class InterpretadorDeDados {

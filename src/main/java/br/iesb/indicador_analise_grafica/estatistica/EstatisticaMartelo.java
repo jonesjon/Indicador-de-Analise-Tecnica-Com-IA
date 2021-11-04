@@ -1,6 +1,6 @@
 package br.iesb.indicador_analise_grafica.estatistica;
 
-import br.iesb.indicador_analise_grafica.PossibilidadeMartelo;
+import br.iesb.indicador_analise_grafica.possibilidades.PossibilidadeMartelo;
 
 public class EstatisticaMartelo {
 	

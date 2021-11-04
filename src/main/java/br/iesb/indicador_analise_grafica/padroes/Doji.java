@@ -1,24 +1,32 @@
-package br.iesb.indicador_analise_grafica;
+package br.iesb.indicador_analise_grafica.padroes;
 
 import javax.persistence.*;
 
-@Entity
-@Table(name="PIERCING_LINE")
-public class PiercingLine{
+import br.iesb.indicador_analise_grafica.Operacao;
 
+@Entity
+@Table(name = "DOJI")
+public class Doji {
+	
 	@Id
 	@Column
-	@GeneratedValue(strategy = GenerationType.SEQUENCE)
-	private long id;
+	@GeneratedValue
+	private long iD;
 	
 	@Column
 	private String tipo;
 	
 	@Column
+	private int tamanhoPavioCorpo;
+	
+	@Column
 	private Boolean volumeAcimaMedia20;
 	
 	@Column
-	private int perfuracao;
+	private int pavioSuperior;
+	
+	@Column
+	private int pavioInferior;
 	
 	@Column
 	private Boolean precoAcimaMedia8;
@@ -30,10 +38,19 @@ public class PiercingLine{
 	private Boolean precoAcimaMedia200;
 	
 	@OneToOne
-    @JoinColumns({@JoinColumn(name="dat"), @JoinColumn(name="nomeDoPapel"), @JoinColumn(name="padrao")})
+	@JoinColumns({@JoinColumn(name="dat"), @JoinColumn(name="nomeDoPapel"), @JoinColumn(name="padrao")})
 	private Operacao operacao = null;
 
-	public PiercingLine() {
+	public Doji() {
+		
+	}
+	
+	public Operacao getOperacao() {
+		return operacao;
+	}
+
+	public void setOperacao(Operacao operacao) {
+		this.operacao = operacao;
 	}
 
 	public String getTipo() {
@@ -44,6 +61,14 @@ public class PiercingLine{
 		this.tipo = tipo;
 	}
 
+	public int getTamanhoPavioCorpo() {
+		return tamanhoPavioCorpo;
+	}
+
+	public void setTamanhoPavioCorpo(int tamanhoPavioCorpo) {
+		this.tamanhoPavioCorpo = tamanhoPavioCorpo;
+	}
+
 	public Boolean getVolumeAcimaMedia20() {
 		return volumeAcimaMedia20;
 	}
@@ -52,12 +77,20 @@ public class PiercingLine{
 		this.volumeAcimaMedia20 = volumeAcimaMedia20;
 	}
 
-	public int getPerfuracao() {
-		return perfuracao;
+	public int getPavioSuperior() {
+		return pavioSuperior;
 	}
 
-	public void setPerfuracao(int perfuracao) {
-		this.perfuracao = perfuracao;
+	public void setPavioSuperior(int pavioSuperior) {
+		this.pavioSuperior = pavioSuperior;
+	}
+
+	public int getPavioInferior() {
+		return pavioInferior;
+	}
+
+	public void setPavioInferior(int pavioInferior) {
+		this.pavioInferior = pavioInferior;
 	}
 
 	public Boolean getPrecoAcimaMedia8() {
@@ -84,12 +117,5 @@ public class PiercingLine{
 		this.precoAcimaMedia200 = precoAcimaMedia200;
 	}
 
-	public Operacao getOperacao() {
-		return operacao;
-	}
-
-	public void setOperacao(Operacao operacao) {
-		this.operacao = operacao;
-	}
-
 }
+

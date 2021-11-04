@@ -34,6 +34,18 @@ public enum PavioInferior {
 		return ID;
 	}
 	
+	public static List<PavioInferior> getPavioInferiorTresSoldados(){
+		List<PavioInferior> list = new ArrayList<PavioInferior>();
+		
+		list.add(SEMPAVIO);
+		list.add(PAVIO5PORCENTO);
+		list.add(PAVIO10PORCENTO);
+		list.add(PAVIO33PORCENTO);
+		
+		return list;
+		
+	}
+	
 	public static List<PavioInferior> getPavioInferiorMartelo(){
 		List<PavioInferior> list = new ArrayList<PavioInferior>();
 		
@@ -42,6 +54,18 @@ public enum PavioInferior {
 		list.add(PAVIO95PORCENTO);
 		list.add(PAVIO100PORCENTO);
 		list.add(NULL);
+		
+		return list;
+	}
+	
+	public static List<PavioInferior> getPavioInferiorEngolfo(){
+		List<PavioInferior> list = new ArrayList<PavioInferior>();
+		
+		list.add(SEMPAVIO);
+		list.add(PAVIO5PORCENTO);
+		list.add(PAVIO10PORCENTO);
+		list.add(PAVIO33PORCENTO);
+		list.add(PAVIO40PORCENTO);
 		
 		return list;
 	}

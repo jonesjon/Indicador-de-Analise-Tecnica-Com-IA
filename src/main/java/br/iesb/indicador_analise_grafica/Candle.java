@@ -1,10 +1,7 @@
 package br.iesb.indicador_analise_grafica;
 
-import java.text.DecimalFormat;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.Date;
 
 
 public class Candle {

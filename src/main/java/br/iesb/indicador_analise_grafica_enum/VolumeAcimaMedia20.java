@@ -28,7 +28,6 @@ public enum VolumeAcimaMedia20 {
 		
 		list.add(SIM);
 		list.add(NAO);
-		list.add(NULL);
 		
 		return list;
 	}

@@ -1,6 +1,8 @@
-package br.iesb.indicador_analise_grafica;
+package br.iesb.indicador_analise_grafica.padroes;
 
 import javax.persistence.*;
+
+import br.iesb.indicador_analise_grafica.Operacao;
 
 @Entity
 @Table(name="BEBE_ABANDONADO")

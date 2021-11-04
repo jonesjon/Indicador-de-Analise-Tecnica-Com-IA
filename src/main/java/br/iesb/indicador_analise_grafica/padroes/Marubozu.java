@@ -1,8 +1,10 @@
-package br.iesb.indicador_analise_grafica;
+package br.iesb.indicador_analise_grafica.padroes;
 
 import java.io.Serializable;
 
 import javax.persistence.*;
+
+import br.iesb.indicador_analise_grafica.Operacao;
 
 @Entity
 @Table(name = "MARUBOZU")

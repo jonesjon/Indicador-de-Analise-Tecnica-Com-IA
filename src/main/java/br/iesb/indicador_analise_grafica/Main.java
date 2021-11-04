@@ -31,23 +31,13 @@ public class Main {
 		//RedeNeural.preenchendoEstatisticaPiercingLine(perfil1);
 		//RedeNeural.preencherTxtValidacaoRedeNeuralPiercingLine();
 		//RedeNeural.realizaTreinamentoRedeNeuralPiercingLine(perfil1);
-		System.out.println();
-		System.out.println("Testando Martelo Ano 2021: ");
-		RedeNeural.testaRedeNeuralMarteloNaPratica(perfil1);
-		RedeNeural.testaRedeNeuralMarteloNaPratica(perfil2);
-		RedeNeural.testaRedeNeuralMarteloNaPratica(perfil3);
-		System.out.println();
-		System.out.println();
-		System.out.println("Testando Piercing Line Ano 2021: ");
-		RedeNeural.testaRedeNeuralPiercingLineNaPratica(perfil1);
-		RedeNeural.testaRedeNeuralPiercingLineNaPratica(perfil2);
-		RedeNeural.testaRedeNeuralPiercingLineNaPratica(perfil3);
-		//RedeNeural.preenchendoEstatisticaMartelo(perfil);
-		//RedeNeural.preencherTxtValidacaoRedeNeuralMartelo();
 		
-		//RedeNeural.realizaTreinamentoRedeNeuralMartelo(perfil);
-		//RedeNeural.testaRedeNeuralMarteloNaPratica(perfil);
-
+		//RedeNeural.preenchendoEstatisticaTresSoldados(perfil3);
+		//RedeNeural.preencherTxtValidacaoRedeNeuralTresSoldados();
+		//RedeNeural.realizaTreinamentoRedeNeuralTresSoldados(perfil3);
+		RedeNeural.testaRedeNeuralTresSoldadosNaPratica(perfil3);
+		
+		
 		long elapsedTime = (System.currentTimeMillis() - start);
 		System.out.println("Tempo gasto parar rodar: (segundos) " + elapsedTime / 1000F);
 

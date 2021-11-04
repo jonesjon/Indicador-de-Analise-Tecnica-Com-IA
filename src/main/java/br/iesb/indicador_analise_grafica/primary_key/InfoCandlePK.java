@@ -2,10 +2,13 @@ package br.iesb.indicador_analise_grafica.primary_key;
 import java.io.Serializable;
 import java.time.LocalDate;
 
-import javax.persistence.*;
-
 
 public class InfoCandlePK implements Serializable{
+	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	
 	private LocalDate data;
 	private String nomeDoPapel;

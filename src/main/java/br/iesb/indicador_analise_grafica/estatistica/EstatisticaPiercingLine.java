@@ -1,6 +1,6 @@
 package br.iesb.indicador_analise_grafica.estatistica;
 
-import br.iesb.indicador_analise_grafica.PossibilidadePiercingLine;
+import br.iesb.indicador_analise_grafica.possibilidades.PossibilidadePiercingLine;
 
 public class EstatisticaPiercingLine {
 	

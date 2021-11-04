@@ -1,6 +1,10 @@
-package br.iesb.indicador_analise_grafica;
+package br.iesb.indicador_analise_grafica.padroes;
 
-import javax.persistence.*;;
+import javax.persistence.*;
+
+import br.iesb.indicador_analise_grafica.Operacao;
+import br.iesb.indicador_analise_grafica_enum.PavioInferior;
+import br.iesb.indicador_analise_grafica_enum.PavioSuperior;;
 
 @Entity
 @Table(name="TRES_SOLDADOS")
@@ -12,22 +16,22 @@ public class TresSoldados {
 	private long id;
 	
 	@Column
-	private int pavioSuperiorPrimeiroCandle;
+	private String pavioSuperiorPrimeiroCandle;
 	
 	@Column
-	private int pavioInferiorPrimeiroCandle;
+	private String pavioInferiorPrimeiroCandle;
 	
 	@Column
-	private int pavioSuperiorSegundoCandle;
+	private String pavioSuperiorSegundoCandle;
 	
 	@Column
-	private int pavioInferiorSegundoCandle;
+	private String pavioInferiorSegundoCandle;
 	
 	@Column
-	private int pavioSuperiorTerceiroCandle;
+	private String pavioSuperiorTerceiroCandle;
 	
 	@Column
-	private int pavioInferiorTerceiroCandle;
+	private String pavioInferiorTerceiroCandle;
 	
 	@Column
 	private Boolean precoAcimaMedia8;
@@ -57,51 +61,51 @@ public class TresSoldados {
 		this.id = id;
 	}
 
-	public int getPavioSuperiorPrimeiroCandle() {
+	public String getPavioSuperiorPrimeiroCandle() {
 		return pavioSuperiorPrimeiroCandle;
 	}
 
-	public void setPavioSuperiorPrimeiroCandle(int pavioSuperiorPrimeiroCandle) {
+	public void setPavioSuperiorPrimeiroCandle(String pavioSuperiorPrimeiroCandle) {
 		this.pavioSuperiorPrimeiroCandle = pavioSuperiorPrimeiroCandle;
 	}
 
-	public int getPavioInferiorPrimeiroCandle() {
+	public String getPavioInferiorPrimeiroCandle() {
 		return pavioInferiorPrimeiroCandle;
 	}
 
-	public void setPavioInferiorPrimeiroCandle(int pavioInferiorPrimeiroCandle) {
+	public void setPavioInferiorPrimeiroCandle(String pavioInferiorPrimeiroCandle) {
 		this.pavioInferiorPrimeiroCandle = pavioInferiorPrimeiroCandle;
 	}
 
-	public int getPavioSuperiorSegundoCandle() {
+	public String getPavioSuperiorSegundoCandle() {
 		return pavioSuperiorSegundoCandle;
 	}
 
-	public void setPavioSuperiorSegundoCandle(int pavioSuperiorSegundoCandle) {
+	public void setPavioSuperiorSegundoCandle(String pavioSuperiorSegundoCandle) {
 		this.pavioSuperiorSegundoCandle = pavioSuperiorSegundoCandle;
 	}
 
-	public int getPavioInferiorSegundoCandle() {
+	public String getPavioInferiorSegundoCandle() {
 		return pavioInferiorSegundoCandle;
 	}
 
-	public void setPavioInferiorSegundoCandle(int pavioInferiorSegundoCandle) {
+	public void setPavioInferiorSegundoCandle(String pavioInferiorSegundoCandle) {
 		this.pavioInferiorSegundoCandle = pavioInferiorSegundoCandle;
 	}
 
-	public int getPavioSuperiorTerceiroCandle() {
+	public String getPavioSuperiorTerceiroCandle() {
 		return pavioSuperiorTerceiroCandle;
 	}
 
-	public void setPavioSuperiorTerceiroCandle(int pavioSuperiorTerceiroCandle) {
+	public void setPavioSuperiorTerceiroCandle(String pavioSuperiorTerceiroCandle) {
 		this.pavioSuperiorTerceiroCandle = pavioSuperiorTerceiroCandle;
 	}
 
-	public int getPavioInferiorTerceiroCandle() {
+	public String getPavioInferiorTerceiroCandle() {
 		return pavioInferiorTerceiroCandle;
 	}
 
-	public void setPavioInferiorTerceiroCandle(int pavioInferiorTerceiroCandle) {
+	public void setPavioInferiorTerceiroCandle(String pavioInferiorTerceiroCandle) {
 		this.pavioInferiorTerceiroCandle = pavioInferiorTerceiroCandle;
 	}
 

@@ -1,5 +1,6 @@
 package br.iesb.indicador_analise_grafica_enum;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -41,5 +42,17 @@ public enum TipoCandle {
 		
 		return tipoRetorno;
 	}
+	
+	public static List<TipoCandle> retornaTiposSemNeutro() {
+		List<TipoCandle> tipo = new ArrayList<TipoCandle>();
+		
+		tipo.add(NEGATIVO);
+		tipo.add(POSITIVO);
+		
+		return tipo;
+		
+	}
+	
+	
 
 }

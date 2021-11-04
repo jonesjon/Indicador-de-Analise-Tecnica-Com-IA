@@ -7,9 +7,15 @@ import java.time.LocalDate;
 
 import javax.persistence.*;
 
-import org.hibernate.annotations.GeneratorType;
 
-import br.iesb.indicador_analise_grafica.primary_key.MarteloPK;
+import br.iesb.indicador_analise_grafica.padroes.BebeAbandonado;
+import br.iesb.indicador_analise_grafica.padroes.Doji;
+import br.iesb.indicador_analise_grafica.padroes.Engolfo;
+import br.iesb.indicador_analise_grafica.padroes.Martelo;
+import br.iesb.indicador_analise_grafica.padroes.MarteloInvertido;
+import br.iesb.indicador_analise_grafica.padroes.Marubozu;
+import br.iesb.indicador_analise_grafica.padroes.PiercingLine;
+import br.iesb.indicador_analise_grafica.padroes.TresSoldados;
 import br.iesb.indicador_analise_grafica.primary_key.OperacaoPK;
 
 @Entity
