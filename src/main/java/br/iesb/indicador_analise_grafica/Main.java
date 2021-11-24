@@ -1,12 +1,7 @@
 package br.iesb.indicador_analise_grafica;
 
 import java.io.IOException;
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 import org.springframework.boot.SpringApplication;
@@ -20,16 +15,19 @@ public class Main {
 	public static void main(String[] args) throws IOException, SQLException {
 
 		SpringApplication.run(Main.class, args);
-		long start = System.currentTimeMillis();
-
-		Perfil perfil = null;
-		
-		perfil = selecionaPerfil(perfil);
-		
-		menu(perfil);
-
-		long elapsedTime = (System.currentTimeMillis() - start);
-		System.out.println("Tempo gasto para rodar: (segundos) " + elapsedTime / 1000F);
+		/*
+		 * long start = System.currentTimeMillis();
+		 * 
+		 * Perfil perfil = null;
+		 * 
+		 * perfil = selecionaPerfil();
+		 * 
+		 * menu(perfil);
+		 * 
+		 * long elapsedTime = (System.currentTimeMillis() - start);
+		 * System.out.println("Tempo gasto para rodar: (segundos) " + elapsedTime /
+		 * 1000F);
+		 */
 
 	}
 
@@ -58,7 +56,11 @@ public class Main {
 				break;
 				
 			case 5:
-				perfil = selecionaPerfil(perfil);
+				perfil = selecionaPerfil();
+				break;
+				
+			case 0:
+				System.out.println("Até mais!");
 				break;
 				
 			default:
@@ -69,8 +71,9 @@ public class Main {
 		} while (opcaoDeMenu != 0);
 	}
 
-	private static Perfil selecionaPerfil(Perfil perfil) {
+	private static Perfil selecionaPerfil() {
 		int valorDoPerfil = 0;
+		Perfil perfil;
 		
 		do{
 			opcoesParaPerfilEscritas();

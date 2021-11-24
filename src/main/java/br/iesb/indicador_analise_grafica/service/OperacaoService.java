@@ -2,6 +2,7 @@ package br.iesb.indicador_analise_grafica.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 
@@ -30,6 +31,10 @@ public class OperacaoService {
 	@PostConstruct
 	public void getOperacaoRepository() {
 		operacaoRepository = operacao;
+	}
+	
+	public static List<Operacao> operacoesPorAno(LocalDate data){
+		return operacaoRepository.operacoesPorAno(data);
 	}
 
 	public static void adicionaOperacao(Operacao operacao) {

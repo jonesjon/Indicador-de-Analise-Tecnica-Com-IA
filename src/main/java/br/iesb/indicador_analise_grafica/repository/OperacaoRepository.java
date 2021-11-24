@@ -2,6 +2,8 @@ package br.iesb.indicador_analise_grafica.repository;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.List;
+
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
@@ -14,6 +16,9 @@ public interface OperacaoRepository extends CrudRepository<Operacao, OperacaoPK>
 
 	@Query(value = "select * from OPERACAO where precoEntrada > ?1 and precoEntrada < ?2 and nomeDoPapel = ?3 order by dat asc", nativeQuery = true)
 	ArrayList<Operacao> findByOperacoesPossiveis(Double min, Double max, String nomeDoPapel);
+	
+	@Query(value = "select * from OPERACAO where dat >= ?1", nativeQuery = true)
+	List<Operacao> operacoesPorAno(LocalDate dat);
 
 	@Query(value = "select * from OPERACAO where precoEntrada > ?1 and precoEntrada < ?2 and dat >= ?3 order by dat asc", nativeQuery = true)
 	ArrayList<Operacao> findByOperacoesPossiveisUltimoAno(Double min, Double max, LocalDate data);
