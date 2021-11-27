@@ -69,7 +69,6 @@ import br.iesb.indicador_analise_grafica_enum.VolumeAcimaMedia20;
 
 public class RedeNeural implements NeuralNetListener {
 
-	ArrayList<Candle> ultimosCandles = new ArrayList<Candle>();
 	static ArrayList<Martelo> listaMartelo = new ArrayList<Martelo>();
 	private static ArrayList<EstatisticaMartelo> estatisticasMartelo = new ArrayList<EstatisticaMartelo>();
 	private static ArrayList<EstatisticaPiercingLine> estatisticasPiercingLine = new ArrayList<EstatisticaPiercingLine>();
