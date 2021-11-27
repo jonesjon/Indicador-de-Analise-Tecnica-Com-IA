@@ -97,16 +97,17 @@ public class Operacao implements Serializable{
 	@Column(name="porcentagemOperacaoFinal")
 	private Double porcentagemOperacaoFinal = 0.0;
 	
+	
+	public Operacao() {
+		
+	}
+	
 	public PiercingLine getPiercingLine() {
 		return piercingLine;
 	}
 
 	public void setPiercingLine(PiercingLine piercingLine) {
 		this.piercingLine = piercingLine;
-	}
-
-	public Operacao() {
-		
 	}
 	
 	public Operacao(LocalDate dat, String nomeDoPapel, String padrao) {
@@ -116,7 +117,6 @@ public class Operacao implements Serializable{
 	}
 	
 	public Double formataPreco(Double num) {
-		
 		
 		String fmt = "#.##";
 		DecimalFormat df = new DecimalFormat(fmt);
