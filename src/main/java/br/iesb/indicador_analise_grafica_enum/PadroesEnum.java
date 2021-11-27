@@ -3,7 +3,7 @@ package br.iesb.indicador_analise_grafica_enum;
 import java.util.Arrays;
 import java.util.List;
 
-public enum Padroes {
+public enum PadroesEnum {
 	
 	MARTELO("Martelo"),
 	MARTELOINVERTIDO("Martelo Invertido"),
@@ -12,17 +12,18 @@ public enum Padroes {
 	PIERCINGLINE("Piercing Line"),
 	DARKCLOUD("Dark Cloud"),
 	DOJICOMPRA("Doji de Compra"),
+	DOJIVENDA("Doji de Venda"),
 	TRESSOLDADOSDEALTA("Tres Soldados de Alta"),
 	TRESSOLDADOSDEBAIXA("Tres soldados de Baixa"),
-	DOJIVENDA("Doji de Venda"),
 	BEBEABANDONADODEALTA("Bebe Abandonado de Alta"),
 	BEBEABANDONADODEBAIXA("Bebe Abandonado de Baixa"),
 	NULL("Null");
 	
-	
 	private String descricao;
 	
-	Padroes(String descricao){
+	
+	
+	PadroesEnum(String descricao){
 		this.descricao = descricao;
 	}
 	
@@ -30,14 +31,14 @@ public enum Padroes {
 		return descricao;
 	}
 	
-	public static List<Padroes> getTodosPadroes(){
-		return Arrays.asList(Padroes.values());
+	public static List<PadroesEnum> getTodosPadroes(){
+		return Arrays.asList(PadroesEnum.values());
 	}
 	
-	public static Padroes comparaPadrao(String padrao) {
-		List<Padroes> padroes = getTodosPadroes();
+	public static PadroesEnum comparaPadrao(String padrao) {
+		List<PadroesEnum> padroes = getTodosPadroes();
 		
-		Padroes padraoRetorno = NULL;
+		PadroesEnum padraoRetorno = NULL;
 		
 		for(int i=0; i<padroes.size(); i++) {
 			if(padrao.equals(padroes.get(i).getDescricao())) {

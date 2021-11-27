@@ -6,27 +6,14 @@ import br.iesb.indicador_analise_grafica.Operacao;
 
 @Entity
 @Table(name = "MARTELO")
-public class Martelo {
-	
-	@Id
-	@Column
-	@GeneratedValue
-	private long iD;
-	
-	@Column(name="tipo")
-	private String tipo = "";
+@PrimaryKeyJoinColumn(name = "ID")
+public class Martelo extends Padrao{
 	
 	@Column(name="pavioSuperior")
 	private String pavioSuperior = "";
 	
 	@Column(name="pavioInferior")
 	private String pavioInferior = "";
-
-	@Column(name="volumeAcimaMedia20")
-	private Boolean volumeAcimaMedia20;
-	
-	@Column(name="marteloAcimaMedia200")
-	private Boolean marteloAcimaMedia200;
 	
 	@OneToOne
     @JoinColumns({@JoinColumn(name="dat"), @JoinColumn(name="nomeDoPapel"), @JoinColumn(name="padrao")})
@@ -34,14 +21,6 @@ public class Martelo {
 	
 	public Martelo() {
 		
-	}
-
-	public String getTipo() {
-		return tipo;
-	}
-	
-	public void setTipo(String tipo) {
-		this.tipo = tipo;
 	}
 
 	public String getPavioSuperior() {
@@ -52,24 +31,8 @@ public class Martelo {
 		return pavioInferior;
 	}
 
-	public Boolean getVolumeAcimaMedia20() {
-		return volumeAcimaMedia20;
-	}
-
 	public Operacao getOperacao() {
 		return operacao;
-	}
-
-	public Boolean getMarteloAcimaMedia200() {
-		return marteloAcimaMedia200;
-	}
-
-	public void setMarteloAcimaMedia200(Boolean marteloAcimaMedia200) {
-		this.marteloAcimaMedia200 = marteloAcimaMedia200;
-	}
-
-	public void setVolumeAcimaMedia20(Boolean volumeAcimaMedia20) {
-		this.volumeAcimaMedia20 = volumeAcimaMedia20;
 	}
 
 	public void setOperacao(Operacao operacao) {

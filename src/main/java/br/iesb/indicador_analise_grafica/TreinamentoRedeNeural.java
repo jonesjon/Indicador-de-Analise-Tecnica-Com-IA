@@ -130,11 +130,11 @@ public class TreinamentoRedeNeural {
 			for(int j=0;j<operacoes.size();j++) {
 				Operacao operacao = operacoes.get(j);
 				ArrayList<InfoCandle> verificaContinuidade = new ArrayList<InfoCandle>();
-				verificaContinuidade = InfoCandleService.verificaGraficoContinuo(operacao.getData(), operacao.getNomeDoPapel(), LIMITVERIFICACONTINUIDADE);
+				verificaContinuidade = InfoCandleService.verificaGraficoContinuo(operacao.getDat(), operacao.getNomeDoPapel(), LIMITVERIFICACONTINUIDADE);
 				
-				if(verificaContinuidadeDoGrafico(operacao.getData(), verificaContinuidade)) {
+				if(verificaContinuidadeDoGrafico(operacao.getDat(), verificaContinuidade)) {
 					ArrayList<InfoCandle> grafico = new ArrayList<InfoCandle>();
-					grafico = InfoCandleService.getGraficoAPartirDaData(operacao.getData(), operacao.getNomeDoPapel());
+					grafico = InfoCandleService.getGraficoAPartirDaData(operacao.getDat(), operacao.getNomeDoPapel());
 					
 					for(int k=0; k<grafico.size(); k++) {
 						
@@ -429,11 +429,11 @@ public class TreinamentoRedeNeural {
 	}
 
 	private static boolean verificaSeOperacaoVenda(Operacao operacao) {
-		return operacao.getEntrada().equals(Entrada.VENDA.getDescricao());
+		return operacao.getTipoEntrada() == Entrada.VENDA;
 	}
 
 	private static boolean verificaSeOperacaoCompra(Operacao operacao) {
-		return operacao.getEntrada().equals(Entrada.COMPRA.getDescricao());
+		return operacao.getTipoEntrada() == Entrada.COMPRA;
 	}
 
 	private static Boolean verificaContinuidadeDoGrafico(LocalDate data, ArrayList<InfoCandle> verif) {

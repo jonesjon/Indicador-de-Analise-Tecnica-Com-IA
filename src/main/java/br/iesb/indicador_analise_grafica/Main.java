@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 import br.iesb.indicador_analise_grafica_enum.Perfil;
 
+
 @SpringBootApplication
 public class Main {
 

@@ -1,27 +1,14 @@
 package br.iesb.indicador_analise_grafica.padroes;
 
-import java.io.Serializable;
-
 import javax.persistence.*;
 
 import br.iesb.indicador_analise_grafica.Operacao;
 
 @Entity
 @Table(name = "MARUBOZU")
-public class Marubozu implements Serializable{
-	
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 1L;
-	
-	@Id
-	@Column
-	@GeneratedValue
-	private long iD;
-	
-	@Column(name="tipo")
-	private String tipo;
+@PrimaryKeyJoinColumn(name = "ID")
+public class Marubozu extends Padrao{
+
 	
 	@Column(name = "variacaoPreco")
 	private String variacaoPreco;
@@ -31,9 +18,6 @@ public class Marubozu implements Serializable{
 	
 	@Column(name="pavioInferior")
 	private String pavioInferior;
-	
-	@Column(name="volumeAcimaMedia20")
-	private Boolean volumeAcimaMedia20;
 	
 	@OneToOne
     @JoinColumns({@JoinColumn(name="dat"), @JoinColumn(name="nomeDoPapel"), @JoinColumn(name="padrao")})
@@ -46,18 +30,13 @@ public class Marubozu implements Serializable{
 	public Marubozu(String tipo, String pavioSuperior,
 			String pavioInferior, Boolean volumeAcimaMedia20, String variacaoPreco, Operacao operacao) {
 		
-		this.tipo = tipo;
 		this.pavioSuperior = pavioSuperior;
 		this.pavioInferior = pavioInferior;
-		this.volumeAcimaMedia20 = volumeAcimaMedia20;
 		this.variacaoPreco = variacaoPreco;
 		this.operacao = operacao;
 		
 	}
 
-	public String getTipo() {
-		return tipo;
-	}
 
 	public String getPavioSuperior() {
 		return pavioSuperior;
@@ -65,10 +44,6 @@ public class Marubozu implements Serializable{
 
 	public String getPavioInferior() {
 		return pavioInferior;
-	}
-
-	public Boolean getVolumeAcimaMedia20() {
-		return volumeAcimaMedia20;
 	}
 
 	public Operacao getOperacao() {
