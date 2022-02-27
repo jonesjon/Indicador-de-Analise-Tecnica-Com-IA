@@ -1,21 +1,37 @@
 package br.iesb.indicador_analise_grafica.padroes;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinColumns;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.DynamicUpdate;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import br.iesb.indicador_analise_grafica.Operacao;
+import br.iesb.indicador_analise_grafica_enum.Entrada;
 import br.iesb.indicador_analise_grafica_enum.PadroesEnum;
+import lombok.Data;
 
 
+@Inheritance(strategy = InheritanceType.JOINED)
+@Entity
 @Table(name = "PADRAO")
+@Data
 public abstract class Padrao {
 	
 	@Id
-	@Column(name = "ID", nullable = false)
+	@Column(name = "id", nullable = false)
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private long id;
 
@@ -33,6 +49,12 @@ public abstract class Padrao {
 	
 	@Column
 	private Boolean volumeAcimaMedia20;
+	
+
+	@JsonIgnore
+	@OneToOne(mappedBy = "padrao")
+	private Operacao operacao;
+	
 
 	public long getId() {
 		return id;
@@ -80,6 +102,14 @@ public abstract class Padrao {
 
 	public void setTipo(String tipo) {
 		this.tipo = tipo;
+	}
+	
+	public Operacao getOperacao() {
+		return operacao;
+	}
+	
+	public void setOperacao(Operacao operacao) {
+		this.operacao = operacao;
 	}
 
 }

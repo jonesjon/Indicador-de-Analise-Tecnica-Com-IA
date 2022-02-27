@@ -2,11 +2,23 @@ package br.iesb.indicador_analise_grafica;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.time.LocalDate;
 import java.util.Scanner;
+
+import javax.persistence.Column;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.Id;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import br.iesb.indicador_analise_grafica.padroes.Marubozu;
+import br.iesb.indicador_analise_grafica.padroes.Padrao;
+import br.iesb.indicador_analise_grafica.repository.MarubozuRepository;
+import br.iesb.indicador_analise_grafica.service.MarubozuService;
+import br.iesb.indicador_analise_grafica.service.OperacaoService;
+import br.iesb.indicador_analise_grafica_enum.PadroesEnum;
 import br.iesb.indicador_analise_grafica_enum.Perfil;
 
 
@@ -14,7 +26,6 @@ import br.iesb.indicador_analise_grafica_enum.Perfil;
 public class Main {
 
 	public static void main(String[] args) throws IOException, SQLException {
-
 		SpringApplication.run(Main.class, args);
 		/*
 		 * long start = System.currentTimeMillis();
@@ -29,7 +40,15 @@ public class Main {
 		 * System.out.println("Tempo gasto para rodar: (segundos) " + elapsedTime /
 		 * 1000F);
 		 */
+		
+		// primeira coisa procura todos padrões
+		//TreinamentoRedeNeural.realizaTreinamentoProcurandoPadroesEmPapeisOperaveis();
+		
+		// segunda coisa é simular operações, onde deu stop e quais alvos
+		TreinamentoRedeNeural.confereAlvosDasOperacoesPossiveis();
 
+		// terceira coisa a seguir a gente fala.... 
+		// RedeNeural.preenchendoEstatisticaEngolfo(perfil);
 	}
 
 	private static void menu(Perfil perfil) {

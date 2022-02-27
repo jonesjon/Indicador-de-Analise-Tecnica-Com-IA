@@ -15,10 +15,6 @@ public class Martelo extends Padrao{
 	@Column(name="pavioInferior")
 	private String pavioInferior = "";
 	
-	@OneToOne
-    @JoinColumns({@JoinColumn(name="dat"), @JoinColumn(name="nomeDoPapel"), @JoinColumn(name="padrao")})
-	private Operacao operacao = null;
-	
 	public Martelo() {
 		
 	}
@@ -29,14 +25,6 @@ public class Martelo extends Padrao{
 
 	public String getPavioInferior() {
 		return pavioInferior;
-	}
-
-	public Operacao getOperacao() {
-		return operacao;
-	}
-
-	public void setOperacao(Operacao operacao) {
-		this.operacao = operacao;
 	}
 	
 	public void setPavioSuperior(String pavioSuperior) {

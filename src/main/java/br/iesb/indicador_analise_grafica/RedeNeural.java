@@ -125,7 +125,7 @@ public class RedeNeural implements NeuralNetListener {
 					martelo.setPavioInferior(classificaPavioInferior(pavioInferior).getDescricao());
 					martelo.setPrecoAcimaMedia200(verificaSePrecoAcimaMedia200(infoCandle));
 					martelo.setVolumeAcimaMedia20(volumeAcimaMedia20(infoCandle));
-					martelo.setOperacao(operacao);
+					//martelo.setOperacao(operacao);
 
 					operacao.setPadrao(martelo);
 					OperacaoService.adicionaOperacao(operacao);
@@ -240,11 +240,16 @@ public class RedeNeural implements NeuralNetListener {
 						Marubozu marubozu = new Marubozu(tipoCandle(infoCandle).getTipo(),
 								classificaPavioSuperior(pavioSuperior).getDescricao(),
 								classificaPavioInferior(pavioInferior).getDescricao(), volumeAcimaMedia20(infoCandle),
-								classificaVariacaoPreco(calculaVariacao).getDescricao(), operacao);
-
+								classificaVariacaoPreco(calculaVariacao).getDescricao());
+						
 						operacao.setPadrao(marubozu);
+						marubozu.setOperacao(operacao);
 						OperacaoService.adicionaOperacao(operacao);
+						
+						
+						
 						MarubozuService.adicionaMarubozu(marubozu);
+						
 
 						return true;
 					} else {
@@ -262,7 +267,8 @@ public class RedeNeural implements NeuralNetListener {
 						Marubozu marubozu = new Marubozu(tipoCandle(infoCandle).getTipo(),
 								classificaPavioSuperior(pavioSuperior).getDescricao(),
 								classificaPavioInferior(pavioInferior).getDescricao(), volumeAcimaMedia20(infoCandle),
-								classificaVariacaoPreco(calculaVariacao).getDescricao(), operacao);
+								classificaVariacaoPreco(calculaVariacao).getDescricao());
+						marubozu.setOperacao(operacao);
 
 						operacao.setPadrao(marubozu);
 						OperacaoService.adicionaOperacao(operacao);
@@ -523,7 +529,7 @@ public class RedeNeural implements NeuralNetListener {
 				bebeAbandonado.setPrecoAcimaMedia200(verificaSePrecoFechamentoAcimaMedia(terceiroCandle, MEDIALONGA));
 				bebeAbandonado.setVolumeAcimaMedia20(volumeAcimaMedia20(terceiroCandle));
 
-				bebeAbandonado.setOperacao(operacao);
+				//bebeAbandonado.setOperacao(operacao);
 				operacao.setPadrao(bebeAbandonado);
 
 				OperacaoService.adicionaOperacao(operacao);
@@ -559,7 +565,7 @@ public class RedeNeural implements NeuralNetListener {
 				bebeAbandonado.setPrecoAcimaMedia200(verificaSePrecoFechamentoAcimaMedia(terceiroCandle, MEDIALONGA));
 				bebeAbandonado.setVolumeAcimaMedia20(volumeAcimaMedia20(terceiroCandle));
 
-				bebeAbandonado.setOperacao(operacao);
+				//bebeAbandonado.setOperacao(operacao);
 				operacao.setPadrao(bebeAbandonado);
 
 				OperacaoService.adicionaOperacao(operacao);
@@ -611,7 +617,7 @@ public class RedeNeural implements NeuralNetListener {
 					engolfo.setPrecoAcimaMedia20(verificaSePrecoFechamentoAcimaMedia(segundoCandle, MEDIA));
 					engolfo.setPrecoAcimaMedia200(verificaSePrecoFechamentoAcimaMedia(segundoCandle, MEDIALONGA));
 					engolfo.setVariacao(classificaVariacaoPreco(variacaoEngolfo).getDescricao());
-					engolfo.setOperacao(operacao);
+					//engolfo.setOperacao(operacao);
 
 					operacao.setPadrao(engolfo);
 
@@ -650,7 +656,7 @@ public class RedeNeural implements NeuralNetListener {
 					engolfo.setPrecoAcimaMedia200(verificaSePrecoFechamentoAcimaMedia(segundoCandle, MEDIALONGA));
 					engolfo.setVariacao(classificaVariacaoPreco(variacaoEngolfo).getDescricao());
 
-					engolfo.setOperacao(operacao);
+					//engolfo.setOperacao(operacao);
 
 					operacao.setPadrao(engolfo);
 
@@ -707,7 +713,7 @@ public class RedeNeural implements NeuralNetListener {
 					dojiCompra.setPrecoAcimaMedia8(verificaSePrecoFechamentoAcimaMedia(infoCandle, MEDIACURTA));
 					dojiCompra.setPrecoAcimaMedia20(verificaSePrecoFechamentoAcimaMedia(infoCandle, MEDIA));
 					dojiCompra.setPrecoAcimaMedia200(verificaSePrecoFechamentoAcimaMedia(infoCandle, MEDIALONGA));
-					dojiCompra.setOperacao(operacaoCompra);
+					//dojiCompra.setOperacao(operacaoCompra);
 					operacaoCompra.setPadrao(dojiCompra);
 
 					OperacaoService.adicionaOperacao(operacaoCompra);
@@ -737,7 +743,7 @@ public class RedeNeural implements NeuralNetListener {
 					dojiVenda.setPrecoAcimaMedia8(verificaSePrecoFechamentoAcimaMedia(infoCandle, MEDIACURTA));
 					dojiVenda.setPrecoAcimaMedia20(verificaSePrecoFechamentoAcimaMedia(infoCandle, MEDIA));
 					dojiVenda.setPrecoAcimaMedia200(verificaSePrecoFechamentoAcimaMedia(infoCandle, MEDIALONGA));
-					dojiVenda.setOperacao(operacaoVenda);
+					//dojiVenda.setOperacao(operacaoVenda);
 					operacaoVenda.setPadrao(dojiVenda);
 
 					OperacaoService.adicionaOperacao(operacaoVenda);

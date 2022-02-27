@@ -12,9 +12,6 @@ public class PiercingLine extends Padrao{
 	@Column
 	private int perfuracao;
 	
-	@OneToOne
-    @JoinColumns({@JoinColumn(name="dat"), @JoinColumn(name="nomeDoPapel"), @JoinColumn(name="padrao")})
-	private Operacao operacao = null;
 
 	public PiercingLine() {
 	}
@@ -26,13 +23,4 @@ public class PiercingLine extends Padrao{
 	public void setPerfuracao(int perfuracao) {
 		this.perfuracao = perfuracao;
 	}
-	
-	public Operacao getOperacao() {
-		return operacao;
-	}
-
-	public void setOperacao(Operacao operacao) {
-		this.operacao = operacao;
-	}
-
 }

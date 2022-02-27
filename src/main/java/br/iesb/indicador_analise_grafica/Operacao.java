@@ -2,19 +2,29 @@ package br.iesb.indicador_analise_grafica;
 
 import java.text.DecimalFormat;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import javax.persistence.*;
 
 import br.iesb.indicador_analise_grafica.padroes.Padrao;
 import br.iesb.indicador_analise_grafica.primary_key.OperacaoPK;
 import br.iesb.indicador_analise_grafica_enum.Entrada;
 import br.iesb.indicador_analise_grafica_enum.PadroesEnum;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor(access = AccessLevel.PUBLIC)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Entity
 @Table(name = "OPERACAO")
-@IdClass(OperacaoPK.class)
-public class Operacao implements Serializable{
+@IdClass(OperacaoId.class)
+@Data
+public class Operacao {
 	
 	/**
 	 * 
@@ -22,20 +32,21 @@ public class Operacao implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@Column(name="dat")
+	@Column(name="dat", nullable = false)
 	private LocalDate dat;
 	
 	@Id
-	@Column(name="nomeDoPapel")
+	@Column(name="nome_do_papel", nullable = false)
 	private String nomeDoPapel;
 	
 	@Id
-	@Column(name="padrao")
+	@Column(name="padrao_enum", nullable = false)
 	@Enumerated(EnumType.STRING)
 	private PadroesEnum padraoEnum;
 	
-	@OneToOne(mappedBy = "operacao", cascade = CascadeType.PERSIST)
-	private Padrao padrao = null;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "id", unique = true, nullable = false)
+	private Padrao padrao;
 	
 	@Column
 	private LocalDate dataFinal;
@@ -78,15 +89,7 @@ public class Operacao implements Serializable{
 	private Double porcentagemOperacaoFinal = 0.0;
 	
 	
-	public Operacao() {
-		
-	}
 	
-	public Operacao(LocalDate dat, String nomeDoPapel, PadroesEnum padrao) {
-		this.dat = dat;
-		this.nomeDoPapel = nomeDoPapel;
-		this.padraoEnum = padrao;
-	}
 	
 	public Double formataPreco(Double num) {
 		
@@ -238,6 +241,13 @@ public class Operacao implements Serializable{
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
+	}
+
+	public Operacao(LocalDate dat, String nomeDoPapel, PadroesEnum padraoEnum) {
+		super();
+		this.dat = dat;
+		this.nomeDoPapel = nomeDoPapel;
+		this.padraoEnum = padraoEnum;
 	}
 }
 	

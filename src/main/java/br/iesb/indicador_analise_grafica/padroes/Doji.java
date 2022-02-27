@@ -18,21 +18,18 @@ public class Doji extends Padrao{
 	@Column
 	private int pavioInferior;
 	
-	@OneToOne
-	@JoinColumns({@JoinColumn(name="dat"), @JoinColumn(name="nomeDoPapel"), @JoinColumn(name="padrao")})
-	private Operacao operacao = null;
 
 	public Doji() {
 		
 	}
 	
-	public Operacao getOperacao() {
+	/*public Operacao getOperacao() {
 		return operacao;
 	}
 
 	public void setOperacao(Operacao operacao) {
 		this.operacao = operacao;
-	}
+	}*/
 
 	public int getTamanhoPavioCorpo() {
 		return tamanhoPavioCorpo;

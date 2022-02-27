@@ -29,10 +29,6 @@ public class TresSoldados extends Padrao {
 	@Column
 	private String pavioInferiorTerceiroCandle;
 	
-	@OneToOne
-    @JoinColumns({@JoinColumn(name="dat"), @JoinColumn(name="nomeDoPapel"), @JoinColumn(name="padrao")})
-	private Operacao operacao = null;
-	
 	public TresSoldados() {
 		
 	}
@@ -83,14 +79,6 @@ public class TresSoldados extends Padrao {
 
 	public void setPavioInferiorTerceiroCandle(String pavioInferiorTerceiroCandle) {
 		this.pavioInferiorTerceiroCandle = pavioInferiorTerceiroCandle;
-	}
-
-	public Operacao getOperacao() {
-		return operacao;
-	}
-
-	public void setOperacao(Operacao operacao) {
-		this.operacao = operacao;
 	}
 	
 	

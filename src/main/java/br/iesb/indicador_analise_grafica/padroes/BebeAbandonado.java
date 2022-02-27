@@ -19,9 +19,9 @@ public class BebeAbandonado extends Padrao{
 	@Column
 	private Boolean terceiroCandleMarubozu;
 	
-	@OneToOne
+	/*@OneToOne
     @JoinColumns({@JoinColumn(name="dat"), @JoinColumn(name="nomeDoPapel"), @JoinColumn(name="padrao")})
-	private Operacao operacao = null;
+	private Operacao operacao = null;*/
 
 	public BebeAbandonado() {
 		
@@ -51,13 +51,13 @@ public class BebeAbandonado extends Padrao{
 		this.terceiroCandleMarubozu = terceiroCandleMarubozu;
 	}
 
-	public Operacao getOperacao() {
+	/*public Operacao getOperacao() {
 		return operacao;
 	}
 
 	public void setOperacao(Operacao operacao) {
 		this.operacao = operacao;
-	}
+	}*/
 	
 	
 	

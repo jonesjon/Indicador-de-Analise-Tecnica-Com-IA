@@ -34,7 +34,7 @@ public class OperacaoService {
 	}
 	
 	public static List<Operacao> operacoesPorAno(LocalDate data){
-		return operacaoRepository.operacoesPorAno(data);
+		return operacaoRepository.findByDatGreaterThanEqual(data);//  operacoesPorAno(data);
 	}
 
 	public static void adicionaOperacao(Operacao operacao) {
