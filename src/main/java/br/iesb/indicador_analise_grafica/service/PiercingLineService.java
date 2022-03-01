@@ -20,8 +20,9 @@ public class PiercingLineService {
 		piercingLineRepository = piercingLine;
 	}
 	
-	public static void adicionaPiercingLine(PiercingLine piercingLine) {
-		piercingLineRepository.save(piercingLine);
-	}
+	/*
+	 * public static void adicionaPiercingLine(PiercingLine piercingLine) {
+	 * piercingLineRepository.save(piercingLine); }
+	 */
 	
 }

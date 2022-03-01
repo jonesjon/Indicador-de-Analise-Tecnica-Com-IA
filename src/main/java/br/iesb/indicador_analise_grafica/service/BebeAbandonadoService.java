@@ -20,8 +20,9 @@ public class BebeAbandonadoService {
 		bebeAbandonadoRepository = bebeAbandonado;
 	}
 	
-	public static void adicionaBebeAbandonado(BebeAbandonado bebeAbandonado) {
-		bebeAbandonadoRepository.save(bebeAbandonado);
-	}
+	/*
+	 * public static void adicionaBebeAbandonado(BebeAbandonado bebeAbandonado) {
+	 * bebeAbandonadoRepository.save(bebeAbandonado); }
+	 */
 	
 }

@@ -31,6 +31,7 @@ public class Marubozu extends Padrao{
 		this.pavioSuperior = pavioSuperior;
 		this.pavioInferior = pavioInferior;
 		this.variacaoPreco = variacaoPreco;
+		this.setVolumeAcimaMedia20(volumeAcimaMedia20);
 		
 	}
 

@@ -20,8 +20,9 @@ public class MarteloInvertidoService {
 		marteloInvertidoRepository = marteloInvertido;
 	}
 	
-	public static void adicionaMarteloInvertido(MarteloInvertido marteloInvertido) {
-		marteloInvertidoRepository.save(marteloInvertido);
-	}
+	/*
+	 * public static void adicionaMarteloInvertido(MarteloInvertido
+	 * marteloInvertido) { marteloInvertidoRepository.save(marteloInvertido); }
+	 */
 	
 }

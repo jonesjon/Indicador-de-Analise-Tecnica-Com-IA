@@ -123,13 +123,15 @@ public class RedeNeural implements NeuralNetListener {
 					martelo.setTipo(tipoCandle(infoCandle).getTipo());
 					martelo.setPavioSuperior(classificaPavioSuperior(pavioSuperior).getDescricao());
 					martelo.setPavioInferior(classificaPavioInferior(pavioInferior).getDescricao());
-					martelo.setPrecoAcimaMedia200(verificaSePrecoAcimaMedia200(infoCandle));
+					martelo.setPrecoAcimaMedia8(verificaSePrecoFechamentoAcimaMedia(infoCandle, MEDIACURTA));
+					martelo.setPrecoAcimaMedia20(verificaSePrecoFechamentoAcimaMedia(infoCandle, MEDIA));
+					martelo.setPrecoAcimaMedia200(verificaSePrecoFechamentoAcimaMedia(infoCandle, MEDIALONGA));
 					martelo.setVolumeAcimaMedia20(volumeAcimaMedia20(infoCandle));
 					//martelo.setOperacao(operacao);
 
 					operacao.setPadrao(martelo);
 					OperacaoService.adicionaOperacao(operacao);
-					MarteloService.adicionaMartelo(martelo);
+					//MarteloService.adicionaMartelo(martelo);
 
 				}
 			}
@@ -174,13 +176,15 @@ public class RedeNeural implements NeuralNetListener {
 					marteloInvertido.setTipo(tipoCandle(infoCandle).getTipo());
 					marteloInvertido.setPavioSuperior(classificaPavioSuperior(pavioSuperior).getDescricao());
 					marteloInvertido.setPavioInferior(classificaPavioInferior(pavioInferior).getDescricao());
-					marteloInvertido.setPrecoAcimaMedia200(verificaSePrecoAcimaMedia200(infoCandle));
+					marteloInvertido.setPrecoAcimaMedia8(verificaSePrecoFechamentoAcimaMedia(infoCandle, MEDIACURTA));
+					marteloInvertido.setPrecoAcimaMedia20(verificaSePrecoFechamentoAcimaMedia(infoCandle, MEDIA));
+					marteloInvertido.setPrecoAcimaMedia200(verificaSePrecoFechamentoAcimaMedia(infoCandle, MEDIALONGA));
 					marteloInvertido.setVolumeAcimaMedia20(volumeAcimaMedia20(infoCandle));
 					marteloInvertido.setOperacao(operacao);
 
 					operacao.setPadrao(marteloInvertido);
 					OperacaoService.adicionaOperacao(operacao);
-					MarteloInvertidoService.adicionaMarteloInvertido(marteloInvertido);
+					//MarteloInvertidoService.adicionaMarteloInvertido(marteloInvertido);
 
 				}
 			}
@@ -242,13 +246,16 @@ public class RedeNeural implements NeuralNetListener {
 								classificaPavioInferior(pavioInferior).getDescricao(), volumeAcimaMedia20(infoCandle),
 								classificaVariacaoPreco(calculaVariacao).getDescricao());
 						
+						marubozu.setPrecoAcimaMedia8(verificaSePrecoFechamentoAcimaMedia(infoCandle, MEDIACURTA));
+						marubozu.setPrecoAcimaMedia20(verificaSePrecoFechamentoAcimaMedia(infoCandle, MEDIA));
+						marubozu.setPrecoAcimaMedia200(verificaSePrecoFechamentoAcimaMedia(infoCandle, MEDIALONGA));
+						marubozu.setTipo(tipoCandle(infoCandle).getTipo());
+
 						operacao.setPadrao(marubozu);
 						marubozu.setOperacao(operacao);
 						OperacaoService.adicionaOperacao(operacao);
 						
-						
-						
-						MarubozuService.adicionaMarubozu(marubozu);
+						//MarubozuService.adicionaMarubozu(marubozu);
 						
 
 						return true;
@@ -269,10 +276,15 @@ public class RedeNeural implements NeuralNetListener {
 								classificaPavioInferior(pavioInferior).getDescricao(), volumeAcimaMedia20(infoCandle),
 								classificaVariacaoPreco(calculaVariacao).getDescricao());
 						marubozu.setOperacao(operacao);
+						
+						marubozu.setPrecoAcimaMedia8(verificaSePrecoFechamentoAcimaMedia(infoCandle, MEDIACURTA));
+						marubozu.setPrecoAcimaMedia20(verificaSePrecoFechamentoAcimaMedia(infoCandle, MEDIA));
+						marubozu.setPrecoAcimaMedia200(verificaSePrecoFechamentoAcimaMedia(infoCandle, MEDIALONGA));
+						marubozu.setTipo(tipoCandle(infoCandle).getTipo());
 
 						operacao.setPadrao(marubozu);
 						OperacaoService.adicionaOperacao(operacao);
-						MarubozuService.adicionaMarubozu(marubozu);
+						//MarubozuService.adicionaMarubozu(marubozu);
 
 						return true;
 					}
@@ -327,7 +339,7 @@ public class RedeNeural implements NeuralNetListener {
 					operacao.setPadrao(piercingLine);
 
 					OperacaoService.adicionaOperacao(operacao);
-					PiercingLineService.adicionaPiercingLine(piercingLine);
+					//PiercingLineService.adicionaPiercingLine(piercingLine);
 
 				}
 
@@ -363,7 +375,7 @@ public class RedeNeural implements NeuralNetListener {
 					operacao.setPadrao(piercingLine);
 
 					OperacaoService.adicionaOperacao(operacao);
-					PiercingLineService.adicionaPiercingLine(piercingLine);
+					//PiercingLineService.adicionaPiercingLine(piercingLine);
 
 				}
 
@@ -426,12 +438,13 @@ public class RedeNeural implements NeuralNetListener {
 				tresSoldados.setPrecoAcimaMedia20(verificaSePrecoFechamentoAcimaMedia(terceiroCandle, MEDIA));
 				tresSoldados.setPrecoAcimaMedia200(verificaSePrecoFechamentoAcimaMedia(terceiroCandle, MEDIALONGA));
 				tresSoldados.setVolumeAcimaMedia20(volumeAcimaMedia20(terceiroCandle));
+				tresSoldados.setTipo(tipoCandle(terceiroCandle).getTipo());
 
 				tresSoldados.setOperacao(operacao);
 				operacao.setPadrao(tresSoldados);
 
 				OperacaoService.adicionaOperacao(operacao);
-				TresSoldadosService.adicionaTresSoldados(tresSoldados);
+				//TresSoldadosService.adicionaTresSoldados(tresSoldados);
 
 			} else if (condicaoParaTresSoldadosDeBaixa(primeiroCandle, segundoCandle, terceiroCandle)) {
 
@@ -473,12 +486,13 @@ public class RedeNeural implements NeuralNetListener {
 				tresSoldados.setPrecoAcimaMedia20(verificaSePrecoFechamentoAcimaMedia(terceiroCandle, MEDIA));
 				tresSoldados.setPrecoAcimaMedia200(verificaSePrecoFechamentoAcimaMedia(terceiroCandle, MEDIALONGA));
 				tresSoldados.setVolumeAcimaMedia20(volumeAcimaMedia20(terceiroCandle));
+				tresSoldados.setTipo(tipoCandle(terceiroCandle).getTipo());
 
 				tresSoldados.setOperacao(operacao);
 				operacao.setPadrao(tresSoldados);
 
 				OperacaoService.adicionaOperacao(operacao);
-				TresSoldadosService.adicionaTresSoldados(tresSoldados);
+				//TresSoldadosService.adicionaTresSoldados(tresSoldados);
 
 			}
 
@@ -528,12 +542,13 @@ public class RedeNeural implements NeuralNetListener {
 				bebeAbandonado.setPrecoAcimaMedia20(verificaSePrecoFechamentoAcimaMedia(terceiroCandle, MEDIA));
 				bebeAbandonado.setPrecoAcimaMedia200(verificaSePrecoFechamentoAcimaMedia(terceiroCandle, MEDIALONGA));
 				bebeAbandonado.setVolumeAcimaMedia20(volumeAcimaMedia20(terceiroCandle));
+				bebeAbandonado.setTipo(tipoCandle(terceiroCandle).getTipo());
 
 				//bebeAbandonado.setOperacao(operacao);
 				operacao.setPadrao(bebeAbandonado);
 
 				OperacaoService.adicionaOperacao(operacao);
-				BebeAbandonadoService.adicionaBebeAbandonado(bebeAbandonado);
+				//BebeAbandonadoService.adicionaBebeAbandonado(bebeAbandonado);
 
 			} else if (condicaoParaBebeAbandonadoDeAlta(primeiroCandle, segundoCandle, terceiroCandle)) {
 
@@ -564,12 +579,13 @@ public class RedeNeural implements NeuralNetListener {
 				bebeAbandonado.setPrecoAcimaMedia20(verificaSePrecoFechamentoAcimaMedia(terceiroCandle, MEDIA));
 				bebeAbandonado.setPrecoAcimaMedia200(verificaSePrecoFechamentoAcimaMedia(terceiroCandle, MEDIALONGA));
 				bebeAbandonado.setVolumeAcimaMedia20(volumeAcimaMedia20(terceiroCandle));
+				bebeAbandonado.setTipo(tipoCandle(terceiroCandle).getTipo());
 
 				//bebeAbandonado.setOperacao(operacao);
 				operacao.setPadrao(bebeAbandonado);
 
 				OperacaoService.adicionaOperacao(operacao);
-				BebeAbandonadoService.adicionaBebeAbandonado(bebeAbandonado);
+				//BebeAbandonadoService.adicionaBebeAbandonado(bebeAbandonado);
 
 			}
 
@@ -622,7 +638,7 @@ public class RedeNeural implements NeuralNetListener {
 					operacao.setPadrao(engolfo);
 
 					OperacaoService.adicionaOperacao(operacao);
-					EngolfoService.adicionaEngolfo(engolfo);
+					//EngolfoService.adicionaEngolfo(engolfo);
 
 				} else if (condicaoParaEngolfoDeBaixa(primeiroCandle, segundoCandle)) {
 
@@ -661,7 +677,7 @@ public class RedeNeural implements NeuralNetListener {
 					operacao.setPadrao(engolfo);
 
 					OperacaoService.adicionaOperacao(operacao);
-					EngolfoService.adicionaEngolfo(engolfo);
+					//EngolfoService.adicionaEngolfo(engolfo);
 
 				}
 
@@ -717,7 +733,7 @@ public class RedeNeural implements NeuralNetListener {
 					operacaoCompra.setPadrao(dojiCompra);
 
 					OperacaoService.adicionaOperacao(operacaoCompra);
-					DojiService.adicionaDoji(dojiCompra);
+					//DojiService.adicionaDoji(dojiCompra);
 
 					Operacao operacaoVenda = new Operacao();
 					operacaoVenda.setPadraoEnum(PadroesEnum.DOJIVENDA);
@@ -747,7 +763,7 @@ public class RedeNeural implements NeuralNetListener {
 					operacaoVenda.setPadrao(dojiVenda);
 
 					OperacaoService.adicionaOperacao(operacaoVenda);
-					DojiService.adicionaDoji(dojiVenda);
+					//DojiService.adicionaDoji(dojiVenda);
 
 				}
 

@@ -20,8 +20,9 @@ public class TresSoldadosService {
 		tresSoldadosRepository = tresSoldados;
 	}
 	
-	public static void adicionaTresSoldados(TresSoldados tresSoldados) {
-		tresSoldadosRepository.save(tresSoldados);
-	}
+	/*
+	 * public static void adicionaTresSoldados(TresSoldados tresSoldados) {
+	 * tresSoldadosRepository.save(tresSoldados); }
+	 */
 
 }
