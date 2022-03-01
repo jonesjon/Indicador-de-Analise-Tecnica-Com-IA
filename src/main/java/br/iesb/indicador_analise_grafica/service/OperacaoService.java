@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import br.iesb.indicador_analise_grafica.Operacao;
 import br.iesb.indicador_analise_grafica.repository.OperacaoRepository;
-import br.iesb.indicador_analise_grafica_enum.Padroes;
+import br.iesb.indicador_analise_grafica_enum.PadroesEnum;
 import br.iesb.indicador_analise_grafica_enum.PavioInferior;
 import br.iesb.indicador_analise_grafica_enum.PavioSuperior;
 import br.iesb.indicador_analise_grafica_enum.Perfuracao;
@@ -34,7 +34,7 @@ public class OperacaoService {
 	}
 	
 	public static List<Operacao> operacoesPorAno(LocalDate data){
-		return operacaoRepository.operacoesPorAno(data);
+		return operacaoRepository.findByDatGreaterThanEqual(data);//  operacoesPorAno(data);
 	}
 
 	public static void adicionaOperacao(Operacao operacao) {
@@ -219,7 +219,7 @@ public class OperacaoService {
 
 	}
 
-	public static Double contaTresSoldadosEspecificoIniciadoGeral(Padroes padrao,
+	public static Double contaTresSoldadosEspecificoIniciadoGeral(PadroesEnum padrao,
 			PavioSuperior pavioSuperiorPrimeiroCandle, PavioInferior pavioInferiorPrimeiroCandle,
 			PavioSuperior pavioSuperiorTerceiroCandle, PavioInferior pavioInferiorTerceiroCandle,
 			PrecoAcimaMedia200 preco200) {
@@ -230,7 +230,7 @@ public class OperacaoService {
 
 	}
 	
-	public static Double contaTresSoldadosEspecificoIniciadoGeralNaoChegouAlvo(Padroes padrao,
+	public static Double contaTresSoldadosEspecificoIniciadoGeralNaoChegouAlvo(PadroesEnum padrao,
 			PavioSuperior pavioSuperiorPrimeiroCandle, PavioInferior pavioInferiorPrimeiroCandle,
 			PavioSuperior pavioSuperiorTerceiroCandle, PavioInferior pavioInferiorTerceiroCandle,
 			PrecoAcimaMedia200 preco200) {
@@ -241,7 +241,7 @@ public class OperacaoService {
 
 	}
 	
-	public static Double contaTresSoldadosEspecificoIniciadoUltimosCincoAnos(Padroes padrao,
+	public static Double contaTresSoldadosEspecificoIniciadoUltimosCincoAnos(PadroesEnum padrao,
 			PavioSuperior pavioSuperiorPrimeiroCandle, PavioInferior pavioInferiorPrimeiroCandle,
 			PavioSuperior pavioSuperiorTerceiroCandle, PavioInferior pavioInferiorTerceiroCandle,
 			PrecoAcimaMedia200 preco200) {
@@ -252,7 +252,7 @@ public class OperacaoService {
 
 	}
 	
-	public static Double contaTresSoldadosEspecificoIniciadoUltimosCincoAnosNaoChegouAlvo(Padroes padrao,
+	public static Double contaTresSoldadosEspecificoIniciadoUltimosCincoAnosNaoChegouAlvo(PadroesEnum padrao,
 			PavioSuperior pavioSuperiorPrimeiroCandle, PavioInferior pavioInferiorPrimeiroCandle,
 			PavioSuperior pavioSuperiorTerceiroCandle, PavioInferior pavioInferiorTerceiroCandle,
 			PrecoAcimaMedia200 preco200) {
@@ -263,7 +263,7 @@ public class OperacaoService {
 
 	}
 	
-	public static Double contaTresSoldadosEspecificoIniciadoUltimoAno(Padroes padrao,
+	public static Double contaTresSoldadosEspecificoIniciadoUltimoAno(PadroesEnum padrao,
 			PavioSuperior pavioSuperiorPrimeiroCandle, PavioInferior pavioInferiorPrimeiroCandle,
 			PavioSuperior pavioSuperiorTerceiroCandle, PavioInferior pavioInferiorTerceiroCandle,
 			PrecoAcimaMedia200 preco200) {
@@ -274,7 +274,7 @@ public class OperacaoService {
 
 	}
 	
-	public static Double contaTresSoldadosEspecificoIniciadoUltimoAnoNaoChegouAlvo(Padroes padrao,
+	public static Double contaTresSoldadosEspecificoIniciadoUltimoAnoNaoChegouAlvo(PadroesEnum padrao,
 			PavioSuperior pavioSuperiorPrimeiroCandle, PavioInferior pavioInferiorPrimeiroCandle,
 			PavioSuperior pavioSuperiorTerceiroCandle, PavioInferior pavioInferiorTerceiroCandle,
 			PrecoAcimaMedia200 preco200) {

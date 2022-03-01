@@ -18,9 +18,8 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.7">
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.8">
 		<attributes>
-			<attribute name="module" value="true"/>
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
@@ -29,20 +28,37 @@
 			<attribute name="maven.pomderived" value="true"/>
 		</attributes>
 	</classpathentry>
-	<classpathentry kind="lib" path="C:\Users\João\git\Indicador-de-Analise-Tecnica-Com-IA\libs/aspectjrt-1.9.6.jar"/>
-	<classpathentry kind="lib" path="C:\Users\João\git\Indicador-de-Analise-Tecnica-Com-IA\libs/hibernate-release-5.5.3.Final.zip"/>
-	<classpathentry kind="lib" path="C:\Users\João\git\Indicador-de-Analise-Tecnica-Com-IA\libs/mysql-connector-java-8.0.25.jar"/>
-	<classpathentry kind="lib" path="C:\Users\João\git\Indicador-de-Analise-Tecnica-Com-IA\libs/slf4j-api-1.7.26.jar"/>
-	<classpathentry kind="lib" path="C:\Users\João\git\Indicador-de-Analise-Tecnica-Com-IA\libs/spring-aop-5.3.8.jar"/>
-	<classpathentry kind="lib" path="C:\Users\João\git\Indicador-de-Analise-Tecnica-Com-IA\libs/spring-beans-5.3.8.jar"/>
-	<classpathentry kind="lib" path="C:\Users\João\git\Indicador-de-Analise-Tecnica-Com-IA\libs/spring-context-5.3.8.jar"/>
-	<classpathentry kind="lib" path="C:\Users\João\git\Indicador-de-Analise-Tecnica-Com-IA\libs/spring-core-5.3.8.jar"/>
-	<classpathentry kind="lib" path="C:\Users\João\git\Indicador-de-Analise-Tecnica-Com-IA\libs/spring-data-commons-2.5.2.jar"/>
-	<classpathentry kind="lib" path="C:\Users\João\git\Indicador-de-Analise-Tecnica-Com-IA\libs/spring-data-jpa-2.5.2.jar"/>
-	<classpathentry kind="lib" path="C:\Users\João\git\Indicador-de-Analise-Tecnica-Com-IA\libs/spring-expression-5.3.8.jar"/>
-	<classpathentry kind="lib" path="C:\Users\João\git\Indicador-de-Analise-Tecnica-Com-IA\libs/spring-jcl-5.3.8.jar"/>
-	<classpathentry kind="lib" path="C:\Users\João\git\Indicador-de-Analise-Tecnica-Com-IA\libs/spring-jdbc-5.3.8.jar"/>
-	<classpathentry kind="lib" path="C:\Users\João\git\Indicador-de-Analise-Tecnica-Com-IA\libs/spring-orm-5.3.8.jar"/>
-	<classpathentry kind="lib" path="C:\Users\João\git\Indicador-de-Analise-Tecnica-Com-IA\libs/spring-tx-5.3.8.jar"/>
+	<classpathentry kind="lib" path="C:/Users/leode/Desktop/futuro/joao-17-2-2021/Indicador-de-Analise-Tecnica-Com-IA/libs/aspectjrt-1.9.6.jar"/>
+	<classpathentry kind="lib" path="C:/Users/leode/Desktop/futuro/joao-17-2-2021/Indicador-de-Analise-Tecnica-Com-IA/libs/hibernate-release-5.5.3.Final.zip"/>
+	<classpathentry kind="lib" path="C:/Users/leode/Desktop/futuro/joao-17-2-2021/Indicador-de-Analise-Tecnica-Com-IA/libs/mysql-connector-java-8.0.25.jar"/>
+	<classpathentry kind="lib" path="C:/Users/leode/Desktop/futuro/joao-17-2-2021/Indicador-de-Analise-Tecnica-Com-IA/libs/slf4j-api-1.7.26.jar"/>
+	<classpathentry kind="lib" path="C:/Users/leode/Desktop/futuro/joao-17-2-2021/Indicador-de-Analise-Tecnica-Com-IA/libs/spring-aop-5.3.8.jar"/>
+	<classpathentry kind="lib" path="C:/Users/leode/Desktop/futuro/joao-17-2-2021/Indicador-de-Analise-Tecnica-Com-IA/libs/spring-beans-5.3.8.jar"/>
+	<classpathentry kind="lib" path="C:/Users/leode/Desktop/futuro/joao-17-2-2021/Indicador-de-Analise-Tecnica-Com-IA/libs/spring-context-5.3.8.jar"/>
+	<classpathentry kind="lib" path="C:/Users/leode/Desktop/futuro/joao-17-2-2021/Indicador-de-Analise-Tecnica-Com-IA/libs/spring-core-5.3.8.jar"/>
+	<classpathentry kind="lib" path="C:/Users/leode/Desktop/futuro/joao-17-2-2021/Indicador-de-Analise-Tecnica-Com-IA/libs/spring-data-commons-2.5.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/leode/Desktop/futuro/joao-17-2-2021/Indicador-de-Analise-Tecnica-Com-IA/libs/spring-data-jpa-2.5.2.jar"/>
+	<classpathentry kind="lib" path="C:/Users/leode/Desktop/futuro/joao-17-2-2021/Indicador-de-Analise-Tecnica-Com-IA/libs/spring-expression-5.3.8.jar"/>
+	<classpathentry kind="lib" path="C:/Users/leode/Desktop/futuro/joao-17-2-2021/Indicador-de-Analise-Tecnica-Com-IA/libs/spring-jcl-5.3.8.jar"/>
+	<classpathentry kind="lib" path="C:/Users/leode/Desktop/futuro/joao-17-2-2021/Indicador-de-Analise-Tecnica-Com-IA/libs/spring-jdbc-5.3.8.jar"/>
+	<classpathentry kind="lib" path="C:/Users/leode/Desktop/futuro/joao-17-2-2021/Indicador-de-Analise-Tecnica-Com-IA/libs/spring-orm-5.3.8.jar"/>
+	<classpathentry kind="lib" path="C:/Users/leode/Desktop/futuro/joao-17-2-2021/Indicador-de-Analise-Tecnica-Com-IA/libs/spring-tx-5.3.8.jar"/>
+	<classpathentry kind="src" path="target/generated-sources/annotations">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="ignore_optional_problems" value="true"/>
+			<attribute name="m2e-apt" value="true"/>
+		</attributes>
+	</classpathentry>
+	<classpathentry kind="src" output="target/test-classes" path="target/generated-test-sources/test-annotations">
+		<attributes>
+			<attribute name="optional" value="true"/>
+			<attribute name="maven.pomderived" value="true"/>
+			<attribute name="ignore_optional_problems" value="true"/>
+			<attribute name="m2e-apt" value="true"/>
+			<attribute name="test" value="true"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="target/classes"/>
 </classpath>

@@ -20,8 +20,9 @@ public class MarubozuService {
 		marubozuRepository = marubozu;
 	}
 	
-	public static void adicionaMarubozu(Marubozu marubozu) {
-		marubozuRepository.save(marubozu);
-	}
+	/*
+	 * public static void adicionaMarubozu(Marubozu marubozu) {
+	 * marubozuRepository.save(marubozu); }
+	 */
 
 }

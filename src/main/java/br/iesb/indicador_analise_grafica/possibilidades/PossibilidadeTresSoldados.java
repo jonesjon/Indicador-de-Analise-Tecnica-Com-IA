@@ -1,6 +1,6 @@
 package br.iesb.indicador_analise_grafica.possibilidades;
 
-import br.iesb.indicador_analise_grafica_enum.Padroes;
+import br.iesb.indicador_analise_grafica_enum.PadroesEnum;
 import br.iesb.indicador_analise_grafica_enum.PavioInferior;
 import br.iesb.indicador_analise_grafica_enum.PavioSuperior;
 import br.iesb.indicador_analise_grafica_enum.PrecoAcimaMedia20;
@@ -10,7 +10,7 @@ import br.iesb.indicador_analise_grafica_enum.VolumeAcimaMedia20;
 
 public class PossibilidadeTresSoldados {
 	
-	private Padroes padrao;
+	private PadroesEnum padrao;
 	
 	private PavioSuperior pavioSuperiorPrimeiroCandle;
 
@@ -23,7 +23,7 @@ public class PossibilidadeTresSoldados {
 	private PrecoAcimaMedia200 precoAcimaMedia200;
 	
 
-	public PossibilidadeTresSoldados(Padroes padrao, PavioSuperior pavioSuperiorPrimeiroCandle,
+	public PossibilidadeTresSoldados(PadroesEnum padrao, PavioSuperior pavioSuperiorPrimeiroCandle,
 			PavioInferior pavioInferiorPrimeiroCandle, PavioSuperior pavioSuperiorTerceiroCandle,
 			PavioInferior pavioInferiorTerceiroCandle, PrecoAcimaMedia200 precoAcimaMedia200) {
 		
@@ -75,11 +75,11 @@ public class PossibilidadeTresSoldados {
 		this.precoAcimaMedia200 = precoAcimaMedia200;
 	}
 
-	public Padroes getPadrao() {
+	public PadroesEnum getPadrao() {
 		return padrao;
 	}
 
-	public void setPadrao(Padroes padrao) {
+	public void setPadrao(PadroesEnum padrao) {
 		this.padrao = padrao;
 	}
 	

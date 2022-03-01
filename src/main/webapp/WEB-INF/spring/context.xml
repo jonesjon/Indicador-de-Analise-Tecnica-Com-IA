@@ -21,13 +21,13 @@
 	<bean id="hibernateJpaVendorAdapter"
 		class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter" />
 
-	<!-- Configure the entity manager factory bean -->
+	<!-- Configure the entity manager factory bean
 	<bean id="entityManagerFactory"
 		class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
 		<property name="dataSource" ref="dataSource" />
 		<property name="jpaVendorAdapter"
 			ref="hibernateJpaVendorAdapter" />
-		<!-- Set JPA properties -->
+		Set JPA properties
 		<property name="jpaProperties">
 			<props>
 				<prop key="hibernate.dialect">${hibernate.dialect}</prop>
@@ -35,14 +35,14 @@
 		</property>
 		<property name="packagesToScan"
 			value="br.iesb.indicador_analise_grafica.model" />
-	</bean>
+	</bean> -->
 
 	<!-- Configure the transaction manager bean -->
-	<bean id="transactionManager"
+	<!-- <bean id="transactionManager"
 		class="org.springframework.orm.jpa.JpaTransactionManager">
 		<property name="entityManagerFactory"
 			ref="entityManagerFactory" />
-	</bean>
+	</bean> -->
 
 	<tx:annotation-driven />
 

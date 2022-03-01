@@ -62,5 +62,4 @@ public class InfoCandleService {
 	public static int getQtdPapeis() {
 		return infoCandleRepository.findQtdPapeis();
 	}
-
 }

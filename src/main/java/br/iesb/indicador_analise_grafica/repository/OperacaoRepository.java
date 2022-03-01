@@ -14,11 +14,13 @@ import br.iesb.indicador_analise_grafica.primary_key.OperacaoPK;
 @Repository
 public interface OperacaoRepository extends CrudRepository<Operacao, OperacaoPK> {
 
-	@Query(value = "select * from OPERACAO where precoEntrada > ?1 and precoEntrada < ?2 and nomeDoPapel = ?3 order by dat asc", nativeQuery = true)
+	@Query(value = "select * from OPERACAO where precoEntrada > ?1 and precoEntrada < ?2 and nome_do_papel = ?3 order by dat asc", nativeQuery = true)
 	ArrayList<Operacao> findByOperacoesPossiveis(Double min, Double max, String nomeDoPapel);
 	
 	@Query(value = "select * from OPERACAO where dat >= ?1", nativeQuery = true)
 	List<Operacao> operacoesPorAno(LocalDate dat);
+	
+	public List<Operacao> findByDatGreaterThanEqual(LocalDate dat);
 
 	@Query(value = "select * from OPERACAO where precoEntrada > ?1 and precoEntrada < ?2 and dat >= ?3 order by dat asc", nativeQuery = true)
 	ArrayList<Operacao> findByOperacoesPossiveisUltimoAno(Double min, Double max, LocalDate data);

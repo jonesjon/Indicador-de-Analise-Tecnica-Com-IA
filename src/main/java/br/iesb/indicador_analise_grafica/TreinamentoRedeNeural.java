@@ -4,6 +4,10 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import br.iesb.indicador_analise_grafica.service.InfoCandleService;
 import br.iesb.indicador_analise_grafica.service.OperacaoService;
@@ -127,14 +131,19 @@ public class TreinamentoRedeNeural {
 			ArrayList<Operacao> operacoes = new ArrayList<Operacao>();
 			operacoes = OperacaoService.getOperacoesPossiveis(MIN, MAX, po.get(i).getNomeDoPapel());
 			
+			ArrayList<InfoCandle> graficoGeral = InfoCandleService.getInfoCandlePeloNome(po.get(i).getNomeDoPapel());
+			
 			for(int j=0;j<operacoes.size();j++) {
 				Operacao operacao = operacoes.get(j);
 				ArrayList<InfoCandle> verificaContinuidade = new ArrayList<InfoCandle>();
-				verificaContinuidade = InfoCandleService.verificaGraficoContinuo(operacao.getData(), operacao.getNomeDoPapel(), LIMITVERIFICACONTINUIDADE);
+				verificaContinuidade = InfoCandleService.verificaGraficoContinuo(operacao.getDat(), operacao.getNomeDoPapel(), LIMITVERIFICACONTINUIDADE);
 				
-				if(verificaContinuidadeDoGrafico(operacao.getData(), verificaContinuidade)) {
-					ArrayList<InfoCandle> grafico = new ArrayList<InfoCandle>();
-					grafico = InfoCandleService.getGraficoAPartirDaData(operacao.getData(), operacao.getNomeDoPapel());
+				if(verificaContinuidadeDoGrafico(operacao.getDat(), verificaContinuidade)) {
+					List<InfoCandle> graficoTemp = graficoGeral.stream().filter( infoCandle -> infoCandle.getData().compareTo(operacao.getDat()) > 0 )
+							.collect(Collectors.toList());
+					
+					ArrayList<InfoCandle> grafico = new ArrayList<InfoCandle>(graficoTemp);
+					//grafico = InfoCandleService.getGraficoAPartirDaData(operacao.getDat(), operacao.getNomeDoPapel());
 					
 					for(int k=0; k<grafico.size(); k++) {
 						
@@ -157,6 +166,8 @@ public class TreinamentoRedeNeural {
 												
 												operacao.setTerceiroAlvoAtingido(true);
 												operacao.setPorcentagemOperacaoFinal(operacao.getPorcentagemOperacaoFinal() + calculaPorcentagemTerceiroAlvo(operacao));
+												operacao.setDataFinal(grafico.get(k).getData());
+												operacao.setOperacaoFinalizada(true);
 												k = grafico.size();
 												
 											}
@@ -166,6 +177,8 @@ public class TreinamentoRedeNeural {
 									}else if(verificaSeOperacaoChegouAoPrecoLossCompra(grafico.get(k), operacao)) {
 										
 										operacao.setPorcentagemOperacaoFinal(calculaPorcentagemStop(operacao));
+										operacao.setDataFinal(grafico.get(k).getData());
+										operacao.setOperacaoFinalizada(true);
 										k = grafico.size();
 										
 									}
@@ -181,12 +194,16 @@ public class TreinamentoRedeNeural {
 											
 											operacao.setTerceiroAlvoAtingido(true);
 											operacao.setPorcentagemOperacaoFinal(operacao.getPorcentagemOperacaoFinal() + calculaPorcentagemTerceiroAlvo(operacao));
+											operacao.setDataFinal(grafico.get(k).getData());
+											operacao.setOperacaoFinalizada(true);
 											k = grafico.size();
 											
 										}
 										
 									}else if(verificaSeOperacaoChegouAoPrecoEntradaAposPrimeiroAlvoCompra(grafico.get(k), operacao)) {
 										
+										operacao.setDataFinal(grafico.get(k).getData());
+										operacao.setOperacaoFinalizada(true);
 										k = grafico.size();
 										
 									}
@@ -197,10 +214,14 @@ public class TreinamentoRedeNeural {
 										
 										operacao.setTerceiroAlvoAtingido(true);
 										operacao.setPorcentagemOperacaoFinal(operacao.getPorcentagemOperacaoFinal() + calculaPorcentagemTerceiroAlvo(operacao));
+										operacao.setDataFinal(grafico.get(k).getData());
+										operacao.setOperacaoFinalizada(true);
 										k = grafico.size();
 										
 									}else if(verificaSeOperacaoChegouNoPrimeiroAlvoAposChegarNoSegundoAlvoCompra(grafico.get(k), operacao)) {
 										
+										operacao.setDataFinal(grafico.get(k).getData());
+										operacao.setOperacaoFinalizada(true);
 										k = grafico.size();
 										operacao.setPorcentagemOperacaoFinal(operacao.getPorcentagemOperacaoFinal() + calculaPorcentagemPrimeiroAlvo(operacao));
 										
@@ -225,6 +246,8 @@ public class TreinamentoRedeNeural {
 												
 												operacao.setTerceiroAlvoAtingido(true);
 												operacao.setPorcentagemOperacaoFinal(operacao.getPorcentagemOperacaoFinal() + calculaPorcentagemTerceiroAlvo(operacao));
+												operacao.setDataFinal(grafico.get(k).getData());
+												operacao.setOperacaoFinalizada(true);
 												k = grafico.size();
 												
 											}
@@ -233,6 +256,8 @@ public class TreinamentoRedeNeural {
 									}else if(verificaSeOperacaoChegouAoPrecoLossVenda(grafico.get(k), operacao)) {
 										
 										operacao.setPorcentagemOperacaoFinal(calculaPorcentagemStop(operacao));
+										operacao.setDataFinal(grafico.get(k).getData());
+										operacao.setOperacaoFinalizada(true);
 										k = grafico.size();
 										
 									}
@@ -247,12 +272,16 @@ public class TreinamentoRedeNeural {
 											
 											operacao.setTerceiroAlvoAtingido(true);
 											operacao.setPorcentagemOperacaoFinal(operacao.getPorcentagemOperacaoFinal() + calculaPorcentagemTerceiroAlvo(operacao));
+											operacao.setDataFinal(grafico.get(k).getData());
+											operacao.setOperacaoFinalizada(true);
 											k = grafico.size();
 											
 										}
 										
 									}else if(verificaSeOperacaoChegouAoPrecoEntradaAposPrimeiroAlvoVenda(grafico.get(k), operacao)) {
 										
+										operacao.setDataFinal(grafico.get(k).getData());
+										operacao.setOperacaoFinalizada(true);
 										k = grafico.size();
 										
 									}
@@ -263,11 +292,15 @@ public class TreinamentoRedeNeural {
 										
 										operacao.setTerceiroAlvoAtingido(true);
 										operacao.setPorcentagemOperacaoFinal(operacao.getPorcentagemOperacaoFinal() + calculaPorcentagemTerceiroAlvo(operacao));
+										operacao.setDataFinal(grafico.get(k).getData());
+										operacao.setOperacaoFinalizada(true);
 										k = grafico.size();
 										
 									}else if(verificaSeOperacaoChegouNoPrimeiroAlvoAposChegarNoSegundoAlvoVenda(grafico.get(k), operacao)) {
 										
 										operacao.setPorcentagemOperacaoFinal(operacao.getPorcentagemOperacaoFinal() + calculaPorcentagemPrimeiroAlvo(operacao));
+										operacao.setDataFinal(grafico.get(k).getData());
+										operacao.setOperacaoFinalizada(true);
 										k = grafico.size();
 										
 									}
@@ -284,6 +317,7 @@ public class TreinamentoRedeNeural {
 									operacao.setStart(true);
 									k--;
 								} else if (verificaSeMinimaChegouPrecoLossCompra(grafico.get(k), operacao)) {
+									//operacao.setOperacaoFinalizada(true);
 									k = grafico.size();
 								}
 
@@ -293,6 +327,7 @@ public class TreinamentoRedeNeural {
 									operacao.setStart(true);
 									k--;
 								} else if (verificaSeMaximaChegouPrecoLossVenda(grafico.get(k), operacao)) {
+									//operacao.setOperacaoFinalizada(true);
 									k = grafico.size();
 								}
 
@@ -429,11 +464,11 @@ public class TreinamentoRedeNeural {
 	}
 
 	private static boolean verificaSeOperacaoVenda(Operacao operacao) {
-		return operacao.getEntrada().equals(Entrada.VENDA.getDescricao());
+		return operacao.getTipoEntrada() == Entrada.VENDA;
 	}
 
 	private static boolean verificaSeOperacaoCompra(Operacao operacao) {
-		return operacao.getEntrada().equals(Entrada.COMPRA.getDescricao());
+		return operacao.getTipoEntrada() == Entrada.COMPRA;
 	}
 
 	private static Boolean verificaContinuidadeDoGrafico(LocalDate data, ArrayList<InfoCandle> verif) {

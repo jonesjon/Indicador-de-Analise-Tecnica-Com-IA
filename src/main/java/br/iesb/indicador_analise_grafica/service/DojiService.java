@@ -20,9 +20,9 @@ public class DojiService {
 		dojiRepository = doji;
 	}
 	
-	public static void adicionaDoji(Doji doji) {
-		dojiRepository.save(doji);
-	}
+	/*
+	 * public static void adicionaDoji(Doji doji) { dojiRepository.save(doji); }
+	 */
 	
 }
 

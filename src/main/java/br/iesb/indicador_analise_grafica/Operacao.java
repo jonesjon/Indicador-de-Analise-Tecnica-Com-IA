@@ -2,26 +2,29 @@ package br.iesb.indicador_analise_grafica;
 
 import java.text.DecimalFormat;
 import java.io.Serializable;
+import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.*;
 
-
-import br.iesb.indicador_analise_grafica.padroes.BebeAbandonado;
-import br.iesb.indicador_analise_grafica.padroes.Doji;
-import br.iesb.indicador_analise_grafica.padroes.Engolfo;
-import br.iesb.indicador_analise_grafica.padroes.Martelo;
-import br.iesb.indicador_analise_grafica.padroes.MarteloInvertido;
-import br.iesb.indicador_analise_grafica.padroes.Marubozu;
-import br.iesb.indicador_analise_grafica.padroes.PiercingLine;
-import br.iesb.indicador_analise_grafica.padroes.TresSoldados;
+import br.iesb.indicador_analise_grafica.padroes.Padrao;
 import br.iesb.indicador_analise_grafica.primary_key.OperacaoPK;
+import br.iesb.indicador_analise_grafica_enum.Entrada;
+import br.iesb.indicador_analise_grafica_enum.PadroesEnum;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
+@AllArgsConstructor(access = AccessLevel.PUBLIC)
+@NoArgsConstructor(access = AccessLevel.PUBLIC)
 @Entity
 @Table(name = "OPERACAO")
-@IdClass(OperacaoPK.class)
-public class Operacao implements Serializable{
+@IdClass(OperacaoId.class)
+@Data
+public class Operacao {
 	
 	/**
 	 * 
@@ -29,46 +32,31 @@ public class Operacao implements Serializable{
 	private static final long serialVersionUID = 1L;
 	
 	@Id
-	@Column(name="dat")
+	@Column(name="dat", nullable = false)
 	private LocalDate dat;
 	
 	@Id
-	@Column(name="nomeDoPapel")
+	@Column(name="nome_do_papel", nullable = false)
 	private String nomeDoPapel;
 	
 	@Id
-	@Column(name="padrao")
-	private String padrao;
+	@Column(name="padrao_enum", nullable = false)
+	@Enumerated(EnumType.STRING)
+	private PadroesEnum padraoEnum;
 	
-	@OneToOne(mappedBy = "operacao", cascade = CascadeType.PERSIST)
-	private Martelo martelo = null;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "id", unique = true, nullable = false)
+	private Padrao padrao;
 	
-	@OneToOne(mappedBy = "operacao", cascade = CascadeType.PERSIST)
-	private MarteloInvertido marteloInvertido = null;
-	
-	@OneToOne(mappedBy = "operacao", cascade = CascadeType.PERSIST)
-	private Marubozu marubozu = null;
-	
-	@OneToOne(mappedBy = "operacao", cascade = CascadeType.PERSIST)
-	private Engolfo engolfo = null;
-	
-	@OneToOne(mappedBy = "operacao", cascade = CascadeType.PERSIST)
-	private Doji doji = null;
-	
-	@OneToOne(mappedBy = "operacao", cascade = CascadeType.PERSIST)
-	private PiercingLine piercingLine = null;
-	
-	@OneToOne(mappedBy = "operacao", cascade = CascadeType.PERSIST)
-	private TresSoldados tresSoldados = null;
-	
-	@OneToOne(mappedBy = "operacao", cascade = CascadeType.PERSIST)
-	private BebeAbandonado bebeAbandonado = null;
+	@Column
+	private LocalDate dataFinal;
 
 	@Column(name="start")
 	private boolean start = false;
 	
 	@Column(name="tipoEntrada")
-	private String tipoEntrada = null;
+	@Enumerated(EnumType.STRING)
+	private Entrada tipoEntradaEnum = null;
 	
 	@Column(name="precoEntrada")
 	private Double precoEntrada;
@@ -94,27 +82,14 @@ public class Operacao implements Serializable{
 	@Column(name="terceiroAlvoAtingido")
 	private Boolean terceiroAlvoAtingido = false;
 	
+	@Column
+	private Boolean operacaoFinalizada = false;
+	
 	@Column(name="porcentagemOperacaoFinal")
 	private Double porcentagemOperacaoFinal = 0.0;
 	
 	
-	public Operacao() {
-		
-	}
 	
-	public PiercingLine getPiercingLine() {
-		return piercingLine;
-	}
-
-	public void setPiercingLine(PiercingLine piercingLine) {
-		this.piercingLine = piercingLine;
-	}
-	
-	public Operacao(LocalDate dat, String nomeDoPapel, String padrao) {
-		this.dat = dat;
-		this.nomeDoPapel = nomeDoPapel;
-		this.padrao = padrao;
-	}
 	
 	public Double formataPreco(Double num) {
 		
@@ -127,93 +102,77 @@ public class Operacao implements Serializable{
 		
 		return 1000000.0;
 	}
-	
-	public Engolfo getEngolfo() {
-		return engolfo;
-	}
 
-	public void setEngolfo(Engolfo engolfo) {
-		this.engolfo = engolfo;
-	}
-	
-	public String getNomeDoPapel() {
-		return nomeDoPapel;
-	}
-
-	public LocalDate getData() {
+	public LocalDate getDat() {
 		return dat;
 	}
 
-	public boolean isStart() {
-		return start;
+	public void setDat(LocalDate dat) {
+		this.dat = dat;
 	}
 
-	public String getEntrada() {
-		return tipoEntrada;
-	}
-
-	public Double getPrecoEntrada() {
-		return precoEntrada;
-	}
-
-	public Double getPrecoStop() {
-		return precoStop;
-	}
-
-	public void setStart(boolean start) {
-		this.start = start;
-	}
-
-	public void setEntrada(String entrada) {
-		this.tipoEntrada = entrada;
-	}
-
-	public void setPrecoEntrada(Double precoEntrada) {
-		this.precoEntrada = formataPreco(precoEntrada);
-	}
-
-	public void setPrecoStop(Double precoLoss) {
-		this.precoStop = formataPreco(precoLoss);
-	}
-
-	public String getPadrao() {
-		return padrao;
-	}
-
-	public Double getPorcentagemOperacaoFinal() {
-		return porcentagemOperacaoFinal;
-	}
-
-	public void setPorcentagemOperacaoFinal(Double porcentagemOperacaoFinal) {
-		this.porcentagemOperacaoFinal = formataPreco(porcentagemOperacaoFinal);
-	}
-
-	public Martelo getMartelo() {
-		return martelo;
-	}
-
-	public void setMartelo(Martelo martelo) {
-		this.martelo = martelo;
-	}
-
-	public Marubozu getMarubozu() {
-		return marubozu;
-	}
-
-	public void setMarubozu(Marubozu marubozu) {
-		this.marubozu = marubozu;
+	public String getNomeDoPapel() {
+		return nomeDoPapel;
 	}
 
 	public void setNomeDoPapel(String nomeDoPapel) {
 		this.nomeDoPapel = nomeDoPapel;
 	}
 
-	public void setPadrao(String padrao) {
+	public PadroesEnum getPadraoEnum() {
+		return padraoEnum;
+	}
+
+	public void setPadraoEnum(PadroesEnum padraoEnum) {
+		this.padraoEnum = padraoEnum;
+	}
+
+	public Padrao getPadrao() {
+		return padrao;
+	}
+
+	public void setPadrao(Padrao padrao) {
 		this.padrao = padrao;
 	}
 
-	public void setTipoEntrada(String tipoEntrada) {
-		this.tipoEntrada = tipoEntrada;
+	public LocalDate getDataFinal() {
+		return dataFinal;
+	}
+
+	public void setDataFinal(LocalDate dataFinal) {
+		this.dataFinal = dataFinal;
+	}
+
+	public boolean isStart() {
+		return start;
+	}
+
+	public void setStart(boolean start) {
+		this.start = start;
+	}
+
+	public Entrada getTipoEntrada() {
+		return tipoEntradaEnum;
+	}
+
+	public void setTipoEntrada(Entrada tipoEntrada) {
+		this.tipoEntradaEnum = tipoEntrada;
+	}
+
+	public Double getPrecoEntrada() {
+		return precoEntrada;
+	}
+
+	public void setPrecoEntrada(Double precoEntrada) {
+		this.precoEntrada = precoEntrada;
+	}
+
+	public Double getPrecoStop() {
+		return precoStop;
+	}
+
+	public void setPrecoStop(Double precoStop) {
+		this.precoStop = precoStop;
 	}
 
 	public Double getPrecoPrimeiroAlvoFibonacci() {
@@ -221,7 +180,7 @@ public class Operacao implements Serializable{
 	}
 
 	public void setPrecoPrimeiroAlvoFibonacci(Double precoPrimeiroAlvoFibonacci) {
-		this.precoPrimeiroAlvoFibonacci = formataPreco(precoPrimeiroAlvoFibonacci);
+		this.precoPrimeiroAlvoFibonacci = precoPrimeiroAlvoFibonacci;
 	}
 
 	public Double getPrecoSegundoAlvoFibonacci() {
@@ -229,7 +188,7 @@ public class Operacao implements Serializable{
 	}
 
 	public void setPrecoSegundoAlvoFibonacci(Double precoSegundoAlvoFibonacci) {
-		this.precoSegundoAlvoFibonacci = formataPreco(precoSegundoAlvoFibonacci);
+		this.precoSegundoAlvoFibonacci = precoSegundoAlvoFibonacci;
 	}
 
 	public Double getPrecoTerceiroAlvoFibonacci() {
@@ -237,7 +196,7 @@ public class Operacao implements Serializable{
 	}
 
 	public void setPrecoTerceiroAlvoFibonacci(Double precoTerceiroAlvoFibonacci) {
-		this.precoTerceiroAlvoFibonacci = formataPreco(precoTerceiroAlvoFibonacci);
+		this.precoTerceiroAlvoFibonacci = precoTerceiroAlvoFibonacci;
 	}
 
 	public Boolean getPrimeiroAlvoAtingido() {
@@ -264,53 +223,31 @@ public class Operacao implements Serializable{
 		this.terceiroAlvoAtingido = terceiroAlvoAtingido;
 	}
 
+	public Boolean getOperacaoFinalizada() {
+		return operacaoFinalizada;
+	}
+
+	public void setOperacaoFinalizada(Boolean operacaoFinalizada) {
+		this.operacaoFinalizada = operacaoFinalizada;
+	}
+
+	public Double getPorcentagemOperacaoFinal() {
+		return porcentagemOperacaoFinal;
+	}
+
+	public void setPorcentagemOperacaoFinal(Double porcentagemOperacaoFinal) {
+		this.porcentagemOperacaoFinal = porcentagemOperacaoFinal;
+	}
+
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
 
-	public String getTipoEntrada() {
-		return tipoEntrada;
-	}
-
-	public Doji getDoji() {
-		return doji;
-	}
-
-	public void setDoji(Doji doji) {
-		this.doji = doji;
-	}
-
-	public LocalDate getDat() {
-		return dat;
-	}
-
-	public void setDat(LocalDate dat) {
+	public Operacao(LocalDate dat, String nomeDoPapel, PadroesEnum padraoEnum) {
+		super();
 		this.dat = dat;
+		this.nomeDoPapel = nomeDoPapel;
+		this.padraoEnum = padraoEnum;
 	}
-
-	public MarteloInvertido getMarteloInvertido() {
-		return marteloInvertido;
-	}
-
-	public void setMarteloInvertido(MarteloInvertido marteloInvertido) {
-		this.marteloInvertido = marteloInvertido;
-	}
-
-	public TresSoldados getTresSoldados() {
-		return tresSoldados;
-	}
-
-	public void setTresSoldados(TresSoldados tresSoldados) {
-		this.tresSoldados = tresSoldados;
-	}
-
-	public BebeAbandonado getBebeAbandonado() {
-		return bebeAbandonado;
-	}
-
-	public void setBebeAbandonado(BebeAbandonado bebeAbandonado) {
-		this.bebeAbandonado = bebeAbandonado;
-	}
-
-
 }
+	

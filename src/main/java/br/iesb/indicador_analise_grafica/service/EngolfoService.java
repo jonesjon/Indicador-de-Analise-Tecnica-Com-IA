@@ -20,8 +20,9 @@ public class EngolfoService {
 		engolfoRepository = engolfo;
 	}
 	
-	public static void adicionaEngolfo(Engolfo engolfo) {
-		engolfoRepository.save(engolfo);
-	}
+	/*
+	 * public static void adicionaEngolfo(Engolfo engolfo) {
+	 * engolfoRepository.save(engolfo); }
+	 */
 	
 }

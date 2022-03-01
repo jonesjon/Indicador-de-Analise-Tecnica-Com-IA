@@ -22,9 +22,10 @@ public class MarteloService {
 		marteloRepository = martelo;
 	}
 	
-	public static void adicionaMartelo(Martelo martelo) {
-		marteloRepository.save(martelo);
-	}
+	/*
+	 * public static void adicionaMartelo(Martelo martelo) {
+	 * marteloRepository.save(martelo); }
+	 */
 	
 	public static ArrayList<Martelo> getMartelosUltimoAno(){
 		return marteloRepository.getMartelosUltimoAno();
