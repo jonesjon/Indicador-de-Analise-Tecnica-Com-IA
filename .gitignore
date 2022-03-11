@@ -1,6 +1,8 @@
 .classpath
 .project
-.settings/**
+.settings/*
 bin/*
 target/*
 series-diarias/*
+"Indicador de An\303\241lise Gr\303\241fica com IA/Indicador de An\303\241lise Gr\303\241fica com IA/*
+.factorypath 
