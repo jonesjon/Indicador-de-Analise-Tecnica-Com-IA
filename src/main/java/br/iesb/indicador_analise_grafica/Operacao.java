@@ -23,7 +23,6 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "OPERACAO")
 @IdClass(OperacaoId.class)
-@Data
 public class Operacao {
 	
 	/**
@@ -102,7 +101,7 @@ public class Operacao {
 		
 		return 1000000.0;
 	}
-
+	
 	public LocalDate getDat() {
 		return dat;
 	}
@@ -245,7 +244,7 @@ public class Operacao {
 
 	public Operacao(LocalDate dat, String nomeDoPapel, PadroesEnum padraoEnum) {
 		super();
-		this.dat = dat;
+		setDat(dat);
 		this.nomeDoPapel = nomeDoPapel;
 		this.padraoEnum = padraoEnum;
 	}

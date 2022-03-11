@@ -3,6 +3,7 @@ package br.iesb.indicador_analise_grafica.padroes;
 import javax.persistence.*;
 
 import br.iesb.indicador_analise_grafica.Operacao;
+import br.iesb.indicador_analise_grafica_enum.PavioSuperior;
 
 @Entity
 @Table(name = "DOJI")
@@ -54,7 +55,5 @@ public class Doji extends Padrao{
 	public void setPavioInferior(int pavioInferior) {
 		this.pavioInferior = pavioInferior;
 	}
-
-
 }
 

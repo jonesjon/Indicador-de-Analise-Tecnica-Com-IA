@@ -3,7 +3,9 @@ package br.iesb.indicador_analise_grafica;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+import lombok.Data;
 
+@Data
 public class Candle {
 	
 
@@ -23,14 +25,20 @@ public class Candle {
 	public Candle(LocalDate date, String abertura, String maxima,
 				String minima, String fechamento, String volume, String papel) {
 		
-		this.abertura = Double.parseDouble(abertura)/100;
-		this.fechamento = Double.parseDouble(fechamento)/100;
-		this.maxima = Double.parseDouble(maxima)/100;
-		this.minima = Double.parseDouble(minima)/100;
-		this.volume = Double.parseDouble(volume)/100;
+		this.abertura = Double.parseDouble(formataNumero(abertura));
+		this.fechamento = Double.parseDouble(formataNumero(fechamento));
+		this.maxima = Double.parseDouble(formataNumero(maxima));
+		this.minima = Double.parseDouble(formataNumero(minima));
+		this.volume = Double.parseDouble(volume);
 		this.data = date;
 		this.papel = papel;
 		
+	}
+	
+	private static String formataNumero(String dado) {
+        Long lo = Long.parseLong(dado);
+        Float l = lo/100f;
+        return l.toString();
 	}
 	
 	public LocalDate getDate() {
@@ -42,8 +50,7 @@ public class Candle {
 	}
 
 	public double getMaxima() {
-		// TODO Auto-generated method stub
-		return 0;
+		return this.maxima;
 	}
 
 

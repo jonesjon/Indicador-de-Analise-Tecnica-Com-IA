@@ -3,6 +3,7 @@ package br.iesb.indicador_analise_grafica.padroes;
 import javax.persistence.*;
 
 import br.iesb.indicador_analise_grafica.Operacao;
+import br.iesb.indicador_analise_grafica_enum.PavioSuperior;
 import lombok.Data;
 
 @Entity
@@ -42,7 +43,6 @@ public class Marubozu extends Padrao{
 
 	public String getPavioInferior() {
 		return pavioInferior;
-	}
-	
+	}	
 
 }

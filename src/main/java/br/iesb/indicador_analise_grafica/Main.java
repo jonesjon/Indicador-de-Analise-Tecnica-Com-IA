@@ -3,6 +3,8 @@ package br.iesb.indicador_analise_grafica;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 import javax.persistence.Column;
@@ -10,6 +12,7 @@ import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.Id;
 
+import org.apache.tomcat.util.digester.ArrayStack;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -24,9 +27,11 @@ import br.iesb.indicador_analise_grafica_enum.Perfil;
 
 @SpringBootApplication
 public class Main {
+	
 
 	public static void main(String[] args) throws IOException, SQLException {
 		SpringApplication.run(Main.class, args);
+		
 		/*
 		 * long start = System.currentTimeMillis();
 		 * 
@@ -45,7 +50,7 @@ public class Main {
 		//TreinamentoRedeNeural.realizaTreinamentoProcurandoPadroesEmPapeisOperaveis();
 		
 		// segunda coisa é simular operações, onde deu stop e quais alvos
-		TreinamentoRedeNeural.confereAlvosDasOperacoesPossiveis();
+		//TreinamentoRedeNeural.confereAlvosDasOperacoesPossiveis();
 
 		// terceira coisa a seguir a gente fala.... 
 		// RedeNeural.preenchendoEstatisticaEngolfo(perfil);

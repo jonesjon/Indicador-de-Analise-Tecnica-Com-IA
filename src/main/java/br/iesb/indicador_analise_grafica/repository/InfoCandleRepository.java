@@ -35,5 +35,11 @@ public interface InfoCandleRepository extends CrudRepository<InfoCandle, InfoCan
 
 	@Query(value = "select * from INFO_CANDLE Where nomeDoPapel = ?1 and dat <= ?2 order by dat desc limit ?3", nativeQuery = true)
 	ArrayList<InfoCandle> findByUltimosCandles(String nomeDoPapel, LocalDate dat, int limit);
+	
+	@Query(value = "SELECT max(data) FROM InfoCandle")
+	public LocalDate findMaxDat();
+	
+	@Query(value = "SELECT * FROM ( select * from info_candle where nomeDoPapel = ?1 ORDER BY DAT DESC LIMIT 200 ) A ORDER BY DAT ASC;" , nativeQuery=true)
+	public ArrayList<InfoCandle> ultimos200Candles(String nomePapel);
 
 }

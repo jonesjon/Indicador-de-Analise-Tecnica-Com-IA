@@ -2,6 +2,7 @@ package br.iesb.indicador_analise_grafica.service;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Optional;
 
 import javax.annotation.PostConstruct;
 
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.iesb.indicador_analise_grafica.InfoCandle;
+import br.iesb.indicador_analise_grafica.controle.Controle;
+import br.iesb.indicador_analise_grafica.repository.ControleRepository;
 import br.iesb.indicador_analise_grafica.repository.InfoCandleRepository;
 
 @Service
@@ -17,6 +20,9 @@ public class InfoCandleService {
 	@Autowired
 	private InfoCandleRepository infoCandle;
 	private static InfoCandleRepository infoCandleRepository;
+	
+	@Autowired
+	private ControleRepository controleRepository;
 
 	@PostConstruct
 	public void getInfoCandleRepository() {
@@ -61,5 +67,24 @@ public class InfoCandleService {
 
 	public static int getQtdPapeis() {
 		return infoCandleRepository.findQtdPapeis();
+	}
+	
+	public Controle getControle( ) {
+		Optional<Controle> controle = controleRepository.findById(1L);
+		if(controle.isPresent()) 
+			return controle.get();
+		return null;
+	}
+	
+	public Controle saveControle(Controle controle) {
+		return controleRepository.save(controle);
+	}
+	
+	public LocalDate getMaxDate() {
+		return infoCandleRepository.findMaxDat();
+	}
+	
+	public ArrayList<InfoCandle> getUltimos200Candles(String nomePapel) {
+		return this.infoCandle.ultimos200Candles(nomePapel);
 	}
 }

@@ -70,6 +70,17 @@ public class InfoCandle implements Serializable {
 		this.volume = candle.volume;
 		this.data = candle.data;
 	}
+	
+	public InfoCandle(Candle candle) {
+		this.nomeDoPapel = candle.getPapel();
+		this.abertura = candle.getAbertura();
+		this.fechamento = candle.getFechamento();
+		this.maxima = candle.getMaxima();
+		this.minima = candle.getMinima();
+		this.volume = candle.getVolume();
+		this.data = candle.getData();
+
+	}
 
 	/*
 	 * public void setInfoCandlePK(InfoCandlePK infoCandlePK) { this.infoCandlePK =
