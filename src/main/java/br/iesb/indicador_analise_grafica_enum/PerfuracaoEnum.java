@@ -4,7 +4,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public enum Perfuracao {
+public enum PerfuracaoEnum {
 	
 	POUCA(1, 50),
 	MEDIANA(50, 100),
@@ -15,7 +15,7 @@ public enum Perfuracao {
 	private int min;
 	private  int max;
 	
-	Perfuracao(int min, int max){
+	PerfuracaoEnum(int min, int max){
 		this.min = min;
 		this.max = max;
 	}
@@ -28,21 +28,21 @@ public enum Perfuracao {
 		return max;
 	}
 	
-	public static List<Perfuracao> retornaPerfuracoes() {
-		return Arrays.asList(Perfuracao.values());
+	public static List<PerfuracaoEnum> retornaPerfuracoes() {
+		return Arrays.asList(PerfuracaoEnum.values());
 	}
 	
-	public static Perfuracao comparaPerfuracaoComInteiro(int perf) {
+	public static PerfuracaoEnum comparaPerfuracaoComInteiro(int perf) {
 		if(perf >= POUCA.min && perf < POUCA.max) {
-			return Perfuracao.POUCA;
+			return PerfuracaoEnum.POUCA;
 		}else if(perf >= MEDIANA.min && perf < MEDIANA.max) {
-			return Perfuracao.MEDIANA;
+			return PerfuracaoEnum.MEDIANA;
 		}else if(perf >= MUITA.min && perf < MUITA.max) {
-			return Perfuracao.MUITA;
+			return PerfuracaoEnum.MUITA;
 		}else if(perf >= EXTREMA.min && perf < EXTREMA.max) {
-			return Perfuracao.EXTREMA;
+			return PerfuracaoEnum.EXTREMA;
 		}
-		return Perfuracao.NULL;
+		return PerfuracaoEnum.NULL;
 	}
 
 }

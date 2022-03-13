@@ -1,12 +1,12 @@
 package br.iesb.indicador_analise_grafica_enum;
 
-public enum Entrada {
+public enum EntradaEnum {
 	
 	COMPRA("Compra"), VENDA("Venda");
 	
 	private String descricao;
 	
-	Entrada(String descricao){
+	EntradaEnum(String descricao){
 		this.descricao = descricao;
 	}
 	

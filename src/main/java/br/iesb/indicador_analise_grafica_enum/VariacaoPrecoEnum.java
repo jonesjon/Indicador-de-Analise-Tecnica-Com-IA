@@ -3,7 +3,7 @@ package br.iesb.indicador_analise_grafica_enum;
 import java.util.ArrayList;
 import java.util.List;
 
-public enum VariacaoPreco {
+public enum VariacaoPrecoEnum {
 
 	ATE2VEZES("Variacao de ate duas vezes"),
 	DE2A3VEZES("Variacao de duas a tres vezes"),
@@ -14,7 +14,7 @@ public enum VariacaoPreco {
 	
 	private String descricao;
 	
-	VariacaoPreco(String descricao){
+	VariacaoPrecoEnum(String descricao){
 		this.descricao = descricao;
 	}
 
@@ -22,9 +22,9 @@ public enum VariacaoPreco {
 		return descricao;
 	}
 	
-	public static List<VariacaoPreco> getListVariacaoEngolfo(){
+	public static List<VariacaoPrecoEnum> getListVariacaoEngolfo(){
 		
-		List<VariacaoPreco> variacao = new ArrayList<VariacaoPreco>();
+		List<VariacaoPrecoEnum> variacao = new ArrayList<VariacaoPrecoEnum>();
 		
 		variacao.add(ATE2VEZES);
 		variacao.add(DE2A3VEZES);
@@ -36,10 +36,10 @@ public enum VariacaoPreco {
 		
 	}
 	
-	public static VariacaoPreco comparaVariacaoPreco(String variacao) {
-		List<VariacaoPreco> listVariacao = getListVariacaoEngolfo();
+	public static VariacaoPrecoEnum comparaVariacaoPreco(String variacao) {
+		List<VariacaoPrecoEnum> listVariacao = getListVariacaoEngolfo();
 		
-		VariacaoPreco varRetorno = VariacaoPreco.NULL;
+		VariacaoPrecoEnum varRetorno = VariacaoPrecoEnum.NULL;
 		
 		for(int i=0; i<listVariacao.size(); i++) {
 			if(listVariacao.get(i).getDescricao().equals(variacao)) {

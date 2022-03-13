@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public enum PavioSuperior {
+public enum PavioSuperiorEnum {
 	
 	SEMPAVIO("Sem Pavio Superior", 1), 
 	PAVIO5PORCENTO("Até 5%", 2), 
@@ -22,7 +22,7 @@ public enum PavioSuperior {
 	private String descricao;
 	private int ID;
 	
-	PavioSuperior(String descricao, int ID){
+	PavioSuperiorEnum(String descricao, int ID){
 		this.descricao = descricao;
 		this.ID = ID;
 	}
@@ -35,8 +35,8 @@ public enum PavioSuperior {
 		return ID;
 	}
 	
-	public static List<PavioSuperior> getPavioSuperiorTresSoldados(){
-		List<PavioSuperior> list = new ArrayList<PavioSuperior>();
+	public static List<PavioSuperiorEnum> getPavioSuperiorTresSoldados(){
+		List<PavioSuperiorEnum> list = new ArrayList<PavioSuperiorEnum>();
 		
 		list.add(SEMPAVIO);
 		list.add(PAVIO5PORCENTO);
@@ -47,8 +47,8 @@ public enum PavioSuperior {
 		
 	}
 	
-	public static List<PavioSuperior> getPavioSuperiorMartelo() {
-		List<PavioSuperior> listAcimaDe = new ArrayList<PavioSuperior>();
+	public static List<PavioSuperiorEnum> getPavioSuperiorMartelo() {
+		List<PavioSuperiorEnum> listAcimaDe = new ArrayList<PavioSuperiorEnum>();
 		
 		listAcimaDe.add(SEMPAVIO);
 		listAcimaDe.add(PAVIO5PORCENTO);
@@ -58,8 +58,8 @@ public enum PavioSuperior {
 		return listAcimaDe;
 	}
 	
-	public static List<PavioSuperior> getPavioSuperiorEngolfo() {
-		List<PavioSuperior> listAcimaDe = new ArrayList<PavioSuperior>();
+	public static List<PavioSuperiorEnum> getPavioSuperiorEngolfo() {
+		List<PavioSuperiorEnum> listAcimaDe = new ArrayList<PavioSuperiorEnum>();
 		
 		listAcimaDe.add(SEMPAVIO);
 		listAcimaDe.add(PAVIO5PORCENTO);
@@ -70,14 +70,14 @@ public enum PavioSuperior {
 		return listAcimaDe;
 	}
 	
-	public static List<PavioSuperior> retornaPavios() {
-		return Arrays.asList(PavioSuperior.values());
+	public static List<PavioSuperiorEnum> retornaPavios() {
+		return Arrays.asList(PavioSuperiorEnum.values());
 	}
 	
-	public static PavioSuperior comparaPavioSuperior(String pavio) {
-		List<PavioSuperior> pavios = retornaPavios();
+	public static PavioSuperiorEnum comparaPavioSuperior(String pavio) {
+		List<PavioSuperiorEnum> pavios = retornaPavios();
 		
-		PavioSuperior pavioRetorno = NULL;
+		PavioSuperiorEnum pavioRetorno = NULL;
 		
 		for(int i=0; i<pavios.size(); i++) {
 			if(pavios.get(i).descricao.equals(pavio)) {

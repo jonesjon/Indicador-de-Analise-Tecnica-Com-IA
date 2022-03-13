@@ -3,14 +3,14 @@ package br.iesb.indicador_analise_grafica_enum;
 import java.util.ArrayList;
 import java.util.List;
 
-public enum PrecoAcimaMedia20 {
+public enum PrecoAcimaMedia20Enum {
 
 	SIM("1", 1), NAO("0", 0), NULL("null", -1);
 	
 	private String nome;
 	private int valor;
 	
-	PrecoAcimaMedia20(String nome, int valor) {
+	PrecoAcimaMedia20Enum(String nome, int valor) {
 		this.nome = nome;
 		this.valor = valor;
 	}
@@ -23,8 +23,8 @@ public enum PrecoAcimaMedia20 {
 		return valor;
 	}
 	
-	public static List<PrecoAcimaMedia20> getListPrecoAcimaMedia20(){
-		List<PrecoAcimaMedia20> list = new ArrayList<PrecoAcimaMedia20>();
+	public static List<PrecoAcimaMedia20Enum> getListPrecoAcimaMedia20(){
+		List<PrecoAcimaMedia20Enum> list = new ArrayList<PrecoAcimaMedia20Enum>();
 		
 		list.add(SIM);
 		list.add(NAO);
@@ -32,14 +32,14 @@ public enum PrecoAcimaMedia20 {
 		return list;
 	}
 	
-	public static PrecoAcimaMedia20 comparaPrecoAcimaMedia20(Boolean valor) {
+	public static PrecoAcimaMedia20Enum comparaPrecoAcimaMedia20(Boolean valor) {
 		
-		PrecoAcimaMedia20 precoRetorno = NULL;
+		PrecoAcimaMedia20Enum precoRetorno = NULL;
 		
 		if(valor == true) {
-			precoRetorno = PrecoAcimaMedia20.SIM;
+			precoRetorno = PrecoAcimaMedia20Enum.SIM;
 		}else {
-			precoRetorno = PrecoAcimaMedia20.NAO;
+			precoRetorno = PrecoAcimaMedia20Enum.NAO;
 		}
 		
 		return precoRetorno;

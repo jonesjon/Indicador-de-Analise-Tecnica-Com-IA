@@ -5,14 +5,14 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public enum TipoCandle {
+public enum TipoCandleEnum {
 	
 	POSITIVO("Positivo", 1), NEGATIVO("Negativo", 2), NEUTRO("Neutro", 3), NULL("Null", 4);
 	
 	private String tipo;
 	private int ID;
 	
-	TipoCandle(String tipo, int ID){
+	TipoCandleEnum(String tipo, int ID){
 		this.tipo = tipo;
 		this.ID = ID;
 	}
@@ -25,14 +25,14 @@ public enum TipoCandle {
 		return ID;
 	}
 	
-	public static List<TipoCandle> retornaTipos() {
-		return Arrays.asList(TipoCandle.values());
+	public static List<TipoCandleEnum> retornaTipos() {
+		return Arrays.asList(TipoCandleEnum.values());
 	}
 	
-	public static TipoCandle comparaTipoCandle(String tipoString) {
-		List<TipoCandle> tipos = retornaTipos();
+	public static TipoCandleEnum comparaTipoCandle(String tipoString) {
+		List<TipoCandleEnum> tipos = retornaTipos();
 		
-		TipoCandle tipoRetorno = TipoCandle.NULL;
+		TipoCandleEnum tipoRetorno = TipoCandleEnum.NULL;
 		
 		for(int i=0; i<tipos.size(); i++) {
 			if(tipos.get(i).getTipo().equals(tipoString)){
@@ -43,8 +43,8 @@ public enum TipoCandle {
 		return tipoRetorno;
 	}
 	
-	public static List<TipoCandle> retornaTiposSemNeutro() {
-		List<TipoCandle> tipo = new ArrayList<TipoCandle>();
+	public static List<TipoCandleEnum> retornaTiposSemNeutro() {
+		List<TipoCandleEnum> tipo = new ArrayList<TipoCandleEnum>();
 		
 		tipo.add(NEGATIVO);
 		tipo.add(POSITIVO);

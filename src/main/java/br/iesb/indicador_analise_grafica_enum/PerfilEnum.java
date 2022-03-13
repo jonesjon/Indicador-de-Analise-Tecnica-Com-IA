@@ -1,6 +1,6 @@
 package br.iesb.indicador_analise_grafica_enum;
 
-public enum Perfil {
+public enum PerfilEnum {
 	
 	ARROJADO("Arrojado", 60.0),
 	MODERADO("Moderado", 70.0),
@@ -9,7 +9,7 @@ public enum Perfil {
 	String definicao;
 	Double id;
 	
-	Perfil(String definicao, Double id){
+	PerfilEnum(String definicao, Double id){
 		this.definicao = definicao;
 		this.id = id;
 	}

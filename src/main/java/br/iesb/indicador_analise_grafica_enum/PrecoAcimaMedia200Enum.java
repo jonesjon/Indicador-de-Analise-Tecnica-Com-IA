@@ -3,14 +3,14 @@ package br.iesb.indicador_analise_grafica_enum;
 import java.util.ArrayList;
 import java.util.List;
 
-public enum PrecoAcimaMedia200 {
+public enum PrecoAcimaMedia200Enum {
 	
 	SIM("1", 1), NAO("0", 0), NULL("null", -1);
 	
 	private String nome;
 	private int valor;
 	
-	PrecoAcimaMedia200(String nome, int valor) {
+	PrecoAcimaMedia200Enum(String nome, int valor) {
 		this.nome = nome;
 		this.valor = valor;
 	}
@@ -23,8 +23,8 @@ public enum PrecoAcimaMedia200 {
 		return valor;
 	}
 	
-	public static List<PrecoAcimaMedia200> getListPrecoAcimaMedia200(){
-		List<PrecoAcimaMedia200> list = new ArrayList<PrecoAcimaMedia200>();
+	public static List<PrecoAcimaMedia200Enum> getListPrecoAcimaMedia200(){
+		List<PrecoAcimaMedia200Enum> list = new ArrayList<PrecoAcimaMedia200Enum>();
 		
 		list.add(SIM);
 		list.add(NAO);
@@ -32,18 +32,22 @@ public enum PrecoAcimaMedia200 {
 		return list;
 	}
 	
-	public static PrecoAcimaMedia200 comparaPrecoAcimaMedia200(Boolean valor) {
+	public static PrecoAcimaMedia200Enum comparaPrecoAcimaMedia200(Boolean valor) {
 		
-		PrecoAcimaMedia200 precoRetorno = NULL;
+		PrecoAcimaMedia200Enum precoRetorno = NULL;
 		
 		if(valor == true) {
-			precoRetorno = PrecoAcimaMedia200.SIM;
+			precoRetorno = PrecoAcimaMedia200Enum.SIM;
 		}else {
-			precoRetorno = PrecoAcimaMedia200.NAO;
+			precoRetorno = PrecoAcimaMedia200Enum.NAO;
 		}
 		
 		return precoRetorno;
 		
+	}
+	
+	public PrecoAcimaMedia200Enum[] getAll() {
+		return PrecoAcimaMedia200Enum.values();
 	}
 
 }
