@@ -12,7 +12,7 @@ import java.util.stream.Collectors;
 import br.iesb.indicador_analise_grafica.service.InfoCandleService;
 import br.iesb.indicador_analise_grafica.service.OperacaoService;
 import br.iesb.indicador_analise_grafica.service.PapeisOperaveisService;
-import br.iesb.indicador_analise_grafica_enum.Entrada;
+import br.iesb.indicador_analise_grafica_enum.EntradaEnum;
 
 public class TreinamentoRedeNeural {
 
@@ -72,7 +72,7 @@ public class TreinamentoRedeNeural {
 
 	}
 
-	public static void realizaTreinamentoProcurandoPadroesEmPapeisOperaveis() {
+	public static void realizaTreinamentoProcurandoPadroesEmPapeisOperaveis(LocalDate dataFiltro) {
 
 		System.out.println("Iniciando busca por padroes...");
 
@@ -84,34 +84,63 @@ public class TreinamentoRedeNeural {
 			String nomeDoPapel = po.get(i).getNomeDoPapel();
 			
 			grafico.clear();
+			
 			grafico = InfoCandleService.getInfoCandlePeloNome(nomeDoPapel);
-		
+			
+			if(dataFiltro != null) {
+				Boolean temDataFiltro = false;
+				Boolean res = false;
+				for(int z = grafico.size()-1 ; z >= 0; z--) {
+					res = grafico.get(z).getData().isEqual(dataFiltro);
+					if(Boolean.TRUE.equals(res)) {
+						temDataFiltro = true;
+						break;
+					}
+				}
+				
+				if(Boolean.FALSE.equals(temDataFiltro)) {
+					System.out.println("Não tem candle para a data desejada: " + dataFiltro.toString() + 
+							" no papel: " + po.get(i).getNomeDoPapel());
+					continue;
+				}
+			}
+			
 			System.out.println();
 			System.out.println("Papel: " + nomeDoPapel);
 			System.out.println();
 			System.out.println("Procurando Marubozu...");
-			RedeNeural.procuraPadraoMarubozu(grafico, LIMITDECANDLEMARUBOZU);
+			RedeNeural.procuraPadraoMarubozu(dataFiltro == null ? grafico : 
+				new ArrayList<InfoCandle>(grafico.subList(grafico.size() - 6, grafico.size())), 
+				LIMITDECANDLEMARUBOZU); // mandar ultimos 6
 			System.out.println();
 			System.out.println("Procurando Martelo...");
-			RedeNeural.procuraPadraoMartelo(grafico);
+			RedeNeural.procuraPadraoMartelo(dataFiltro == null ? grafico : 
+				new ArrayList<InfoCandle>(grafico.subList(grafico.size() - 1, grafico.size()))); // mandar ultimos 1
 			System.out.println();
 			System.out.println("Procurando Martelo Invertido...");
-			RedeNeural.procuraPadraoMarteloInvertido(grafico);
+			RedeNeural.procuraPadraoMarteloInvertido(dataFiltro == null ? grafico : 
+				new ArrayList<InfoCandle>(grafico.subList(grafico.size() - 1, grafico.size()))); // mandar ultimos 1
 			System.out.println();
 			System.out.println("Procurando Doji...");
-			RedeNeural.procuraPadraoDoji(grafico);
+			RedeNeural.procuraPadraoDoji(dataFiltro == null ? grafico : 
+				new ArrayList<InfoCandle>(grafico.subList(grafico.size() - 1, grafico.size()))); // mandar ultimos 1
 			System.out.println();
 			System.out.println("Procurando Piercing Line...");
-			RedeNeural.procuraPadraoPiercingLine(grafico);
+			RedeNeural.procuraPadraoPiercingLine(dataFiltro == null ? grafico : 
+				new ArrayList<InfoCandle>(grafico.subList(grafico.size() - 2, grafico.size()))); // mandar ultimos 2
 			System.out.println();
 			System.out.println("Procurando Engolfo...");
-			RedeNeural.procuraPadraoEngolfo(grafico, LIMITDECANDLEENGOLFO);
+			RedeNeural.procuraPadraoEngolfo(dataFiltro == null ? grafico : 
+				new ArrayList<InfoCandle>(grafico.subList(grafico.size() - 2, grafico.size())), 
+				LIMITDECANDLEENGOLFO); // mandar ultimos 2
 			System.out.println();
 			System.out.println("Procurando Tres Soldados...");
-			RedeNeural.procuraPadraoTresSoldados(grafico);
+			RedeNeural.procuraPadraoTresSoldados(dataFiltro == null ? grafico : 
+				new ArrayList<InfoCandle>(grafico.subList(grafico.size() - 3, grafico.size()))); // mandar ultimos 3
 			System.out.println();
 			System.out.println("Procurando Bebe Abandonado...");
-			RedeNeural.procuraPadraoBebeAbandonado(grafico);
+			RedeNeural.procuraPadraoBebeAbandonado(dataFiltro == null ? grafico : 
+				new ArrayList<InfoCandle>(grafico.subList(grafico.size() - 3, grafico.size()))); // mandar ultimos 3
 
 		}
 
@@ -464,11 +493,11 @@ public class TreinamentoRedeNeural {
 	}
 
 	private static boolean verificaSeOperacaoVenda(Operacao operacao) {
-		return operacao.getTipoEntrada() == Entrada.VENDA;
+		return operacao.getTipoEntrada() == EntradaEnum.VENDA;
 	}
 
 	private static boolean verificaSeOperacaoCompra(Operacao operacao) {
-		return operacao.getTipoEntrada() == Entrada.COMPRA;
+		return operacao.getTipoEntrada() == EntradaEnum.COMPRA;
 	}
 
 	private static Boolean verificaContinuidadeDoGrafico(LocalDate data, ArrayList<InfoCandle> verif) {

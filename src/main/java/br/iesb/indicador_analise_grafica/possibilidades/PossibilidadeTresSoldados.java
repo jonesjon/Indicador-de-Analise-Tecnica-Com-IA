@@ -1,31 +1,31 @@
 package br.iesb.indicador_analise_grafica.possibilidades;
 
 import br.iesb.indicador_analise_grafica_enum.PadroesEnum;
-import br.iesb.indicador_analise_grafica_enum.PavioInferior;
-import br.iesb.indicador_analise_grafica_enum.PavioSuperior;
-import br.iesb.indicador_analise_grafica_enum.PrecoAcimaMedia20;
-import br.iesb.indicador_analise_grafica_enum.PrecoAcimaMedia200;
-import br.iesb.indicador_analise_grafica_enum.PrecoAcimaMedia8;
-import br.iesb.indicador_analise_grafica_enum.VolumeAcimaMedia20;
+import br.iesb.indicador_analise_grafica_enum.PavioInferiorEnum;
+import br.iesb.indicador_analise_grafica_enum.PavioSuperiorEnum;
+import br.iesb.indicador_analise_grafica_enum.PrecoAcimaMedia20Enum;
+import br.iesb.indicador_analise_grafica_enum.PrecoAcimaMedia200Enum;
+import br.iesb.indicador_analise_grafica_enum.PrecoAcimaMedia8Enum;
+import br.iesb.indicador_analise_grafica_enum.VolumeAcimaMedia20Enum;
 
 public class PossibilidadeTresSoldados {
 	
 	private PadroesEnum padrao;
 	
-	private PavioSuperior pavioSuperiorPrimeiroCandle;
+	private PavioSuperiorEnum pavioSuperiorPrimeiroCandle;
 
-	private PavioInferior pavioInferiorPrimeiroCandle;
+	private PavioInferiorEnum pavioInferiorPrimeiroCandle;
 	
-	private PavioSuperior pavioSuperiorTerceiroCandle;
+	private PavioSuperiorEnum pavioSuperiorTerceiroCandle;
 
-	private PavioInferior pavioInferiorTerceiroCandle;
+	private PavioInferiorEnum pavioInferiorTerceiroCandle;
 	
-	private PrecoAcimaMedia200 precoAcimaMedia200;
+	private PrecoAcimaMedia200Enum precoAcimaMedia200;
 	
 
-	public PossibilidadeTresSoldados(PadroesEnum padrao, PavioSuperior pavioSuperiorPrimeiroCandle,
-			PavioInferior pavioInferiorPrimeiroCandle, PavioSuperior pavioSuperiorTerceiroCandle,
-			PavioInferior pavioInferiorTerceiroCandle, PrecoAcimaMedia200 precoAcimaMedia200) {
+	public PossibilidadeTresSoldados(PadroesEnum padrao, PavioSuperiorEnum pavioSuperiorPrimeiroCandle,
+			PavioInferiorEnum pavioInferiorPrimeiroCandle, PavioSuperiorEnum pavioSuperiorTerceiroCandle,
+			PavioInferiorEnum pavioInferiorTerceiroCandle, PrecoAcimaMedia200Enum precoAcimaMedia200) {
 		
 		this.padrao = padrao;
 		this.pavioSuperiorPrimeiroCandle = pavioSuperiorPrimeiroCandle;
@@ -35,43 +35,43 @@ public class PossibilidadeTresSoldados {
 		this.precoAcimaMedia200 = precoAcimaMedia200;
 	}
 
-	public PavioSuperior getPavioSuperiorPrimeiroCandle() {
+	public PavioSuperiorEnum getPavioSuperiorPrimeiroCandle() {
 		return pavioSuperiorPrimeiroCandle;
 	}
 
-	public void setPavioSuperiorPrimeiroCandle(PavioSuperior pavioSuperiorPrimeiroCandle) {
+	public void setPavioSuperiorPrimeiroCandle(PavioSuperiorEnum pavioSuperiorPrimeiroCandle) {
 		this.pavioSuperiorPrimeiroCandle = pavioSuperiorPrimeiroCandle;
 	}
 
-	public PavioInferior getPavioInferiorPrimeiroCandle() {
+	public PavioInferiorEnum getPavioInferiorPrimeiroCandle() {
 		return pavioInferiorPrimeiroCandle;
 	}
 
-	public void setPavioInferiorPrimeiroCandle(PavioInferior pavioInferiorPrimeiroCandle) {
+	public void setPavioInferiorPrimeiroCandle(PavioInferiorEnum pavioInferiorPrimeiroCandle) {
 		this.pavioInferiorPrimeiroCandle = pavioInferiorPrimeiroCandle;
 	}
 
-	public PavioSuperior getPavioSuperiorTerceiroCandle() {
+	public PavioSuperiorEnum getPavioSuperiorTerceiroCandle() {
 		return pavioSuperiorTerceiroCandle;
 	}
 
-	public void setPavioSuperiorTerceiroCandle(PavioSuperior pavioSuperiorTerceiroCandle) {
+	public void setPavioSuperiorTerceiroCandle(PavioSuperiorEnum pavioSuperiorTerceiroCandle) {
 		this.pavioSuperiorTerceiroCandle = pavioSuperiorTerceiroCandle;
 	}
 
-	public PavioInferior getPavioInferiorTerceiroCandle() {
+	public PavioInferiorEnum getPavioInferiorTerceiroCandle() {
 		return pavioInferiorTerceiroCandle;
 	}
 
-	public void setPavioInferiorTerceiroCandle(PavioInferior pavioInferiorTerceiroCandle) {
+	public void setPavioInferiorTerceiroCandle(PavioInferiorEnum pavioInferiorTerceiroCandle) {
 		this.pavioInferiorTerceiroCandle = pavioInferiorTerceiroCandle;
 	}
 
-	public PrecoAcimaMedia200 getPrecoAcimaMedia200() {
+	public PrecoAcimaMedia200Enum getPrecoAcimaMedia200() {
 		return precoAcimaMedia200;
 	}
 
-	public void setPrecoAcimaMedia200(PrecoAcimaMedia200 precoAcimaMedia200) {
+	public void setPrecoAcimaMedia200(PrecoAcimaMedia200Enum precoAcimaMedia200) {
 		this.precoAcimaMedia200 = precoAcimaMedia200;
 	}
 

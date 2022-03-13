@@ -19,7 +19,7 @@ import org.hibernate.annotations.DynamicUpdate;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import br.iesb.indicador_analise_grafica.Operacao;
-import br.iesb.indicador_analise_grafica_enum.Entrada;
+import br.iesb.indicador_analise_grafica_enum.EntradaEnum;
 import br.iesb.indicador_analise_grafica_enum.PadroesEnum;
 import lombok.Data;
 

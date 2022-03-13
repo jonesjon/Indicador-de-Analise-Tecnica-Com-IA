@@ -54,19 +54,20 @@ import br.iesb.indicador_analise_grafica.service.MarubozuService;
 import br.iesb.indicador_analise_grafica.service.OperacaoService;
 import br.iesb.indicador_analise_grafica.service.PiercingLineService;
 import br.iesb.indicador_analise_grafica.service.TresSoldadosService;
-import br.iesb.indicador_analise_grafica_enum.Entrada;
+import br.iesb.indicador_analise_grafica_enum.EntradaEnum;
 import br.iesb.indicador_analise_grafica_enum.PadroesEnum;
-import br.iesb.indicador_analise_grafica_enum.PavioInferior;
-import br.iesb.indicador_analise_grafica_enum.PavioSuperior;
-import br.iesb.indicador_analise_grafica_enum.Perfil;
-import br.iesb.indicador_analise_grafica_enum.Perfuracao;
-import br.iesb.indicador_analise_grafica_enum.PrecoAcimaMedia20;
-import br.iesb.indicador_analise_grafica_enum.PrecoAcimaMedia200;
-import br.iesb.indicador_analise_grafica_enum.PrecoAcimaMedia8;
-import br.iesb.indicador_analise_grafica_enum.TendenciaMediaCurta;
-import br.iesb.indicador_analise_grafica_enum.TipoCandle;
-import br.iesb.indicador_analise_grafica_enum.VariacaoPreco;
-import br.iesb.indicador_analise_grafica_enum.VolumeAcimaMedia20;
+import br.iesb.indicador_analise_grafica_enum.PavioInferiorEnum;
+import br.iesb.indicador_analise_grafica_enum.PavioSuperiorEnum;
+import br.iesb.indicador_analise_grafica_enum.PerfilEnum;
+import br.iesb.indicador_analise_grafica_enum.PerfuracaoEnum;
+import br.iesb.indicador_analise_grafica_enum.PrecoAcimaMedia20Enum;
+import br.iesb.indicador_analise_grafica_enum.PrecoAcimaMedia200Enum;
+import br.iesb.indicador_analise_grafica_enum.PrecoAcimaMedia8Enum;
+import br.iesb.indicador_analise_grafica_enum.TendenciaMediaCurtaEnum;
+import br.iesb.indicador_analise_grafica_enum.TipoCandleEnum;
+import br.iesb.indicador_analise_grafica_enum.VariacaoPrecoEnum;
+import br.iesb.indicador_analise_grafica_enum.VolumeAcimaMedia20Enum;
+import lombok.Data;
 
 public class RedeNeural implements NeuralNetListener {
 
@@ -109,14 +110,14 @@ public class RedeNeural implements NeuralNetListener {
 					operacao.setNomeDoPapel(infoCandle.getNomeDoPapel());
 					operacao.setDat(infoCandle.getData());
 					operacao.setPadraoEnum(PadroesEnum.MARTELO);
-					operacao.setTipoEntrada(Entrada.COMPRA);
+					operacao.setTipoEntrada(EntradaEnum.COMPRA);
 					operacao.setPrecoEntrada(setPrecoEntradaCompra(infoCandle));
 					operacao.setPrecoStop(setPrecoStopCompra(infoCandle));
 					operacao.setPrecoPrimeiroAlvoFibonacci(
-							calculaPrecoPrimeiroAlvoFibonacci(infoCandle, Entrada.COMPRA));
-					operacao.setPrecoSegundoAlvoFibonacci(calculaPrecoSegundoAlvoFibonacci(infoCandle, Entrada.COMPRA));
+							calculaPrecoPrimeiroAlvoFibonacci(infoCandle, EntradaEnum.COMPRA));
+					operacao.setPrecoSegundoAlvoFibonacci(calculaPrecoSegundoAlvoFibonacci(infoCandle, EntradaEnum.COMPRA));
 					operacao.setPrecoTerceiroAlvoFibonacci(
-							calculaPrecoTerceiroAlvoFibonacci(infoCandle, Entrada.COMPRA));
+							calculaPrecoTerceiroAlvoFibonacci(infoCandle, EntradaEnum.COMPRA));
 
 					Martelo martelo = new Martelo();
 
@@ -162,14 +163,14 @@ public class RedeNeural implements NeuralNetListener {
 
 					Operacao operacao = new Operacao(infoCandle.getData(), infoCandle.getNomeDoPapel(),
 							PadroesEnum.MARTELOINVERTIDO);
-					operacao.setTipoEntrada(Entrada.VENDA);
+					operacao.setTipoEntrada(EntradaEnum.VENDA);
 					operacao.setPrecoEntrada(setPrecoEntradaVenda(infoCandle));
 					operacao.setPrecoStop(setPrecoStopVenda(infoCandle));
 					operacao.setPrecoPrimeiroAlvoFibonacci(
-							calculaPrecoPrimeiroAlvoFibonacci(infoCandle, Entrada.VENDA));
-					operacao.setPrecoSegundoAlvoFibonacci(calculaPrecoSegundoAlvoFibonacci(infoCandle, Entrada.VENDA));
+							calculaPrecoPrimeiroAlvoFibonacci(infoCandle, EntradaEnum.VENDA));
+					operacao.setPrecoSegundoAlvoFibonacci(calculaPrecoSegundoAlvoFibonacci(infoCandle, EntradaEnum.VENDA));
 					operacao.setPrecoTerceiroAlvoFibonacci(
-							calculaPrecoTerceiroAlvoFibonacci(infoCandle, Entrada.VENDA));
+							calculaPrecoTerceiroAlvoFibonacci(infoCandle, EntradaEnum.VENDA));
 
 					MarteloInvertido marteloInvertido = new MarteloInvertido();
 
@@ -229,17 +230,17 @@ public class RedeNeural implements NeuralNetListener {
 					operacao.setNomeDoPapel(infoCandle.getNomeDoPapel());
 					operacao.setPadraoEnum(PadroesEnum.MARUBOZU);
 
-					if (tipoCandle(infoCandle) == TipoCandle.POSITIVO) {
+					if (tipoCandle(infoCandle) == TipoCandleEnum.POSITIVO) {
 
-						operacao.setTipoEntrada(Entrada.COMPRA);
+						operacao.setTipoEntrada(EntradaEnum.COMPRA);
 						operacao.setPrecoEntrada(setPrecoEntradaCompra(infoCandle));
 						operacao.setPrecoStop(setPrecoStopCompra(infoCandle));
 						operacao.setPrecoPrimeiroAlvoFibonacci(
-								calculaPrecoPrimeiroAlvoFibonacci(infoCandle, Entrada.COMPRA));
+								calculaPrecoPrimeiroAlvoFibonacci(infoCandle, EntradaEnum.COMPRA));
 						operacao.setPrecoSegundoAlvoFibonacci(
-								calculaPrecoSegundoAlvoFibonacci(infoCandle, Entrada.COMPRA));
+								calculaPrecoSegundoAlvoFibonacci(infoCandle, EntradaEnum.COMPRA));
 						operacao.setPrecoTerceiroAlvoFibonacci(
-								calculaPrecoTerceiroAlvoFibonacci(infoCandle, Entrada.COMPRA));
+								calculaPrecoTerceiroAlvoFibonacci(infoCandle, EntradaEnum.COMPRA));
 
 						Marubozu marubozu = new Marubozu(tipoCandle(infoCandle).getTipo(),
 								classificaPavioSuperior(pavioSuperior).getDescricao(),
@@ -261,15 +262,15 @@ public class RedeNeural implements NeuralNetListener {
 						return true;
 					} else {
 
-						operacao.setTipoEntrada(Entrada.VENDA);
+						operacao.setTipoEntrada(EntradaEnum.VENDA);
 						operacao.setPrecoEntrada(setPrecoEntradaVenda(infoCandle));
 						operacao.setPrecoStop(setPrecoStopVenda(infoCandle));
 						operacao.setPrecoPrimeiroAlvoFibonacci(
-								calculaPrecoPrimeiroAlvoFibonacci(infoCandle, Entrada.VENDA));
+								calculaPrecoPrimeiroAlvoFibonacci(infoCandle, EntradaEnum.VENDA));
 						operacao.setPrecoSegundoAlvoFibonacci(
-								calculaPrecoSegundoAlvoFibonacci(infoCandle, Entrada.VENDA));
+								calculaPrecoSegundoAlvoFibonacci(infoCandle, EntradaEnum.VENDA));
 						operacao.setPrecoTerceiroAlvoFibonacci(
-								calculaPrecoTerceiroAlvoFibonacci(infoCandle, Entrada.VENDA));
+								calculaPrecoTerceiroAlvoFibonacci(infoCandle, EntradaEnum.VENDA));
 
 						Marubozu marubozu = new Marubozu(tipoCandle(infoCandle).getTipo(),
 								classificaPavioSuperior(pavioSuperior).getDescricao(),
@@ -307,7 +308,7 @@ public class RedeNeural implements NeuralNetListener {
 			InfoCandle primeiroCandle = grafico.get(i);
 			InfoCandle segundoCandle = grafico.get(i + 1);
 
-			if (tipoCandle(primeiroCandle) == TipoCandle.POSITIVO) {
+			if (tipoCandle(primeiroCandle) == TipoCandleEnum.POSITIVO) {
 
 				if (condicaoPiercingLineDeBaixa(primeiroCandle, segundoCandle)) {
 
@@ -317,15 +318,15 @@ public class RedeNeural implements NeuralNetListener {
 					operacao.setDat(segundoCandle.getData());
 					operacao.setNomeDoPapel(segundoCandle.getNomeDoPapel());
 					operacao.setPadraoEnum(PadroesEnum.DARKCLOUD);
-					operacao.setTipoEntrada(Entrada.VENDA);
+					operacao.setTipoEntrada(EntradaEnum.VENDA);
 					operacao.setPrecoEntrada(setPrecoEntradaVenda(segundoCandle));
 					operacao.setPrecoStop(setPrecoStopVenda(segundoCandle));
 					operacao.setPrecoPrimeiroAlvoFibonacci(
-							calculaPrecoPrimeiroAlvoFibonacci(segundoCandle, Entrada.VENDA));
+							calculaPrecoPrimeiroAlvoFibonacci(segundoCandle, EntradaEnum.VENDA));
 					operacao.setPrecoSegundoAlvoFibonacci(
-							calculaPrecoSegundoAlvoFibonacci(segundoCandle, Entrada.VENDA));
+							calculaPrecoSegundoAlvoFibonacci(segundoCandle, EntradaEnum.VENDA));
 					operacao.setPrecoTerceiroAlvoFibonacci(
-							calculaPrecoTerceiroAlvoFibonacci(segundoCandle, Entrada.VENDA));
+							calculaPrecoTerceiroAlvoFibonacci(segundoCandle, EntradaEnum.VENDA));
 
 					PiercingLine piercingLine = new PiercingLine();
 
@@ -343,7 +344,7 @@ public class RedeNeural implements NeuralNetListener {
 
 				}
 
-			} else if (tipoCandle(primeiroCandle) == TipoCandle.NEGATIVO) {
+			} else if (tipoCandle(primeiroCandle) == TipoCandleEnum.NEGATIVO) {
 
 				if (condicaoPiercingLineDeAlta(primeiroCandle, segundoCandle)) {
 
@@ -353,15 +354,15 @@ public class RedeNeural implements NeuralNetListener {
 					operacao.setDat(segundoCandle.getData());
 					operacao.setNomeDoPapel(segundoCandle.getNomeDoPapel());
 					operacao.setPadraoEnum(PadroesEnum.PIERCINGLINE);
-					operacao.setTipoEntrada(Entrada.COMPRA);
+					operacao.setTipoEntrada(EntradaEnum.COMPRA);
 					operacao.setPrecoEntrada(setPrecoEntradaCompra(segundoCandle));
 					operacao.setPrecoStop(setPrecoStopCompra(segundoCandle));
 					operacao.setPrecoPrimeiroAlvoFibonacci(
-							calculaPrecoPrimeiroAlvoFibonacci(segundoCandle, Entrada.COMPRA));
+							calculaPrecoPrimeiroAlvoFibonacci(segundoCandle, EntradaEnum.COMPRA));
 					operacao.setPrecoSegundoAlvoFibonacci(
-							calculaPrecoSegundoAlvoFibonacci(segundoCandle, Entrada.COMPRA));
+							calculaPrecoSegundoAlvoFibonacci(segundoCandle, EntradaEnum.COMPRA));
 					operacao.setPrecoTerceiroAlvoFibonacci(
-							calculaPrecoTerceiroAlvoFibonacci(segundoCandle, Entrada.COMPRA));
+							calculaPrecoTerceiroAlvoFibonacci(segundoCandle, EntradaEnum.COMPRA));
 
 					PiercingLine piercingLine = new PiercingLine();
 
@@ -413,12 +414,12 @@ public class RedeNeural implements NeuralNetListener {
 				operacao.setDat(terceiroCandle.getData());
 				operacao.setNomeDoPapel(terceiroCandle.getNomeDoPapel());
 				operacao.setPadraoEnum(PadroesEnum.TRESSOLDADOSDEALTA);
-				operacao.setTipoEntrada(Entrada.COMPRA);
+				operacao.setTipoEntrada(EntradaEnum.COMPRA);
 				operacao.setPrecoEntrada(setPrecoEntradaCompra(terceiroCandle));
 				operacao.setPrecoStop(setPrecoStopCompra(primeiroCandle));
-				operacao.setPrecoPrimeiroAlvoFibonacci(calculaPrecoPrimeiroAlvoFibonacci(todosCandles, Entrada.COMPRA));
-				operacao.setPrecoSegundoAlvoFibonacci(calculaPrecoSegundoAlvoFibonacci(todosCandles, Entrada.COMPRA));
-				operacao.setPrecoTerceiroAlvoFibonacci(calculaPrecoTerceiroAlvoFibonacci(todosCandles, Entrada.COMPRA));
+				operacao.setPrecoPrimeiroAlvoFibonacci(calculaPrecoPrimeiroAlvoFibonacci(todosCandles, EntradaEnum.COMPRA));
+				operacao.setPrecoSegundoAlvoFibonacci(calculaPrecoSegundoAlvoFibonacci(todosCandles, EntradaEnum.COMPRA));
+				operacao.setPrecoTerceiroAlvoFibonacci(calculaPrecoTerceiroAlvoFibonacci(todosCandles, EntradaEnum.COMPRA));
 
 				TresSoldados tresSoldados = new TresSoldados();
 
@@ -461,12 +462,12 @@ public class RedeNeural implements NeuralNetListener {
 				operacao.setDat(terceiroCandle.getData());
 				operacao.setNomeDoPapel(terceiroCandle.getNomeDoPapel());
 				operacao.setPadraoEnum(PadroesEnum.TRESSOLDADOSDEBAIXA);
-				operacao.setTipoEntrada(Entrada.VENDA);
+				operacao.setTipoEntrada(EntradaEnum.VENDA);
 				operacao.setPrecoEntrada(setPrecoEntradaVenda(terceiroCandle));
 				operacao.setPrecoStop(setPrecoStopVenda(primeiroCandle));
-				operacao.setPrecoPrimeiroAlvoFibonacci(calculaPrecoPrimeiroAlvoFibonacci(todosCandles, Entrada.VENDA));
-				operacao.setPrecoSegundoAlvoFibonacci(calculaPrecoSegundoAlvoFibonacci(todosCandles, Entrada.VENDA));
-				operacao.setPrecoTerceiroAlvoFibonacci(calculaPrecoTerceiroAlvoFibonacci(todosCandles, Entrada.VENDA));
+				operacao.setPrecoPrimeiroAlvoFibonacci(calculaPrecoPrimeiroAlvoFibonacci(todosCandles, EntradaEnum.VENDA));
+				operacao.setPrecoSegundoAlvoFibonacci(calculaPrecoSegundoAlvoFibonacci(todosCandles, EntradaEnum.VENDA));
+				operacao.setPrecoTerceiroAlvoFibonacci(calculaPrecoTerceiroAlvoFibonacci(todosCandles, EntradaEnum.VENDA));
 
 				TresSoldados tresSoldados = new TresSoldados();
 
@@ -525,12 +526,12 @@ public class RedeNeural implements NeuralNetListener {
 				operacao.setDat(terceiroCandle.getData());
 				operacao.setNomeDoPapel(terceiroCandle.getNomeDoPapel());
 				operacao.setPadraoEnum(PadroesEnum.BEBEABANDONADODEBAIXA);
-				operacao.setTipoEntrada(Entrada.VENDA);
+				operacao.setTipoEntrada(EntradaEnum.VENDA);
 				operacao.setPrecoEntrada(setPrecoEntradaVenda(terceiroCandle));
 				operacao.setPrecoStop(setPrecoStopVenda(segundoCandle));
-				operacao.setPrecoPrimeiroAlvoFibonacci(calculaPrecoPrimeiroAlvoFibonacci(todosCandles, Entrada.VENDA));
-				operacao.setPrecoSegundoAlvoFibonacci(calculaPrecoSegundoAlvoFibonacci(todosCandles, Entrada.VENDA));
-				operacao.setPrecoTerceiroAlvoFibonacci(calculaPrecoTerceiroAlvoFibonacci(todosCandles, Entrada.VENDA));
+				operacao.setPrecoPrimeiroAlvoFibonacci(calculaPrecoPrimeiroAlvoFibonacci(todosCandles, EntradaEnum.VENDA));
+				operacao.setPrecoSegundoAlvoFibonacci(calculaPrecoSegundoAlvoFibonacci(todosCandles, EntradaEnum.VENDA));
+				operacao.setPrecoTerceiroAlvoFibonacci(calculaPrecoTerceiroAlvoFibonacci(todosCandles, EntradaEnum.VENDA));
 
 				BebeAbandonado bebeAbandonado = new BebeAbandonado();
 
@@ -562,12 +563,12 @@ public class RedeNeural implements NeuralNetListener {
 				operacao.setDat(terceiroCandle.getData());
 				operacao.setNomeDoPapel(terceiroCandle.getNomeDoPapel());
 				operacao.setPadraoEnum(PadroesEnum.BEBEABANDONADODEALTA);
-				operacao.setTipoEntrada(Entrada.COMPRA);
+				operacao.setTipoEntrada(EntradaEnum.COMPRA);
 				operacao.setPrecoEntrada(setPrecoEntradaCompra(terceiroCandle));
 				operacao.setPrecoStop(setPrecoStopCompra(segundoCandle));
-				operacao.setPrecoPrimeiroAlvoFibonacci(calculaPrecoPrimeiroAlvoFibonacci(todosCandles, Entrada.COMPRA));
-				operacao.setPrecoSegundoAlvoFibonacci(calculaPrecoSegundoAlvoFibonacci(todosCandles, Entrada.COMPRA));
-				operacao.setPrecoTerceiroAlvoFibonacci(calculaPrecoTerceiroAlvoFibonacci(todosCandles, Entrada.COMPRA));
+				operacao.setPrecoPrimeiroAlvoFibonacci(calculaPrecoPrimeiroAlvoFibonacci(todosCandles, EntradaEnum.COMPRA));
+				operacao.setPrecoSegundoAlvoFibonacci(calculaPrecoSegundoAlvoFibonacci(todosCandles, EntradaEnum.COMPRA));
+				operacao.setPrecoTerceiroAlvoFibonacci(calculaPrecoTerceiroAlvoFibonacci(todosCandles, EntradaEnum.COMPRA));
 
 				BebeAbandonado bebeAbandonado = new BebeAbandonado();
 
@@ -612,15 +613,15 @@ public class RedeNeural implements NeuralNetListener {
 					operacao.setDat(segundoCandle.getData());
 					operacao.setNomeDoPapel(segundoCandle.getNomeDoPapel());
 					operacao.setPadraoEnum(PadroesEnum.ENGOLFO);
-					operacao.setTipoEntrada(Entrada.COMPRA);
+					operacao.setTipoEntrada(EntradaEnum.COMPRA);
 					operacao.setPrecoEntrada(setPrecoEntradaCompra(segundoCandle));
 					operacao.setPrecoStop(setPrecoStopCompra(segundoCandle));
 					operacao.setPrecoPrimeiroAlvoFibonacci(
-							calculaPrecoPrimeiroAlvoFibonacci(segundoCandle, Entrada.COMPRA));
+							calculaPrecoPrimeiroAlvoFibonacci(segundoCandle, EntradaEnum.COMPRA));
 					operacao.setPrecoSegundoAlvoFibonacci(
-							calculaPrecoSegundoAlvoFibonacci(segundoCandle, Entrada.COMPRA));
+							calculaPrecoSegundoAlvoFibonacci(segundoCandle, EntradaEnum.COMPRA));
 					operacao.setPrecoTerceiroAlvoFibonacci(
-							calculaPrecoTerceiroAlvoFibonacci(segundoCandle, Entrada.COMPRA));
+							calculaPrecoTerceiroAlvoFibonacci(segundoCandle, EntradaEnum.COMPRA));
 
 					Engolfo engolfo = new Engolfo();
 					engolfo.setTipo(tipoCandle(segundoCandle).getTipo());
@@ -650,15 +651,15 @@ public class RedeNeural implements NeuralNetListener {
 					operacao.setDat(segundoCandle.getData());
 					operacao.setNomeDoPapel(segundoCandle.getNomeDoPapel());
 					operacao.setPadraoEnum(PadroesEnum.ENGOLFO);
-					operacao.setTipoEntrada(Entrada.VENDA);
+					operacao.setTipoEntrada(EntradaEnum.VENDA);
 					operacao.setPrecoEntrada(setPrecoEntradaVenda(segundoCandle));
 					operacao.setPrecoStop(setPrecoStopVenda(segundoCandle));
 					operacao.setPrecoPrimeiroAlvoFibonacci(
-							calculaPrecoPrimeiroAlvoFibonacci(segundoCandle, Entrada.VENDA));
+							calculaPrecoPrimeiroAlvoFibonacci(segundoCandle, EntradaEnum.VENDA));
 					operacao.setPrecoSegundoAlvoFibonacci(
-							calculaPrecoSegundoAlvoFibonacci(segundoCandle, Entrada.VENDA));
+							calculaPrecoSegundoAlvoFibonacci(segundoCandle, EntradaEnum.VENDA));
 					operacao.setPrecoTerceiroAlvoFibonacci(
-							calculaPrecoTerceiroAlvoFibonacci(segundoCandle, Entrada.VENDA));
+							calculaPrecoTerceiroAlvoFibonacci(segundoCandle, EntradaEnum.VENDA));
 
 					Engolfo engolfo = new Engolfo();
 					engolfo.setTipo(tipoCandle(segundoCandle).getTipo());
@@ -708,16 +709,16 @@ public class RedeNeural implements NeuralNetListener {
 					Operacao operacaoCompra = new Operacao();
 					operacaoCompra.setPadraoEnum(PadroesEnum.DOJICOMPRA);
 					operacaoCompra.setDat(infoCandle.getData());
-					operacaoCompra.setTipoEntrada(Entrada.COMPRA);
+					operacaoCompra.setTipoEntrada(EntradaEnum.COMPRA);
 					operacaoCompra.setNomeDoPapel(infoCandle.getNomeDoPapel());
 					operacaoCompra.setPrecoEntrada(setPrecoEntradaCompra(infoCandle));
 					operacaoCompra.setPrecoStop(setPrecoStopCompra(infoCandle));
 					operacaoCompra.setPrecoPrimeiroAlvoFibonacci(
-							calculaPrecoPrimeiroAlvoFibonacci(infoCandle, Entrada.COMPRA));
+							calculaPrecoPrimeiroAlvoFibonacci(infoCandle, EntradaEnum.COMPRA));
 					operacaoCompra
-							.setPrecoSegundoAlvoFibonacci(calculaPrecoSegundoAlvoFibonacci(infoCandle, Entrada.COMPRA));
+							.setPrecoSegundoAlvoFibonacci(calculaPrecoSegundoAlvoFibonacci(infoCandle, EntradaEnum.COMPRA));
 					operacaoCompra.setPrecoTerceiroAlvoFibonacci(
-							calculaPrecoTerceiroAlvoFibonacci(infoCandle, Entrada.COMPRA));
+							calculaPrecoTerceiroAlvoFibonacci(infoCandle, EntradaEnum.COMPRA));
 
 					Doji dojiCompra = new Doji();
 
@@ -739,15 +740,15 @@ public class RedeNeural implements NeuralNetListener {
 					operacaoVenda.setPadraoEnum(PadroesEnum.DOJIVENDA);
 					operacaoVenda.setDat(infoCandle.getData());
 					operacaoVenda.setNomeDoPapel(infoCandle.getNomeDoPapel());
-					operacaoVenda.setTipoEntrada(Entrada.VENDA);
+					operacaoVenda.setTipoEntrada(EntradaEnum.VENDA);
 					operacaoVenda.setPrecoEntrada(setPrecoEntradaVenda(infoCandle));
 					operacaoVenda.setPrecoStop(setPrecoStopVenda(infoCandle));
 					operacaoVenda.setPrecoPrimeiroAlvoFibonacci(
-							calculaPrecoPrimeiroAlvoFibonacci(infoCandle, Entrada.VENDA));
+							calculaPrecoPrimeiroAlvoFibonacci(infoCandle, EntradaEnum.VENDA));
 					operacaoVenda
-							.setPrecoSegundoAlvoFibonacci(calculaPrecoSegundoAlvoFibonacci(infoCandle, Entrada.VENDA));
+							.setPrecoSegundoAlvoFibonacci(calculaPrecoSegundoAlvoFibonacci(infoCandle, EntradaEnum.VENDA));
 					operacaoVenda.setPrecoTerceiroAlvoFibonacci(
-							calculaPrecoTerceiroAlvoFibonacci(infoCandle, Entrada.VENDA));
+							calculaPrecoTerceiroAlvoFibonacci(infoCandle, EntradaEnum.VENDA));
 
 					Doji dojiVenda = new Doji();
 
@@ -775,7 +776,7 @@ public class RedeNeural implements NeuralNetListener {
 	private static Boolean condicaoParaMarteloInvertido(InfoCandle infoCandle, Double pavioSuperior,
 			Double pavioInferior) {
 		return pavioSuperior >= 67 && pavioInferior <= 10
-				&& tendenciaMediaCurta(infoCandle) == TendenciaMediaCurta.ALTA;
+				&& tendenciaMediaCurta(infoCandle) == TendenciaMediaCurtaEnum.ALTA;
 	}
 
 	private static Boolean verificaSePrecoAcimaMedia200(InfoCandle infoCandle) {
@@ -792,11 +793,11 @@ public class RedeNeural implements NeuralNetListener {
 		List<PadroesEnum> padroes = new ArrayList<>();
 		padroes.add(PadroesEnum.TRESSOLDADOSDEALTA);
 		padroes.add(PadroesEnum.TRESSOLDADOSDEBAIXA);
-		List<PavioSuperior> pavioSuperiorPrimeiroCandle = PavioSuperior.getPavioSuperiorTresSoldados();
-		List<PavioInferior> pavioInferiorPrimeiroCandle = PavioInferior.getPavioInferiorTresSoldados();
-		List<PavioSuperior> pavioSuperiorTerceiroCandle = PavioSuperior.getPavioSuperiorTresSoldados();
-		List<PavioInferior> pavioInferiorTerceiroCandle = PavioInferior.getPavioInferiorTresSoldados();
-		List<PrecoAcimaMedia200> precoAcimaMedia200 = PrecoAcimaMedia200.getListPrecoAcimaMedia200();
+		List<PavioSuperiorEnum> pavioSuperiorPrimeiroCandle = PavioSuperiorEnum.getPavioSuperiorTresSoldados();
+		List<PavioInferiorEnum> pavioInferiorPrimeiroCandle = PavioInferiorEnum.getPavioInferiorTresSoldados();
+		List<PavioSuperiorEnum> pavioSuperiorTerceiroCandle = PavioSuperiorEnum.getPavioSuperiorTresSoldados();
+		List<PavioInferiorEnum> pavioInferiorTerceiroCandle = PavioInferiorEnum.getPavioInferiorTresSoldados();
+		List<PrecoAcimaMedia200Enum> precoAcimaMedia200 = PrecoAcimaMedia200Enum.getListPrecoAcimaMedia200();
 
 		ArrayList<PossibilidadeTresSoldados> possibilidades = new ArrayList<PossibilidadeTresSoldados>();
 
@@ -825,14 +826,14 @@ public class RedeNeural implements NeuralNetListener {
 
 	private static ArrayList<PossibilidadeEngolfo> todasAsPossibilidadesEngolfo() {
 
-		List<TipoCandle> tipoCandle = TipoCandle.retornaTiposSemNeutro();
-		List<PavioSuperior> pavioSuperior = PavioSuperior.getPavioSuperiorEngolfo();
-		List<PavioInferior> pavioInferior = PavioInferior.getPavioInferiorEngolfo();
-		List<VolumeAcimaMedia20> volumeAcimaMedia20 = VolumeAcimaMedia20.getListVolumeAcimaMedia20();
-		List<PrecoAcimaMedia8> precoAcimaMedia8 = PrecoAcimaMedia8.getListPrecoAcimaMedia8();
-		List<PrecoAcimaMedia20> precoAcimaMedia20 = PrecoAcimaMedia20.getListPrecoAcimaMedia20();
-		List<PrecoAcimaMedia200> precoAcimaMedia200 = PrecoAcimaMedia200.getListPrecoAcimaMedia200();
-		List<VariacaoPreco> variacao = VariacaoPreco.getListVariacaoEngolfo();
+		List<TipoCandleEnum> tipoCandle = TipoCandleEnum.retornaTiposSemNeutro();
+		List<PavioSuperiorEnum> pavioSuperior = PavioSuperiorEnum.getPavioSuperiorEngolfo();
+		List<PavioInferiorEnum> pavioInferior = PavioInferiorEnum.getPavioInferiorEngolfo();
+		List<VolumeAcimaMedia20Enum> volumeAcimaMedia20 = VolumeAcimaMedia20Enum.getListVolumeAcimaMedia20();
+		List<PrecoAcimaMedia8Enum> precoAcimaMedia8 = PrecoAcimaMedia8Enum.getListPrecoAcimaMedia8();
+		List<PrecoAcimaMedia20Enum> precoAcimaMedia20 = PrecoAcimaMedia20Enum.getListPrecoAcimaMedia20();
+		List<PrecoAcimaMedia200Enum> precoAcimaMedia200 = PrecoAcimaMedia200Enum.getListPrecoAcimaMedia200();
+		List<VariacaoPrecoEnum> variacao = VariacaoPrecoEnum.getListVariacaoEngolfo();
 
 		ArrayList<PossibilidadeEngolfo> possibilidades = new ArrayList<PossibilidadeEngolfo>();
 
@@ -862,12 +863,12 @@ public class RedeNeural implements NeuralNetListener {
 
 	private static ArrayList<PossibilidadePiercingLine> todasAsPossibilidadesPiercingLine() {
 
-		List<TipoCandle> tipos = TipoCandle.retornaTipos();
-		List<VolumeAcimaMedia20> vol = VolumeAcimaMedia20.getListVolumeAcimaMedia20();
-		List<Perfuracao> perf = Perfuracao.retornaPerfuracoes();
-		List<PrecoAcimaMedia8> preco8 = PrecoAcimaMedia8.getListPrecoAcimaMedia8();
-		List<PrecoAcimaMedia20> preco20 = PrecoAcimaMedia20.getListPrecoAcimaMedia20();
-		List<PrecoAcimaMedia200> preco200 = PrecoAcimaMedia200.getListPrecoAcimaMedia200();
+		List<TipoCandleEnum> tipos = TipoCandleEnum.retornaTipos();
+		List<VolumeAcimaMedia20Enum> vol = VolumeAcimaMedia20Enum.getListVolumeAcimaMedia20();
+		List<PerfuracaoEnum> perf = PerfuracaoEnum.retornaPerfuracoes();
+		List<PrecoAcimaMedia8Enum> preco8 = PrecoAcimaMedia8Enum.getListPrecoAcimaMedia8();
+		List<PrecoAcimaMedia20Enum> preco20 = PrecoAcimaMedia20Enum.getListPrecoAcimaMedia20();
+		List<PrecoAcimaMedia200Enum> preco200 = PrecoAcimaMedia200Enum.getListPrecoAcimaMedia200();
 
 		ArrayList<PossibilidadePiercingLine> possibilidades = new ArrayList<PossibilidadePiercingLine>();
 
@@ -881,13 +882,13 @@ public class RedeNeural implements NeuralNetListener {
 								PossibilidadePiercingLine possibilidade = new PossibilidadePiercingLine(tipo, volume,
 										perfuracao, precoCurto, precoMedio, precoLongo);
 
-								if (possibilidade.getTipoCandle() != TipoCandle.NULL
-										&& possibilidade.getTipoCandle() != TipoCandle.NEUTRO
-										&& possibilidade.getVolumeAcimaMedia20() != VolumeAcimaMedia20.NULL
-										&& possibilidade.getPerfuracao() != Perfuracao.NULL
-										&& possibilidade.getPrecoAcimaMedia8() != PrecoAcimaMedia8.NULL
-										&& possibilidade.getPrecoAcimaMedia20() != PrecoAcimaMedia20.NULL
-										&& possibilidade.getPrecoAcimaMedia200() != PrecoAcimaMedia200.NULL) {
+								if (possibilidade.getTipoCandle() != TipoCandleEnum.NULL
+										&& possibilidade.getTipoCandle() != TipoCandleEnum.NEUTRO
+										&& possibilidade.getVolumeAcimaMedia20() != VolumeAcimaMedia20Enum.NULL
+										&& possibilidade.getPerfuracao() != PerfuracaoEnum.NULL
+										&& possibilidade.getPrecoAcimaMedia8() != PrecoAcimaMedia8Enum.NULL
+										&& possibilidade.getPrecoAcimaMedia20() != PrecoAcimaMedia20Enum.NULL
+										&& possibilidade.getPrecoAcimaMedia200() != PrecoAcimaMedia200Enum.NULL) {
 
 									possibilidades.add(possibilidade);
 
@@ -906,11 +907,11 @@ public class RedeNeural implements NeuralNetListener {
 
 	private static ArrayList<PossibilidadeMartelo> todasAsPossibilidadesMartelo() {
 
-		List<TipoCandle> tipos = TipoCandle.retornaTipos();
-		List<PavioSuperior> pavioS = PavioSuperior.getPavioSuperiorMartelo();
-		List<PavioInferior> pavioInf = PavioInferior.getPavioInferiorMartelo();
-		List<VolumeAcimaMedia20> vol = VolumeAcimaMedia20.getListVolumeAcimaMedia20();
-		List<PrecoAcimaMedia200> precos = PrecoAcimaMedia200.getListPrecoAcimaMedia200();
+		List<TipoCandleEnum> tipos = TipoCandleEnum.retornaTipos();
+		List<PavioSuperiorEnum> pavioS = PavioSuperiorEnum.getPavioSuperiorMartelo();
+		List<PavioInferiorEnum> pavioInf = PavioInferiorEnum.getPavioInferiorMartelo();
+		List<VolumeAcimaMedia20Enum> vol = VolumeAcimaMedia20Enum.getListVolumeAcimaMedia20();
+		List<PrecoAcimaMedia200Enum> precos = PrecoAcimaMedia200Enum.getListPrecoAcimaMedia200();
 
 		ArrayList<PossibilidadeMartelo> possibilidades = new ArrayList<PossibilidadeMartelo>();
 
@@ -923,11 +924,11 @@ public class RedeNeural implements NeuralNetListener {
 							PossibilidadeMartelo possibilidade = new PossibilidadeMartelo(tipo, pavioSuperior,
 									pavioInferior, volume, preco);
 
-							if (possibilidade.getTipoCandle() != TipoCandle.NULL
-									&& possibilidade.getPavioSuperior() != PavioSuperior.NULL
-									&& possibilidade.getPavioInferior() != PavioInferior.NULL
-									&& possibilidade.getVolumeAcimaMedia20() != VolumeAcimaMedia20.NULL
-									&& possibilidade.getPrecoAcimaMedia200() != PrecoAcimaMedia200.NULL) {
+							if (possibilidade.getTipoCandle() != TipoCandleEnum.NULL
+									&& possibilidade.getPavioSuperior() != PavioSuperiorEnum.NULL
+									&& possibilidade.getPavioInferior() != PavioInferiorEnum.NULL
+									&& possibilidade.getVolumeAcimaMedia20() != VolumeAcimaMedia20Enum.NULL
+									&& possibilidade.getPrecoAcimaMedia200() != PrecoAcimaMedia200Enum.NULL) {
 
 								possibilidades.add(possibilidade);
 
@@ -943,7 +944,7 @@ public class RedeNeural implements NeuralNetListener {
 
 	}
 
-	public static void preenchendoEstatisticaTresSoldados(Perfil perfil) {
+	public static void preenchendoEstatisticaTresSoldados(PerfilEnum perfil) {
 
 		int FREQUENCIAMINIMA = 0;
 
@@ -1024,7 +1025,7 @@ public class RedeNeural implements NeuralNetListener {
 
 	}
 
-	public static void preenchendoEstatisticaPiercingLine(Perfil perfil) {
+	public static void preenchendoEstatisticaPiercingLine(PerfilEnum perfil) {
 
 		ArrayList<PossibilidadePiercingLine> todasPossibilidades = todasAsPossibilidadesPiercingLine();
 
@@ -1093,7 +1094,7 @@ public class RedeNeural implements NeuralNetListener {
 
 	}
 
-	public static void preenchendoEstatisticaMartelo(Perfil perfil) {
+	public static void preenchendoEstatisticaMartelo(PerfilEnum perfil) {
 
 		ArrayList<PossibilidadeMartelo> todasPossibilidades = todasAsPossibilidadesMartelo();
 
@@ -1166,7 +1167,7 @@ public class RedeNeural implements NeuralNetListener {
 
 	}
 
-	public static void preenchendoEstatisticaEngolfo(Perfil perfil) {
+	public static void preenchendoEstatisticaEngolfo(PerfilEnum perfil) {
 
 		ArrayList<PossibilidadeEngolfo> todasPossibilidades = todasAsPossibilidadesEngolfo();
 
@@ -1235,7 +1236,7 @@ public class RedeNeural implements NeuralNetListener {
 
 	}
 
-	private static void preencherTxtTreinamentoRedeNeuralTresSoldados(Perfil perfil) throws IOException {
+	private static void preencherTxtTreinamentoRedeNeuralTresSoldados(PerfilEnum perfil) throws IOException {
 
 		FileWriter arq = new FileWriter("resource\\ArquivoTreinamentoTresSoldadosPerfil" + perfil.getNome() + ".txt");
 		PrintWriter gravarArq = new PrintWriter(arq);
@@ -1267,63 +1268,63 @@ public class RedeNeural implements NeuralNetListener {
 			}
 
 			if (estatisticaTresSoldados.getConfiguracaoTresSoldados()
-					.getPavioSuperiorPrimeiroCandle() == PavioSuperior.SEMPAVIO) {
+					.getPavioSuperiorPrimeiroCandle() == PavioSuperiorEnum.SEMPAVIO) {
 				pavioSuperiorPrimeiroCandleString = "0;0;";
 			} else if (estatisticaTresSoldados.getConfiguracaoTresSoldados()
-					.getPavioSuperiorPrimeiroCandle() == PavioSuperior.PAVIO5PORCENTO) {
+					.getPavioSuperiorPrimeiroCandle() == PavioSuperiorEnum.PAVIO5PORCENTO) {
 				pavioSuperiorPrimeiroCandleString = "0;1;";
 			} else if (estatisticaTresSoldados.getConfiguracaoTresSoldados()
-					.getPavioSuperiorPrimeiroCandle() == PavioSuperior.PAVIO10PORCENTO) {
+					.getPavioSuperiorPrimeiroCandle() == PavioSuperiorEnum.PAVIO10PORCENTO) {
 				pavioSuperiorPrimeiroCandleString = "1;0;";
 			} else if (estatisticaTresSoldados.getConfiguracaoTresSoldados()
-					.getPavioSuperiorPrimeiroCandle() == PavioSuperior.PAVIO33PORCENTO) {
+					.getPavioSuperiorPrimeiroCandle() == PavioSuperiorEnum.PAVIO33PORCENTO) {
 				pavioSuperiorPrimeiroCandleString = "1;1;";
 			}
 
 			if (estatisticaTresSoldados.getConfiguracaoTresSoldados()
-					.getPavioInferiorPrimeiroCandle() == PavioInferior.SEMPAVIO) {
+					.getPavioInferiorPrimeiroCandle() == PavioInferiorEnum.SEMPAVIO) {
 				pavioInferiorPrimeiroCandleString = "0;0;";
 			} else if (estatisticaTresSoldados.getConfiguracaoTresSoldados()
-					.getPavioInferiorPrimeiroCandle() == PavioInferior.PAVIO5PORCENTO) {
+					.getPavioInferiorPrimeiroCandle() == PavioInferiorEnum.PAVIO5PORCENTO) {
 				pavioInferiorPrimeiroCandleString = "0;1;";
 			} else if (estatisticaTresSoldados.getConfiguracaoTresSoldados()
-					.getPavioInferiorPrimeiroCandle() == PavioInferior.PAVIO10PORCENTO) {
+					.getPavioInferiorPrimeiroCandle() == PavioInferiorEnum.PAVIO10PORCENTO) {
 				pavioInferiorPrimeiroCandleString = "1;0;";
 			} else if (estatisticaTresSoldados.getConfiguracaoTresSoldados()
-					.getPavioInferiorPrimeiroCandle() == PavioInferior.PAVIO33PORCENTO) {
+					.getPavioInferiorPrimeiroCandle() == PavioInferiorEnum.PAVIO33PORCENTO) {
 				pavioInferiorPrimeiroCandleString = "1;1;";
 			}
 
 			if (estatisticaTresSoldados.getConfiguracaoTresSoldados()
-					.getPavioSuperiorTerceiroCandle() == PavioSuperior.SEMPAVIO) {
+					.getPavioSuperiorTerceiroCandle() == PavioSuperiorEnum.SEMPAVIO) {
 				pavioSuperiorTerceiroCandleString = "0;0;";
 			} else if (estatisticaTresSoldados.getConfiguracaoTresSoldados()
-					.getPavioSuperiorTerceiroCandle() == PavioSuperior.PAVIO5PORCENTO) {
+					.getPavioSuperiorTerceiroCandle() == PavioSuperiorEnum.PAVIO5PORCENTO) {
 				pavioSuperiorTerceiroCandleString = "0;1;";
 			} else if (estatisticaTresSoldados.getConfiguracaoTresSoldados()
-					.getPavioSuperiorTerceiroCandle() == PavioSuperior.PAVIO10PORCENTO) {
+					.getPavioSuperiorTerceiroCandle() == PavioSuperiorEnum.PAVIO10PORCENTO) {
 				pavioSuperiorTerceiroCandleString = "1;0;";
 			} else if (estatisticaTresSoldados.getConfiguracaoTresSoldados()
-					.getPavioSuperiorTerceiroCandle() == PavioSuperior.PAVIO33PORCENTO) {
+					.getPavioSuperiorTerceiroCandle() == PavioSuperiorEnum.PAVIO33PORCENTO) {
 				pavioSuperiorTerceiroCandleString = "1;1;";
 			}
 
 			if (estatisticaTresSoldados.getConfiguracaoTresSoldados()
-					.getPavioInferiorTerceiroCandle() == PavioInferior.SEMPAVIO) {
+					.getPavioInferiorTerceiroCandle() == PavioInferiorEnum.SEMPAVIO) {
 				pavioInferiorTerceiroCandleString = "0;0;";
 			} else if (estatisticaTresSoldados.getConfiguracaoTresSoldados()
-					.getPavioInferiorTerceiroCandle() == PavioInferior.PAVIO5PORCENTO) {
+					.getPavioInferiorTerceiroCandle() == PavioInferiorEnum.PAVIO5PORCENTO) {
 				pavioInferiorTerceiroCandleString = "0;1;";
 			} else if (estatisticaTresSoldados.getConfiguracaoTresSoldados()
-					.getPavioInferiorTerceiroCandle() == PavioInferior.PAVIO10PORCENTO) {
+					.getPavioInferiorTerceiroCandle() == PavioInferiorEnum.PAVIO10PORCENTO) {
 				pavioInferiorTerceiroCandleString = "1;0;";
 			} else if (estatisticaTresSoldados.getConfiguracaoTresSoldados()
-					.getPavioInferiorTerceiroCandle() == PavioInferior.PAVIO33PORCENTO) {
+					.getPavioInferiorTerceiroCandle() == PavioInferiorEnum.PAVIO33PORCENTO) {
 				pavioInferiorTerceiroCandleString = "1;1;";
 			}
 
 			if (estatisticaTresSoldados.getConfiguracaoTresSoldados()
-					.getPrecoAcimaMedia200() == PrecoAcimaMedia200.SIM) {
+					.getPrecoAcimaMedia200() == PrecoAcimaMedia200Enum.SIM) {
 				precoAcimaMedia200String = "1;";
 			} else {
 				precoAcimaMedia200String = "0;";
@@ -1359,7 +1360,7 @@ public class RedeNeural implements NeuralNetListener {
 
 	}
 
-	private static void preencherTxtTreinamentoRedeNeuralEngolfo(Perfil perfil) throws IOException {
+	private static void preencherTxtTreinamentoRedeNeuralEngolfo(PerfilEnum perfil) throws IOException {
 
 		FileWriter arq = new FileWriter("resource\\ArquivoTreinamentoEngolfoPerfil" + perfil.getNome() + ".txt");
 		PrintWriter gravarArq = new PrintWriter(arq);
@@ -1375,75 +1376,75 @@ public class RedeNeural implements NeuralNetListener {
 			String precoAcimaMedia200String = "";
 			String variacaoString = "";
 
-			if (estatisticaEngolfo.getConfiguracaoEngolfo().getTipoCandle() == TipoCandle.NEGATIVO) {
+			if (estatisticaEngolfo.getConfiguracaoEngolfo().getTipoCandle() == TipoCandleEnum.NEGATIVO) {
 				tipoCandleString = "0;";
-			} else if (estatisticaEngolfo.getConfiguracaoEngolfo().getTipoCandle() == TipoCandle.POSITIVO) {
+			} else if (estatisticaEngolfo.getConfiguracaoEngolfo().getTipoCandle() == TipoCandleEnum.POSITIVO) {
 				tipoCandleString = "1;";
 			}
 
-			if (estatisticaEngolfo.getConfiguracaoEngolfo().getPavioSuperior() == PavioSuperior.SEMPAVIO) {
+			if (estatisticaEngolfo.getConfiguracaoEngolfo().getPavioSuperior() == PavioSuperiorEnum.SEMPAVIO) {
 				pavioSuperiorString = "0;0;0;";
-			} else if (estatisticaEngolfo.getConfiguracaoEngolfo().getPavioSuperior() == PavioSuperior.PAVIO5PORCENTO) {
+			} else if (estatisticaEngolfo.getConfiguracaoEngolfo().getPavioSuperior() == PavioSuperiorEnum.PAVIO5PORCENTO) {
 				pavioSuperiorString = "0;0;1;";
 			} else if (estatisticaEngolfo.getConfiguracaoEngolfo()
-					.getPavioSuperior() == PavioSuperior.PAVIO10PORCENTO) {
+					.getPavioSuperior() == PavioSuperiorEnum.PAVIO10PORCENTO) {
 				pavioSuperiorString = "0;1;0;";
 			} else if (estatisticaEngolfo.getConfiguracaoEngolfo()
-					.getPavioSuperior() == PavioSuperior.PAVIO33PORCENTO) {
+					.getPavioSuperior() == PavioSuperiorEnum.PAVIO33PORCENTO) {
 				pavioSuperiorString = "0;1;1;";
 			} else if (estatisticaEngolfo.getConfiguracaoEngolfo()
-					.getPavioSuperior() == PavioSuperior.PAVIO40PORCENTO) {
+					.getPavioSuperior() == PavioSuperiorEnum.PAVIO40PORCENTO) {
 				pavioSuperiorString = "1;0;0;";
 			}
 
-			if (estatisticaEngolfo.getConfiguracaoEngolfo().getPavioInferior() == PavioInferior.SEMPAVIO) {
+			if (estatisticaEngolfo.getConfiguracaoEngolfo().getPavioInferior() == PavioInferiorEnum.SEMPAVIO) {
 				pavioInferiorString = "0;0;0;";
-			} else if (estatisticaEngolfo.getConfiguracaoEngolfo().getPavioInferior() == PavioInferior.PAVIO5PORCENTO) {
+			} else if (estatisticaEngolfo.getConfiguracaoEngolfo().getPavioInferior() == PavioInferiorEnum.PAVIO5PORCENTO) {
 				pavioInferiorString = "0;0;1;";
 			} else if (estatisticaEngolfo.getConfiguracaoEngolfo()
-					.getPavioInferior() == PavioInferior.PAVIO10PORCENTO) {
+					.getPavioInferior() == PavioInferiorEnum.PAVIO10PORCENTO) {
 				pavioInferiorString = "0;1;0;";
 			} else if (estatisticaEngolfo.getConfiguracaoEngolfo()
-					.getPavioInferior() == PavioInferior.PAVIO33PORCENTO) {
+					.getPavioInferior() == PavioInferiorEnum.PAVIO33PORCENTO) {
 				pavioInferiorString = "0;1;1;";
 			} else if (estatisticaEngolfo.getConfiguracaoEngolfo()
-					.getPavioInferior() == PavioInferior.PAVIO40PORCENTO) {
+					.getPavioInferior() == PavioInferiorEnum.PAVIO40PORCENTO) {
 				pavioInferiorString = "1;0;0;";
 			}
 
-			if (estatisticaEngolfo.getConfiguracaoEngolfo().getVolumeAcimaMedia20() == VolumeAcimaMedia20.SIM) {
+			if (estatisticaEngolfo.getConfiguracaoEngolfo().getVolumeAcimaMedia20() == VolumeAcimaMedia20Enum.SIM) {
 				volumeAcimaMedia20String = "1;";
 			} else {
 				volumeAcimaMedia20String = "0;";
 			}
 
-			if (estatisticaEngolfo.getConfiguracaoEngolfo().getPrecoAcimaMedia8() == PrecoAcimaMedia8.SIM) {
+			if (estatisticaEngolfo.getConfiguracaoEngolfo().getPrecoAcimaMedia8() == PrecoAcimaMedia8Enum.SIM) {
 				precoAcimaMedia8String = "1;";
 			} else {
 				precoAcimaMedia8String = "0;";
 			}
 
-			if (estatisticaEngolfo.getConfiguracaoEngolfo().getPrecoAcimaMedia20() == PrecoAcimaMedia20.SIM) {
+			if (estatisticaEngolfo.getConfiguracaoEngolfo().getPrecoAcimaMedia20() == PrecoAcimaMedia20Enum.SIM) {
 				precoAcimaMedia20String = "1;";
 			} else {
 				precoAcimaMedia20String = "0;";
 			}
 
-			if (estatisticaEngolfo.getConfiguracaoEngolfo().getPrecoAcimaMedia200() == PrecoAcimaMedia200.SIM) {
+			if (estatisticaEngolfo.getConfiguracaoEngolfo().getPrecoAcimaMedia200() == PrecoAcimaMedia200Enum.SIM) {
 				precoAcimaMedia200String = "1;";
 			} else {
 				precoAcimaMedia200String = "0;";
 			}
 
-			if (estatisticaEngolfo.getConfiguracaoEngolfo().getVariacao() == VariacaoPreco.ATE2VEZES) {
+			if (estatisticaEngolfo.getConfiguracaoEngolfo().getVariacao() == VariacaoPrecoEnum.ATE2VEZES) {
 				variacaoString = "0;0;0;";
-			} else if (estatisticaEngolfo.getConfiguracaoEngolfo().getVariacao() == VariacaoPreco.DE2A3VEZES) {
+			} else if (estatisticaEngolfo.getConfiguracaoEngolfo().getVariacao() == VariacaoPrecoEnum.DE2A3VEZES) {
 				variacaoString = "0;0;1;";
-			} else if (estatisticaEngolfo.getConfiguracaoEngolfo().getVariacao() == VariacaoPreco.DE3A4VEZES) {
+			} else if (estatisticaEngolfo.getConfiguracaoEngolfo().getVariacao() == VariacaoPrecoEnum.DE3A4VEZES) {
 				variacaoString = "0;1;0;";
-			} else if (estatisticaEngolfo.getConfiguracaoEngolfo().getVariacao() == VariacaoPreco.DE4A5VEZES) {
+			} else if (estatisticaEngolfo.getConfiguracaoEngolfo().getVariacao() == VariacaoPrecoEnum.DE4A5VEZES) {
 				variacaoString = "0;1;1;";
-			} else if (estatisticaEngolfo.getConfiguracaoEngolfo().getVariacao() == VariacaoPreco.MAIORQUE5VEZES) {
+			} else if (estatisticaEngolfo.getConfiguracaoEngolfo().getVariacao() == VariacaoPrecoEnum.MAIORQUE5VEZES) {
 				variacaoString = "1;0;0;";
 			}
 
@@ -1459,9 +1460,9 @@ public class RedeNeural implements NeuralNetListener {
 				manter = "1;";
 			}
 
-			if (estatisticaEngolfo.getConfiguracaoEngolfo().getTipoCandle() == TipoCandle.POSITIVO) {
+			if (estatisticaEngolfo.getConfiguracaoEngolfo().getTipoCandle() == TipoCandleEnum.POSITIVO) {
 				direcao = "1;";
-			} else if (estatisticaEngolfo.getConfiguracaoEngolfo().getTipoCandle() == TipoCandle.NEGATIVO) {
+			} else if (estatisticaEngolfo.getConfiguracaoEngolfo().getTipoCandle() == TipoCandleEnum.NEGATIVO) {
 				direcao = "0;";
 			}
 
@@ -1475,7 +1476,7 @@ public class RedeNeural implements NeuralNetListener {
 
 	}
 
-	private static void preencherTxtTreinamentoRedeNeuralPiercingLine(Perfil perfil) throws IOException {
+	private static void preencherTxtTreinamentoRedeNeuralPiercingLine(PerfilEnum perfil) throws IOException {
 
 		FileWriter arq = new FileWriter("resource\\ArquivoTreinamentoPiercingLinePerfil" + perfil.getNome() + ".txt");
 		PrintWriter gravarArq = new PrintWriter(arq);
@@ -1485,19 +1486,19 @@ public class RedeNeural implements NeuralNetListener {
 			String tipoCandleString = "";
 			String perfuracao = "";
 
-			if (estatisticaPiercingLine.getConfiguracaoPiercingLine().getTipoCandle() == TipoCandle.NEGATIVO) {
+			if (estatisticaPiercingLine.getConfiguracaoPiercingLine().getTipoCandle() == TipoCandleEnum.NEGATIVO) {
 				tipoCandleString = "0;";
-			} else if (estatisticaPiercingLine.getConfiguracaoPiercingLine().getTipoCandle() == TipoCandle.POSITIVO) {
+			} else if (estatisticaPiercingLine.getConfiguracaoPiercingLine().getTipoCandle() == TipoCandleEnum.POSITIVO) {
 				tipoCandleString = "1;";
 			}
 
-			if (estatisticaPiercingLine.getConfiguracaoPiercingLine().getPerfuracao() == Perfuracao.POUCA) {
+			if (estatisticaPiercingLine.getConfiguracaoPiercingLine().getPerfuracao() == PerfuracaoEnum.POUCA) {
 				perfuracao = "0;0;";
-			} else if (estatisticaPiercingLine.getConfiguracaoPiercingLine().getPerfuracao() == Perfuracao.MEDIANA) {
+			} else if (estatisticaPiercingLine.getConfiguracaoPiercingLine().getPerfuracao() == PerfuracaoEnum.MEDIANA) {
 				perfuracao = "0;1;";
-			} else if (estatisticaPiercingLine.getConfiguracaoPiercingLine().getPerfuracao() == Perfuracao.MUITA) {
+			} else if (estatisticaPiercingLine.getConfiguracaoPiercingLine().getPerfuracao() == PerfuracaoEnum.MUITA) {
 				perfuracao = "1;0;";
-			} else if (estatisticaPiercingLine.getConfiguracaoPiercingLine().getPerfuracao() == Perfuracao.EXTREMA) {
+			} else if (estatisticaPiercingLine.getConfiguracaoPiercingLine().getPerfuracao() == PerfuracaoEnum.EXTREMA) {
 				perfuracao = "1;1;";
 			}
 
@@ -1519,11 +1520,11 @@ public class RedeNeural implements NeuralNetListener {
 				manter = "1;";
 			}
 
-			if (estatisticaPiercingLine.getConfiguracaoPiercingLine().getTipoCandle() == TipoCandle.POSITIVO) {
+			if (estatisticaPiercingLine.getConfiguracaoPiercingLine().getTipoCandle() == TipoCandleEnum.POSITIVO) {
 
 				direcao = "1;";
 
-			} else if (estatisticaPiercingLine.getConfiguracaoPiercingLine().getTipoCandle() == TipoCandle.NEGATIVO) {
+			} else if (estatisticaPiercingLine.getConfiguracaoPiercingLine().getTipoCandle() == TipoCandleEnum.NEGATIVO) {
 
 				direcao = "0;";
 
@@ -1539,7 +1540,7 @@ public class RedeNeural implements NeuralNetListener {
 
 	}
 
-	private static void preencherTxtTreinamentoRedeNeuralMartelo(Perfil perfil) throws IOException {
+	private static void preencherTxtTreinamentoRedeNeuralMartelo(PerfilEnum perfil) throws IOException {
 
 		FileWriter arq = new FileWriter("resource\\ArquivoTreinamentoMarteloPerfil" + perfil.getNome() + ".txt");
 		PrintWriter gravarArq = new PrintWriter(arq);
@@ -1620,35 +1621,35 @@ public class RedeNeural implements NeuralNetListener {
 			String pavioSuperiorString = "";
 			String pavioInferiorString = "";
 
-			if (TipoCandle.comparaTipoCandle(martelo.getTipo()).getID() == 1) {
+			if (TipoCandleEnum.comparaTipoCandle(martelo.getTipo()).getID() == 1) {
 				tipoCandleString = "0;1;";
-			} else if (TipoCandle.comparaTipoCandle(martelo.getTipo()).getID() == 2) {
+			} else if (TipoCandleEnum.comparaTipoCandle(martelo.getTipo()).getID() == 2) {
 				tipoCandleString = "1;0;";
-			} else if (TipoCandle.comparaTipoCandle(martelo.getTipo()).getID() == 3) {
+			} else if (TipoCandleEnum.comparaTipoCandle(martelo.getTipo()).getID() == 3) {
 				tipoCandleString = "1;1;";
 			}
 
-			if (PavioSuperior.comparaPavioSuperior(martelo.getPavioSuperior()).getID() == 1) {
+			if (PavioSuperiorEnum.comparaPavioSuperior(martelo.getPavioSuperior()).getID() == 1) {
 				pavioSuperiorString = "0;1;";
-			} else if (PavioSuperior.comparaPavioSuperior(martelo.getPavioSuperior()).getID() == 2) {
+			} else if (PavioSuperiorEnum.comparaPavioSuperior(martelo.getPavioSuperior()).getID() == 2) {
 				pavioSuperiorString = "1;0;";
-			} else if (PavioSuperior.comparaPavioSuperior(martelo.getPavioSuperior()).getID() == 3) {
+			} else if (PavioSuperiorEnum.comparaPavioSuperior(martelo.getPavioSuperior()).getID() == 3) {
 				pavioSuperiorString = "1;1;";
 			}
 
-			if (PavioInferior.comparaPavioInferior(martelo.getPavioInferior()).getID() == 7) {
+			if (PavioInferiorEnum.comparaPavioInferior(martelo.getPavioInferior()).getID() == 7) {
 				pavioInferiorString = "0;0;";
-			} else if (PavioInferior.comparaPavioInferior(martelo.getPavioInferior()).getID() == 8) {
+			} else if (PavioInferiorEnum.comparaPavioInferior(martelo.getPavioInferior()).getID() == 8) {
 				pavioInferiorString = "0;1;";
-			} else if (PavioInferior.comparaPavioInferior(martelo.getPavioInferior()).getID() == 9) {
+			} else if (PavioInferiorEnum.comparaPavioInferior(martelo.getPavioInferior()).getID() == 9) {
 				pavioInferiorString = "1;0;";
-			} else if (PavioInferior.comparaPavioInferior(martelo.getPavioInferior()).getID() == 10) {
+			} else if (PavioInferiorEnum.comparaPavioInferior(martelo.getPavioInferior()).getID() == 10) {
 				pavioInferiorString = "1;1;";
 			}
 
 			gravarArq.printf(tipoCandleString + pavioSuperiorString + pavioInferiorString
-					+ VolumeAcimaMedia20.comparaVolumeAcimaMedia20(martelo.getVolumeAcimaMedia20()).getValor() + ";"
-					+ PrecoAcimaMedia200.comparaPrecoAcimaMedia200(martelo.getPrecoAcimaMedia200()).getValor() + ";");
+					+ VolumeAcimaMedia20Enum.comparaVolumeAcimaMedia20(martelo.getVolumeAcimaMedia20()).getValor() + ";"
+					+ PrecoAcimaMedia200Enum.comparaPrecoAcimaMedia200(martelo.getPrecoAcimaMedia200()).getValor() + ";");
 			gravarArq.println();
 
 		});
@@ -1684,43 +1685,43 @@ public class RedeNeural implements NeuralNetListener {
 			String preco20 = "";
 			String preco200 = "";
 
-			if (TipoCandle.comparaTipoCandle(piercing.getTipo()) == TipoCandle.NEGATIVO) {
+			if (TipoCandleEnum.comparaTipoCandle(piercing.getTipo()) == TipoCandleEnum.NEGATIVO) {
 				tipoCandleString = "0;";
-			} else if (TipoCandle.comparaTipoCandle(piercing.getTipo()) == TipoCandle.POSITIVO) {
+			} else if (TipoCandleEnum.comparaTipoCandle(piercing.getTipo()) == TipoCandleEnum.POSITIVO) {
 				tipoCandleString = "1;";
 			}
 
-			if (VolumeAcimaMedia20
-					.comparaVolumeAcimaMedia20(piercing.getVolumeAcimaMedia20()) == VolumeAcimaMedia20.SIM) {
+			if (VolumeAcimaMedia20Enum
+					.comparaVolumeAcimaMedia20(piercing.getVolumeAcimaMedia20()) == VolumeAcimaMedia20Enum.SIM) {
 				vol = "1;";
 			} else {
 				vol = "0;";
 			}
 
-			if (Perfuracao.comparaPerfuracaoComInteiro(piercing.getPerfuracao()) == Perfuracao.POUCA) {
+			if (PerfuracaoEnum.comparaPerfuracaoComInteiro(piercing.getPerfuracao()) == PerfuracaoEnum.POUCA) {
 				perfuracao = "0;0;";
-			} else if (Perfuracao.comparaPerfuracaoComInteiro(piercing.getPerfuracao()) == Perfuracao.MEDIANA) {
+			} else if (PerfuracaoEnum.comparaPerfuracaoComInteiro(piercing.getPerfuracao()) == PerfuracaoEnum.MEDIANA) {
 				perfuracao = "0;1;";
-			} else if (Perfuracao.comparaPerfuracaoComInteiro(piercing.getPerfuracao()) == Perfuracao.MUITA) {
+			} else if (PerfuracaoEnum.comparaPerfuracaoComInteiro(piercing.getPerfuracao()) == PerfuracaoEnum.MUITA) {
 				perfuracao = "1;0;";
-			} else if (Perfuracao.comparaPerfuracaoComInteiro(piercing.getPerfuracao()) == Perfuracao.EXTREMA) {
+			} else if (PerfuracaoEnum.comparaPerfuracaoComInteiro(piercing.getPerfuracao()) == PerfuracaoEnum.EXTREMA) {
 				perfuracao = "1;1;";
 			}
 
-			if (PrecoAcimaMedia8.comparaPrecoAcimaMedia8(piercing.getPrecoAcimaMedia8()) == PrecoAcimaMedia8.SIM) {
+			if (PrecoAcimaMedia8Enum.comparaPrecoAcimaMedia8(piercing.getPrecoAcimaMedia8()) == PrecoAcimaMedia8Enum.SIM) {
 				preco8 = "1;";
 			} else {
 				preco8 = "0;";
 			}
 
-			if (PrecoAcimaMedia20.comparaPrecoAcimaMedia20(piercing.getPrecoAcimaMedia20()) == PrecoAcimaMedia20.SIM) {
+			if (PrecoAcimaMedia20Enum.comparaPrecoAcimaMedia20(piercing.getPrecoAcimaMedia20()) == PrecoAcimaMedia20Enum.SIM) {
 				preco20 = "1;";
 			} else {
 				preco20 = "0;";
 			}
 
-			if (PrecoAcimaMedia200
-					.comparaPrecoAcimaMedia200(piercing.getPrecoAcimaMedia200()) == PrecoAcimaMedia200.SIM) {
+			if (PrecoAcimaMedia200Enum
+					.comparaPrecoAcimaMedia200(piercing.getPrecoAcimaMedia200()) == PrecoAcimaMedia200Enum.SIM) {
 				preco200 = "1;";
 			} else {
 				preco200 = "0;";
@@ -1766,89 +1767,89 @@ public class RedeNeural implements NeuralNetListener {
 			String precoAcimaMedia200String = "";
 			String variacaoString = "";
 
-			if (PavioSuperior.comparaPavioSuperior(engolfo.getPavioSuperior()) == PavioSuperior.SEMPAVIO) {
+			if (PavioSuperiorEnum.comparaPavioSuperior(engolfo.getPavioSuperior()) == PavioSuperiorEnum.SEMPAVIO) {
 				pavioSuperiorString = "0;0;0;";
-			} else if (PavioSuperior.comparaPavioSuperior(engolfo.getPavioSuperior()) == PavioSuperior.PAVIO5PORCENTO) {
+			} else if (PavioSuperiorEnum.comparaPavioSuperior(engolfo.getPavioSuperior()) == PavioSuperiorEnum.PAVIO5PORCENTO) {
 				pavioSuperiorString = "0;0;1;";
-			} else if (PavioSuperior
-					.comparaPavioSuperior(engolfo.getPavioSuperior()) == PavioSuperior.PAVIO10PORCENTO) {
+			} else if (PavioSuperiorEnum
+					.comparaPavioSuperior(engolfo.getPavioSuperior()) == PavioSuperiorEnum.PAVIO10PORCENTO) {
 				pavioSuperiorString = "0;1;0;";
-			} else if (PavioSuperior
-					.comparaPavioSuperior(engolfo.getPavioSuperior()) == PavioSuperior.PAVIO33PORCENTO) {
+			} else if (PavioSuperiorEnum
+					.comparaPavioSuperior(engolfo.getPavioSuperior()) == PavioSuperiorEnum.PAVIO33PORCENTO) {
 				pavioSuperiorString = "0;1;1;";
-			} else if (PavioSuperior
-					.comparaPavioSuperior(engolfo.getPavioSuperior()) == PavioSuperior.PAVIO40PORCENTO) {
+			} else if (PavioSuperiorEnum
+					.comparaPavioSuperior(engolfo.getPavioSuperior()) == PavioSuperiorEnum.PAVIO40PORCENTO) {
 				pavioSuperiorString = "1;0;0;";
-			} else if (PavioSuperior.comparaPavioSuperior(engolfo.getPavioSuperior()) == PavioSuperior.PAVIO67PORCENTO
-					|| PavioSuperior.comparaPavioSuperior(engolfo.getPavioSuperior()) == PavioSuperior.PAVIO80PORCENTO
-					|| PavioSuperior
-							.comparaPavioSuperior(engolfo.getPavioSuperior()) == PavioSuperior.PAVIO90PORCENTO) {
+			} else if (PavioSuperiorEnum.comparaPavioSuperior(engolfo.getPavioSuperior()) == PavioSuperiorEnum.PAVIO67PORCENTO
+					|| PavioSuperiorEnum.comparaPavioSuperior(engolfo.getPavioSuperior()) == PavioSuperiorEnum.PAVIO80PORCENTO
+					|| PavioSuperiorEnum
+							.comparaPavioSuperior(engolfo.getPavioSuperior()) == PavioSuperiorEnum.PAVIO90PORCENTO) {
 				validaEngolfo = false;
 			}
 
-			if (PavioInferior.comparaPavioInferior(engolfo.getPavioInferior()) == PavioInferior.SEMPAVIO) {
+			if (PavioInferiorEnum.comparaPavioInferior(engolfo.getPavioInferior()) == PavioInferiorEnum.SEMPAVIO) {
 				pavioInferiorString = "0;0;0;";
-			} else if (PavioInferior.comparaPavioInferior(engolfo.getPavioInferior()) == PavioInferior.PAVIO5PORCENTO) {
+			} else if (PavioInferiorEnum.comparaPavioInferior(engolfo.getPavioInferior()) == PavioInferiorEnum.PAVIO5PORCENTO) {
 				pavioInferiorString = "0;0;1;";
-			} else if (PavioInferior
-					.comparaPavioInferior(engolfo.getPavioInferior()) == PavioInferior.PAVIO10PORCENTO) {
+			} else if (PavioInferiorEnum
+					.comparaPavioInferior(engolfo.getPavioInferior()) == PavioInferiorEnum.PAVIO10PORCENTO) {
 				pavioInferiorString = "0;1;0;";
-			} else if (PavioInferior
-					.comparaPavioInferior(engolfo.getPavioInferior()) == PavioInferior.PAVIO33PORCENTO) {
+			} else if (PavioInferiorEnum
+					.comparaPavioInferior(engolfo.getPavioInferior()) == PavioInferiorEnum.PAVIO33PORCENTO) {
 				pavioInferiorString = "0;1;1;";
-			} else if (PavioInferior
-					.comparaPavioInferior(engolfo.getPavioInferior()) == PavioInferior.PAVIO40PORCENTO) {
+			} else if (PavioInferiorEnum
+					.comparaPavioInferior(engolfo.getPavioInferior()) == PavioInferiorEnum.PAVIO40PORCENTO) {
 				pavioInferiorString = "1;0;0;";
-			} else if (PavioInferior.comparaPavioInferior(engolfo.getPavioInferior()) == PavioInferior.PAVIO67PORCENTO
-					|| PavioInferior.comparaPavioInferior(engolfo.getPavioInferior()) == PavioInferior.PAVIO80PORCENTO
-					|| PavioInferior
-							.comparaPavioInferior(engolfo.getPavioInferior()) == PavioInferior.PAVIO90PORCENTO) {
+			} else if (PavioInferiorEnum.comparaPavioInferior(engolfo.getPavioInferior()) == PavioInferiorEnum.PAVIO67PORCENTO
+					|| PavioInferiorEnum.comparaPavioInferior(engolfo.getPavioInferior()) == PavioInferiorEnum.PAVIO80PORCENTO
+					|| PavioInferiorEnum
+							.comparaPavioInferior(engolfo.getPavioInferior()) == PavioInferiorEnum.PAVIO90PORCENTO) {
 				validaEngolfo = false;
 			}
 
 			if (validaEngolfo == true) {
 
-				if (TipoCandle.comparaTipoCandle(engolfo.getTipo()) == TipoCandle.NEGATIVO) {
+				if (TipoCandleEnum.comparaTipoCandle(engolfo.getTipo()) == TipoCandleEnum.NEGATIVO) {
 					tipoCandleString = "0;";
-				} else if (TipoCandle.comparaTipoCandle(engolfo.getTipo()) == TipoCandle.POSITIVO) {
+				} else if (TipoCandleEnum.comparaTipoCandle(engolfo.getTipo()) == TipoCandleEnum.POSITIVO) {
 					tipoCandleString = "1;";
 				}
 
-				if (VolumeAcimaMedia20
-						.comparaVolumeAcimaMedia20(engolfo.getVolumeAcimaMedia20()) == VolumeAcimaMedia20.SIM) {
+				if (VolumeAcimaMedia20Enum
+						.comparaVolumeAcimaMedia20(engolfo.getVolumeAcimaMedia20()) == VolumeAcimaMedia20Enum.SIM) {
 					volumeAcimaMedia20String = "1;";
 				} else {
 					volumeAcimaMedia20String = "0;";
 				}
 
-				if (PrecoAcimaMedia8.comparaPrecoAcimaMedia8(engolfo.getPrecoAcimaMedia8()) == PrecoAcimaMedia8.SIM) {
+				if (PrecoAcimaMedia8Enum.comparaPrecoAcimaMedia8(engolfo.getPrecoAcimaMedia8()) == PrecoAcimaMedia8Enum.SIM) {
 					precoAcimaMedia8String = "1;";
 				} else {
 					precoAcimaMedia8String = "0;";
 				}
 
-				if (PrecoAcimaMedia20.comparaPrecoAcimaMedia20(engolfo.getPrecoAcimaMedia20()) == PrecoAcimaMedia20.SIM) {
+				if (PrecoAcimaMedia20Enum.comparaPrecoAcimaMedia20(engolfo.getPrecoAcimaMedia20()) == PrecoAcimaMedia20Enum.SIM) {
 					precoAcimaMedia20String = "1;";
 				} else {
 					precoAcimaMedia20String = "0;";
 				}
 
-				if (PrecoAcimaMedia200
-						.comparaPrecoAcimaMedia200(engolfo.getPrecoAcimaMedia200()) == PrecoAcimaMedia200.SIM) {
+				if (PrecoAcimaMedia200Enum
+						.comparaPrecoAcimaMedia200(engolfo.getPrecoAcimaMedia200()) == PrecoAcimaMedia200Enum.SIM) {
 					precoAcimaMedia200String = "1;";
 				} else {
 					precoAcimaMedia200String = "0;";
 				}
 
-				if (VariacaoPreco.comparaVariacaoPreco(engolfo.getVariacao()) == VariacaoPreco.ATE2VEZES) {
+				if (VariacaoPrecoEnum.comparaVariacaoPreco(engolfo.getVariacao()) == VariacaoPrecoEnum.ATE2VEZES) {
 					variacaoString = "0;0;0;";
-				} else if (VariacaoPreco.comparaVariacaoPreco(engolfo.getVariacao()) == VariacaoPreco.DE2A3VEZES) {
+				} else if (VariacaoPrecoEnum.comparaVariacaoPreco(engolfo.getVariacao()) == VariacaoPrecoEnum.DE2A3VEZES) {
 					variacaoString = "0;0;1;";
-				} else if (VariacaoPreco.comparaVariacaoPreco(engolfo.getVariacao()) == VariacaoPreco.DE3A4VEZES) {
+				} else if (VariacaoPrecoEnum.comparaVariacaoPreco(engolfo.getVariacao()) == VariacaoPrecoEnum.DE3A4VEZES) {
 					variacaoString = "0;1;0;";
-				} else if (VariacaoPreco.comparaVariacaoPreco(engolfo.getVariacao()) == VariacaoPreco.DE4A5VEZES) {
+				} else if (VariacaoPrecoEnum.comparaVariacaoPreco(engolfo.getVariacao()) == VariacaoPrecoEnum.DE4A5VEZES) {
 					variacaoString = "0;1;1;";
-				} else if (VariacaoPreco.comparaVariacaoPreco(engolfo.getVariacao()) == VariacaoPreco.MAIORQUE5VEZES) {
+				} else if (VariacaoPrecoEnum.comparaVariacaoPreco(engolfo.getVariacao()) == VariacaoPrecoEnum.MAIORQUE5VEZES) {
 					variacaoString = "1;0;0;";
 				}
 
@@ -1884,39 +1885,39 @@ public class RedeNeural implements NeuralNetListener {
 			
 			TresSoldados tres = (TresSoldados) tr;
 
-			if (PavioSuperior.comparaPavioSuperior(tres.getPavioSuperiorPrimeiroCandle()) == PavioSuperior.SEMPAVIO
-					|| PavioSuperior
-							.comparaPavioSuperior(tres.getPavioSuperiorPrimeiroCandle()) == PavioSuperior.PAVIO5PORCENTO
-					|| PavioSuperior.comparaPavioSuperior(
-							tres.getPavioSuperiorPrimeiroCandle()) == PavioSuperior.PAVIO10PORCENTO
-					|| PavioSuperior.comparaPavioSuperior(
-							tres.getPavioSuperiorPrimeiroCandle()) == PavioSuperior.PAVIO33PORCENTO) {
+			if (PavioSuperiorEnum.comparaPavioSuperior(tres.getPavioSuperiorPrimeiroCandle()) == PavioSuperiorEnum.SEMPAVIO
+					|| PavioSuperiorEnum
+							.comparaPavioSuperior(tres.getPavioSuperiorPrimeiroCandle()) == PavioSuperiorEnum.PAVIO5PORCENTO
+					|| PavioSuperiorEnum.comparaPavioSuperior(
+							tres.getPavioSuperiorPrimeiroCandle()) == PavioSuperiorEnum.PAVIO10PORCENTO
+					|| PavioSuperiorEnum.comparaPavioSuperior(
+							tres.getPavioSuperiorPrimeiroCandle()) == PavioSuperiorEnum.PAVIO33PORCENTO) {
 
-				if (PavioInferior.comparaPavioInferior(tres.getPavioInferiorPrimeiroCandle()) == PavioInferior.SEMPAVIO
-						|| PavioInferior.comparaPavioInferior(
-								tres.getPavioInferiorPrimeiroCandle()) == PavioInferior.PAVIO5PORCENTO
-						|| PavioInferior.comparaPavioInferior(
-								tres.getPavioInferiorPrimeiroCandle()) == PavioInferior.PAVIO10PORCENTO
-						|| PavioInferior.comparaPavioInferior(
-								tres.getPavioInferiorPrimeiroCandle()) == PavioInferior.PAVIO33PORCENTO) {
+				if (PavioInferiorEnum.comparaPavioInferior(tres.getPavioInferiorPrimeiroCandle()) == PavioInferiorEnum.SEMPAVIO
+						|| PavioInferiorEnum.comparaPavioInferior(
+								tres.getPavioInferiorPrimeiroCandle()) == PavioInferiorEnum.PAVIO5PORCENTO
+						|| PavioInferiorEnum.comparaPavioInferior(
+								tres.getPavioInferiorPrimeiroCandle()) == PavioInferiorEnum.PAVIO10PORCENTO
+						|| PavioInferiorEnum.comparaPavioInferior(
+								tres.getPavioInferiorPrimeiroCandle()) == PavioInferiorEnum.PAVIO33PORCENTO) {
 
-					if (PavioSuperior
-							.comparaPavioSuperior(tres.getPavioSuperiorTerceiroCandle()) == PavioSuperior.SEMPAVIO
-							|| PavioSuperior.comparaPavioSuperior(
-									tres.getPavioSuperiorTerceiroCandle()) == PavioSuperior.PAVIO5PORCENTO
-							|| PavioSuperior.comparaPavioSuperior(
-									tres.getPavioSuperiorTerceiroCandle()) == PavioSuperior.PAVIO10PORCENTO
-							|| PavioSuperior.comparaPavioSuperior(
-									tres.getPavioSuperiorTerceiroCandle()) == PavioSuperior.PAVIO33PORCENTO) {
+					if (PavioSuperiorEnum
+							.comparaPavioSuperior(tres.getPavioSuperiorTerceiroCandle()) == PavioSuperiorEnum.SEMPAVIO
+							|| PavioSuperiorEnum.comparaPavioSuperior(
+									tres.getPavioSuperiorTerceiroCandle()) == PavioSuperiorEnum.PAVIO5PORCENTO
+							|| PavioSuperiorEnum.comparaPavioSuperior(
+									tres.getPavioSuperiorTerceiroCandle()) == PavioSuperiorEnum.PAVIO10PORCENTO
+							|| PavioSuperiorEnum.comparaPavioSuperior(
+									tres.getPavioSuperiorTerceiroCandle()) == PavioSuperiorEnum.PAVIO33PORCENTO) {
 
-						if (PavioInferior
-								.comparaPavioInferior(tres.getPavioInferiorTerceiroCandle()) == PavioInferior.SEMPAVIO
-								|| PavioInferior.comparaPavioInferior(
-										tres.getPavioInferiorTerceiroCandle()) == PavioInferior.PAVIO5PORCENTO
-								|| PavioInferior.comparaPavioInferior(
-										tres.getPavioInferiorTerceiroCandle()) == PavioInferior.PAVIO10PORCENTO
-								|| PavioInferior.comparaPavioInferior(
-										tres.getPavioInferiorTerceiroCandle()) == PavioInferior.PAVIO33PORCENTO) {
+						if (PavioInferiorEnum
+								.comparaPavioInferior(tres.getPavioInferiorTerceiroCandle()) == PavioInferiorEnum.SEMPAVIO
+								|| PavioInferiorEnum.comparaPavioInferior(
+										tres.getPavioInferiorTerceiroCandle()) == PavioInferiorEnum.PAVIO5PORCENTO
+								|| PavioInferiorEnum.comparaPavioInferior(
+										tres.getPavioInferiorTerceiroCandle()) == PavioInferiorEnum.PAVIO10PORCENTO
+								|| PavioInferiorEnum.comparaPavioInferior(
+										tres.getPavioInferiorTerceiroCandle()) == PavioInferiorEnum.PAVIO33PORCENTO) {
 
 							String padraoString = "";
 							String pavioSuperiorPrimeiroCandleString = "";
@@ -1931,64 +1932,64 @@ public class RedeNeural implements NeuralNetListener {
 								padraoString = "0;";
 							}
 
-							if (PavioSuperior.comparaPavioSuperior(
-									tres.getPavioSuperiorPrimeiroCandle()) == PavioSuperior.SEMPAVIO) {
+							if (PavioSuperiorEnum.comparaPavioSuperior(
+									tres.getPavioSuperiorPrimeiroCandle()) == PavioSuperiorEnum.SEMPAVIO) {
 								pavioSuperiorPrimeiroCandleString = "0;0;";
-							} else if (PavioSuperior.comparaPavioSuperior(
-									tres.getPavioSuperiorPrimeiroCandle()) == PavioSuperior.PAVIO5PORCENTO) {
+							} else if (PavioSuperiorEnum.comparaPavioSuperior(
+									tres.getPavioSuperiorPrimeiroCandle()) == PavioSuperiorEnum.PAVIO5PORCENTO) {
 								pavioSuperiorPrimeiroCandleString = "0;1;";
-							} else if (PavioSuperior.comparaPavioSuperior(
-									tres.getPavioSuperiorPrimeiroCandle()) == PavioSuperior.PAVIO10PORCENTO) {
+							} else if (PavioSuperiorEnum.comparaPavioSuperior(
+									tres.getPavioSuperiorPrimeiroCandle()) == PavioSuperiorEnum.PAVIO10PORCENTO) {
 								pavioSuperiorPrimeiroCandleString = "1;0;";
-							} else if (PavioSuperior.comparaPavioSuperior(
-									tres.getPavioSuperiorPrimeiroCandle()) == PavioSuperior.PAVIO33PORCENTO) {
+							} else if (PavioSuperiorEnum.comparaPavioSuperior(
+									tres.getPavioSuperiorPrimeiroCandle()) == PavioSuperiorEnum.PAVIO33PORCENTO) {
 								pavioSuperiorPrimeiroCandleString = "1;1;";
 							}
 
-							if (PavioInferior.comparaPavioInferior(
-									tres.getPavioInferiorPrimeiroCandle()) == PavioInferior.SEMPAVIO) {
+							if (PavioInferiorEnum.comparaPavioInferior(
+									tres.getPavioInferiorPrimeiroCandle()) == PavioInferiorEnum.SEMPAVIO) {
 								pavioInferiorPrimeiroCandleString = "0;0;";
-							} else if (PavioInferior.comparaPavioInferior(
-									tres.getPavioInferiorPrimeiroCandle()) == PavioInferior.PAVIO5PORCENTO) {
+							} else if (PavioInferiorEnum.comparaPavioInferior(
+									tres.getPavioInferiorPrimeiroCandle()) == PavioInferiorEnum.PAVIO5PORCENTO) {
 								pavioInferiorPrimeiroCandleString = "0;1;";
-							} else if (PavioInferior.comparaPavioInferior(
-									tres.getPavioInferiorPrimeiroCandle()) == PavioInferior.PAVIO10PORCENTO) {
+							} else if (PavioInferiorEnum.comparaPavioInferior(
+									tres.getPavioInferiorPrimeiroCandle()) == PavioInferiorEnum.PAVIO10PORCENTO) {
 								pavioInferiorPrimeiroCandleString = "1;0;";
-							} else if (PavioInferior.comparaPavioInferior(
-									tres.getPavioInferiorPrimeiroCandle()) == PavioInferior.PAVIO33PORCENTO) {
+							} else if (PavioInferiorEnum.comparaPavioInferior(
+									tres.getPavioInferiorPrimeiroCandle()) == PavioInferiorEnum.PAVIO33PORCENTO) {
 								pavioInferiorPrimeiroCandleString = "1;1;";
 							}
 
-							if (PavioSuperior.comparaPavioSuperior(
-									tres.getPavioSuperiorTerceiroCandle()) == PavioSuperior.SEMPAVIO) {
+							if (PavioSuperiorEnum.comparaPavioSuperior(
+									tres.getPavioSuperiorTerceiroCandle()) == PavioSuperiorEnum.SEMPAVIO) {
 								pavioSuperiorTerceiroCandleString = "0;0;";
-							} else if (PavioSuperior.comparaPavioSuperior(
-									tres.getPavioSuperiorTerceiroCandle()) == PavioSuperior.PAVIO5PORCENTO) {
+							} else if (PavioSuperiorEnum.comparaPavioSuperior(
+									tres.getPavioSuperiorTerceiroCandle()) == PavioSuperiorEnum.PAVIO5PORCENTO) {
 								pavioSuperiorTerceiroCandleString = "0;1;";
-							} else if (PavioSuperior.comparaPavioSuperior(
-									tres.getPavioSuperiorTerceiroCandle()) == PavioSuperior.PAVIO10PORCENTO) {
+							} else if (PavioSuperiorEnum.comparaPavioSuperior(
+									tres.getPavioSuperiorTerceiroCandle()) == PavioSuperiorEnum.PAVIO10PORCENTO) {
 								pavioSuperiorTerceiroCandleString = "1;0;";
-							} else if (PavioSuperior.comparaPavioSuperior(
-									tres.getPavioSuperiorTerceiroCandle()) == PavioSuperior.PAVIO33PORCENTO) {
+							} else if (PavioSuperiorEnum.comparaPavioSuperior(
+									tres.getPavioSuperiorTerceiroCandle()) == PavioSuperiorEnum.PAVIO33PORCENTO) {
 								pavioSuperiorTerceiroCandleString = "1;1;";
 							}
 
-							if (PavioInferior.comparaPavioInferior(
-									tres.getPavioInferiorTerceiroCandle()) == PavioInferior.SEMPAVIO) {
+							if (PavioInferiorEnum.comparaPavioInferior(
+									tres.getPavioInferiorTerceiroCandle()) == PavioInferiorEnum.SEMPAVIO) {
 								pavioInferiorTerceiroCandleString = "0;0;";
-							} else if (PavioInferior.comparaPavioInferior(
-									tres.getPavioInferiorTerceiroCandle()) == PavioInferior.PAVIO5PORCENTO) {
+							} else if (PavioInferiorEnum.comparaPavioInferior(
+									tres.getPavioInferiorTerceiroCandle()) == PavioInferiorEnum.PAVIO5PORCENTO) {
 								pavioInferiorTerceiroCandleString = "0;1;";
-							} else if (PavioInferior.comparaPavioInferior(
-									tres.getPavioInferiorTerceiroCandle()) == PavioInferior.PAVIO10PORCENTO) {
+							} else if (PavioInferiorEnum.comparaPavioInferior(
+									tres.getPavioInferiorTerceiroCandle()) == PavioInferiorEnum.PAVIO10PORCENTO) {
 								pavioInferiorTerceiroCandleString = "1;0;";
-							} else if (PavioInferior.comparaPavioInferior(
-									tres.getPavioInferiorTerceiroCandle()) == PavioInferior.PAVIO33PORCENTO) {
+							} else if (PavioInferiorEnum.comparaPavioInferior(
+									tres.getPavioInferiorTerceiroCandle()) == PavioInferiorEnum.PAVIO33PORCENTO) {
 								pavioInferiorTerceiroCandleString = "1;1;";
 							}
 
-							if (PrecoAcimaMedia200.comparaPrecoAcimaMedia200(
-									tres.getPrecoAcimaMedia200()) == PrecoAcimaMedia200.SIM) {
+							if (PrecoAcimaMedia200Enum.comparaPrecoAcimaMedia200(
+									tres.getPrecoAcimaMedia200()) == PrecoAcimaMedia200Enum.SIM) {
 								precoAcimaMedia200String = "1;";
 							} else {
 								precoAcimaMedia200String = "0;";
@@ -2013,7 +2014,7 @@ public class RedeNeural implements NeuralNetListener {
 
 	}
 
-	public static void testaRedeNeuralMarteloNaPratica(Perfil perfil) {
+	public static void testaRedeNeuralMarteloNaPratica(PerfilEnum perfil) {
 
 		LocalDate data = LocalDate.parse("2021-01-01");
 		ArrayList<Operacao> operacoes = OperacaoService.getOperacoesUltimoAno(MIN, MAX, data);
@@ -2102,7 +2103,7 @@ public class RedeNeural implements NeuralNetListener {
 
 	}
 
-	public static void testaRedeNeuralPiercingLineNaPratica(Perfil perfil) {
+	public static void testaRedeNeuralPiercingLineNaPratica(PerfilEnum perfil) {
 
 		LocalDate data = LocalDate.parse("2021-01-01");
 
@@ -2202,7 +2203,7 @@ public class RedeNeural implements NeuralNetListener {
 
 	}
 
-	public static void testaRedeNeuralEngolfoNaPratica(Perfil perfil) {
+	public static void testaRedeNeuralEngolfoNaPratica(PerfilEnum perfil) {
 
 		LocalDate data = LocalDate.parse("2021-01-01");
 
@@ -2215,19 +2216,19 @@ public class RedeNeural implements NeuralNetListener {
 			Engolfo engolfo = (Engolfo) operacao.getPadrao();
 			
 			if (operacao.getPadraoEnum() == PadroesEnum.ENGOLFO) {
-				if (PavioInferior
-						.comparaPavioInferior(engolfo.getPavioInferior()) != PavioInferior.PAVIO67PORCENTO
-						&& PavioInferior.comparaPavioInferior(
-								engolfo.getPavioInferior()) != PavioInferior.PAVIO80PORCENTO
-						&& PavioInferior.comparaPavioInferior(
-								engolfo.getPavioInferior()) != PavioInferior.PAVIO90PORCENTO) {
+				if (PavioInferiorEnum
+						.comparaPavioInferior(engolfo.getPavioInferior()) != PavioInferiorEnum.PAVIO67PORCENTO
+						&& PavioInferiorEnum.comparaPavioInferior(
+								engolfo.getPavioInferior()) != PavioInferiorEnum.PAVIO80PORCENTO
+						&& PavioInferiorEnum.comparaPavioInferior(
+								engolfo.getPavioInferior()) != PavioInferiorEnum.PAVIO90PORCENTO) {
 
-					if (PavioSuperior.comparaPavioSuperior(
-							engolfo.getPavioSuperior()) != PavioSuperior.PAVIO67PORCENTO
-							&& PavioSuperior.comparaPavioSuperior(
-									engolfo.getPavioSuperior()) != PavioSuperior.PAVIO80PORCENTO
-							&& PavioSuperior.comparaPavioSuperior(
-									engolfo.getPavioSuperior()) != PavioSuperior.PAVIO90PORCENTO)
+					if (PavioSuperiorEnum.comparaPavioSuperior(
+							engolfo.getPavioSuperior()) != PavioSuperiorEnum.PAVIO67PORCENTO
+							&& PavioSuperiorEnum.comparaPavioSuperior(
+									engolfo.getPavioSuperior()) != PavioSuperiorEnum.PAVIO80PORCENTO
+							&& PavioSuperiorEnum.comparaPavioSuperior(
+									engolfo.getPavioSuperior()) != PavioSuperiorEnum.PAVIO90PORCENTO)
 
 						engolfos.add(engolfo);
 					operacoesEngolfo.add(operacao);
@@ -2323,7 +2324,7 @@ public class RedeNeural implements NeuralNetListener {
 
 	}
 
-	public static void testaRedeNeuralTresSoldadosNaPratica(Perfil perfil) {
+	public static void testaRedeNeuralTresSoldadosNaPratica(PerfilEnum perfil) {
 
 		LocalDate data = LocalDate.parse("2021-01-01");
 
@@ -2337,28 +2338,28 @@ public class RedeNeural implements NeuralNetListener {
 			if (operacao.getPadraoEnum() == PadroesEnum.TRESSOLDADOSDEALTA
 					|| operacao.getPadraoEnum() == PadroesEnum.TRESSOLDADOSDEBAIXA) {
 
-				if (PavioSuperior.comparaPavioSuperior(tres.getPavioSuperiorPrimeiroCandle()) == PavioSuperior.SEMPAVIO
-						|| PavioSuperior
-								.comparaPavioSuperior(tres.getPavioSuperiorPrimeiroCandle()) == PavioSuperior.PAVIO5PORCENTO
-						|| PavioSuperior.comparaPavioSuperior(tres.getPavioSuperiorPrimeiroCandle()) == PavioSuperior.PAVIO10PORCENTO
-						|| PavioSuperior.comparaPavioSuperior(tres.getPavioSuperiorPrimeiroCandle()) == PavioSuperior.PAVIO33PORCENTO) {
+				if (PavioSuperiorEnum.comparaPavioSuperior(tres.getPavioSuperiorPrimeiroCandle()) == PavioSuperiorEnum.SEMPAVIO
+						|| PavioSuperiorEnum
+								.comparaPavioSuperior(tres.getPavioSuperiorPrimeiroCandle()) == PavioSuperiorEnum.PAVIO5PORCENTO
+						|| PavioSuperiorEnum.comparaPavioSuperior(tres.getPavioSuperiorPrimeiroCandle()) == PavioSuperiorEnum.PAVIO10PORCENTO
+						|| PavioSuperiorEnum.comparaPavioSuperior(tres.getPavioSuperiorPrimeiroCandle()) == PavioSuperiorEnum.PAVIO33PORCENTO) {
 
-					if (PavioInferior.comparaPavioInferior(tres.getPavioInferiorPrimeiroCandle()) == PavioInferior.SEMPAVIO
-							|| PavioInferior.comparaPavioInferior(tres.getPavioInferiorPrimeiroCandle()) == PavioInferior.PAVIO5PORCENTO
-							|| PavioInferior.comparaPavioInferior(tres.getPavioInferiorPrimeiroCandle()) == PavioInferior.PAVIO10PORCENTO
-							|| PavioInferior.comparaPavioInferior(tres.getPavioInferiorPrimeiroCandle()) == PavioInferior.PAVIO33PORCENTO) {
+					if (PavioInferiorEnum.comparaPavioInferior(tres.getPavioInferiorPrimeiroCandle()) == PavioInferiorEnum.SEMPAVIO
+							|| PavioInferiorEnum.comparaPavioInferior(tres.getPavioInferiorPrimeiroCandle()) == PavioInferiorEnum.PAVIO5PORCENTO
+							|| PavioInferiorEnum.comparaPavioInferior(tres.getPavioInferiorPrimeiroCandle()) == PavioInferiorEnum.PAVIO10PORCENTO
+							|| PavioInferiorEnum.comparaPavioInferior(tres.getPavioInferiorPrimeiroCandle()) == PavioInferiorEnum.PAVIO33PORCENTO) {
 
-						if (PavioSuperior
-								.comparaPavioSuperior(tres.getPavioSuperiorTerceiroCandle()) == PavioSuperior.SEMPAVIO
-								|| PavioSuperior.comparaPavioSuperior(tres.getPavioSuperiorTerceiroCandle()) == PavioSuperior.PAVIO5PORCENTO
-								|| PavioSuperior.comparaPavioSuperior(tres.getPavioSuperiorTerceiroCandle()) == PavioSuperior.PAVIO10PORCENTO
-								|| PavioSuperior.comparaPavioSuperior(tres.getPavioSuperiorTerceiroCandle()) == PavioSuperior.PAVIO33PORCENTO) {
+						if (PavioSuperiorEnum
+								.comparaPavioSuperior(tres.getPavioSuperiorTerceiroCandle()) == PavioSuperiorEnum.SEMPAVIO
+								|| PavioSuperiorEnum.comparaPavioSuperior(tres.getPavioSuperiorTerceiroCandle()) == PavioSuperiorEnum.PAVIO5PORCENTO
+								|| PavioSuperiorEnum.comparaPavioSuperior(tres.getPavioSuperiorTerceiroCandle()) == PavioSuperiorEnum.PAVIO10PORCENTO
+								|| PavioSuperiorEnum.comparaPavioSuperior(tres.getPavioSuperiorTerceiroCandle()) == PavioSuperiorEnum.PAVIO33PORCENTO) {
 
-							if (PavioInferior
-									.comparaPavioInferior(tres.getPavioInferiorTerceiroCandle()) == PavioInferior.SEMPAVIO
-									|| PavioInferior.comparaPavioInferior(tres.getPavioInferiorTerceiroCandle()) == PavioInferior.PAVIO5PORCENTO
-									|| PavioInferior.comparaPavioInferior(tres.getPavioInferiorTerceiroCandle()) == PavioInferior.PAVIO10PORCENTO
-									|| PavioInferior.comparaPavioInferior(tres.getPavioInferiorTerceiroCandle()) == PavioInferior.PAVIO33PORCENTO) {
+							if (PavioInferiorEnum
+									.comparaPavioInferior(tres.getPavioInferiorTerceiroCandle()) == PavioInferiorEnum.SEMPAVIO
+									|| PavioInferiorEnum.comparaPavioInferior(tres.getPavioInferiorTerceiroCandle()) == PavioInferiorEnum.PAVIO5PORCENTO
+									|| PavioInferiorEnum.comparaPavioInferior(tres.getPavioInferiorTerceiroCandle()) == PavioInferiorEnum.PAVIO10PORCENTO
+									|| PavioInferiorEnum.comparaPavioInferior(tres.getPavioInferiorTerceiroCandle()) == PavioInferiorEnum.PAVIO33PORCENTO) {
 								
 								tresSoldados.add(tres);
 								operacoesTresSoldados.add(operacao);
@@ -2458,7 +2459,7 @@ public class RedeNeural implements NeuralNetListener {
 
 	}
 
-	public static void realizaTreinamentoRedeNeuralTresSoldados(Perfil perfil) throws IOException {
+	public static void realizaTreinamentoRedeNeuralTresSoldados(PerfilEnum perfil) throws IOException {
 
 		Double acerto = 0.0;
 
@@ -2621,7 +2622,7 @@ public class RedeNeural implements NeuralNetListener {
 
 	}
 
-	public static void realizaTreinamentoRedeNeuralEngolfo(Perfil perfil) throws IOException {
+	public static void realizaTreinamentoRedeNeuralEngolfo(PerfilEnum perfil) throws IOException {
 
 		Double acerto = 0.0;
 
@@ -2784,7 +2785,7 @@ public class RedeNeural implements NeuralNetListener {
 
 	}
 
-	public static void realizaTreinamentoRedeNeuralPiercingLine(Perfil perfil) throws IOException {
+	public static void realizaTreinamentoRedeNeuralPiercingLine(PerfilEnum perfil) throws IOException {
 
 		Double acerto = 0.0;
 
@@ -2947,7 +2948,7 @@ public class RedeNeural implements NeuralNetListener {
 
 	}
 
-	public static void realizaTreinamentoRedeNeuralMartelo(Perfil perfil) throws IOException {
+	public static void realizaTreinamentoRedeNeuralMartelo(PerfilEnum perfil) throws IOException {
 
 		Double acerto = 0.0;
 
@@ -3106,19 +3107,19 @@ public class RedeNeural implements NeuralNetListener {
 		}
 	}
 
-	private static boolean condicaoParaCompraMartelo(Double assertividadeComPeso, Perfil perfil) {
+	private static boolean condicaoParaCompraMartelo(Double assertividadeComPeso, PerfilEnum perfil) {
 		return assertividadeComPeso.compareTo(perfil.getValor()) == 0 || assertividadeComPeso > perfil.getValor();
 	}
 
-	private static boolean condicaoParaPiercingLine(Double assertividadeComPeso, Perfil perfil) {
+	private static boolean condicaoParaPiercingLine(Double assertividadeComPeso, PerfilEnum perfil) {
 		return assertividadeComPeso.compareTo(perfil.getValor()) == 0 || assertividadeComPeso > perfil.getValor();
 	}
 
-	private static boolean condicaoParaMargemSegurancaEngolfo(Double assertividadeComPeso, Perfil perfil) {
+	private static boolean condicaoParaMargemSegurancaEngolfo(Double assertividadeComPeso, PerfilEnum perfil) {
 		return assertividadeComPeso.compareTo(perfil.getValor()) == 0 || assertividadeComPeso > perfil.getValor();
 	}
 
-	private static boolean condicaoParaMargemSegurancaTresSoldados(Double assertividadeComPeso, Perfil perfil) {
+	private static boolean condicaoParaMargemSegurancaTresSoldados(Double assertividadeComPeso, PerfilEnum perfil) {
 		return assertividadeComPeso.compareTo(perfil.getValor()) == 0 || assertividadeComPeso > perfil.getValor();
 	}
 
@@ -3142,10 +3143,10 @@ public class RedeNeural implements NeuralNetListener {
 	private static boolean condicaoParaBebeAbandonadoDeAlta(InfoCandle primeiroCandle, InfoCandle segundoCandle,
 			InfoCandle terceiroCandle) {
 
-		return tipoCandle(primeiroCandle) == TipoCandle.NEGATIVO
+		return tipoCandle(primeiroCandle) == TipoCandleEnum.NEGATIVO
 				&& segundoCandle.getMaxima() < primeiroCandle.getMinima()
 				&& terceiroCandle.getMinima() > segundoCandle.getMaxima()
-				&& tipoCandle(terceiroCandle) == TipoCandle.POSITIVO;
+				&& tipoCandle(terceiroCandle) == TipoCandleEnum.POSITIVO;
 	}
 
 	private static boolean condicaoParaMarubozuSimples(InfoCandle primeiroCandle) {
@@ -3154,30 +3155,30 @@ public class RedeNeural implements NeuralNetListener {
 
 	private static boolean condicaoParaBebeAbandonadoDeBaixa(InfoCandle primeiroCandle, InfoCandle segundoCandle,
 			InfoCandle terceiroCandle) {
-		return tipoCandle(primeiroCandle) == TipoCandle.POSITIVO
+		return tipoCandle(primeiroCandle) == TipoCandleEnum.POSITIVO
 				&& segundoCandle.getMinima() > primeiroCandle.getMaxima()
 				&& terceiroCandle.getMaxima() < segundoCandle.getMinima()
-				&& tipoCandle(terceiroCandle) == TipoCandle.NEGATIVO;
+				&& tipoCandle(terceiroCandle) == TipoCandleEnum.NEGATIVO;
 	}
 
 	private static boolean condicaoParaTresSoldadosDeBaixa(InfoCandle primeiroCandle, InfoCandle segundoCandle,
 			InfoCandle terceiroCandle) {
-		return tipoCandle(primeiroCandle) == TipoCandle.NEGATIVO && pavioSuperiorEmPorcentagem(primeiroCandle) < 40
-				&& pavioInferiorEmPorcentagem(primeiroCandle) < 40 && tipoCandle(segundoCandle) == TipoCandle.NEGATIVO
+		return tipoCandle(primeiroCandle) == TipoCandleEnum.NEGATIVO && pavioSuperiorEmPorcentagem(primeiroCandle) < 40
+				&& pavioInferiorEmPorcentagem(primeiroCandle) < 40 && tipoCandle(segundoCandle) == TipoCandleEnum.NEGATIVO
 				&& pavioSuperiorEmPorcentagem(segundoCandle) < 40 && pavioInferiorEmPorcentagem(segundoCandle) < 40
-				&& tipoCandle(terceiroCandle) == TipoCandle.NEGATIVO && pavioSuperiorEmPorcentagem(terceiroCandle) < 40
+				&& tipoCandle(terceiroCandle) == TipoCandleEnum.NEGATIVO && pavioSuperiorEmPorcentagem(terceiroCandle) < 40
 				&& pavioInferiorEmPorcentagem(terceiroCandle) < 40
-				&& tendenciaMediaCurta(terceiroCandle) == TendenciaMediaCurta.ALTA;
+				&& tendenciaMediaCurta(terceiroCandle) == TendenciaMediaCurtaEnum.ALTA;
 	}
 
 	private static boolean condicaoParaTresSoldadosDeAlta(InfoCandle primeiroCandle, InfoCandle segundoCandle,
 			InfoCandle terceiroCandle) {
-		return tipoCandle(primeiroCandle) == TipoCandle.POSITIVO && pavioSuperiorEmPorcentagem(primeiroCandle) < 40
-				&& pavioInferiorEmPorcentagem(primeiroCandle) < 40 && tipoCandle(segundoCandle) == TipoCandle.POSITIVO
+		return tipoCandle(primeiroCandle) == TipoCandleEnum.POSITIVO && pavioSuperiorEmPorcentagem(primeiroCandle) < 40
+				&& pavioInferiorEmPorcentagem(primeiroCandle) < 40 && tipoCandle(segundoCandle) == TipoCandleEnum.POSITIVO
 				&& pavioSuperiorEmPorcentagem(segundoCandle) < 40 && pavioInferiorEmPorcentagem(segundoCandle) < 40
-				&& tipoCandle(terceiroCandle) == TipoCandle.POSITIVO && pavioSuperiorEmPorcentagem(terceiroCandle) < 40
+				&& tipoCandle(terceiroCandle) == TipoCandleEnum.POSITIVO && pavioSuperiorEmPorcentagem(terceiroCandle) < 40
 				&& pavioInferiorEmPorcentagem(terceiroCandle) < 40
-				&& tendenciaMediaCurta(terceiroCandle) == TendenciaMediaCurta.BAIXA;
+				&& tendenciaMediaCurta(terceiroCandle) == TendenciaMediaCurtaEnum.BAIXA;
 	}
 
 	private static int calculoPerfuracao(InfoCandle primeiroCandle, InfoCandle segundoCandle) {
@@ -3212,9 +3213,9 @@ public class RedeNeural implements NeuralNetListener {
 
 		Double dif = Math.abs((candle.getFechamento() - candle.getAbertura()) / 2);
 
-		if (tipoCandle(candle) == TipoCandle.POSITIVO) {
+		if (tipoCandle(candle) == TipoCandleEnum.POSITIVO) {
 			return candle.getAbertura() + dif;
-		} else if (tipoCandle(candle) == TipoCandle.NEGATIVO) {
+		} else if (tipoCandle(candle) == TipoCandleEnum.NEGATIVO) {
 			return candle.getFechamento() + dif;
 		}
 
@@ -3237,14 +3238,14 @@ public class RedeNeural implements NeuralNetListener {
 		return (infoCandle.getMaxima() + 0.01);
 	}
 
-	private static Double calculaPrecoTerceiroAlvoFibonacci(InfoCandle infoCandle, Entrada entrada) {
+	private static Double calculaPrecoTerceiroAlvoFibonacci(InfoCandle infoCandle, EntradaEnum entrada) {
 
 		if (infoCandle != null && entrada != null) {
-			if (entrada == Entrada.COMPRA) {
+			if (entrada == EntradaEnum.COMPRA) {
 
 				return Math.abs(((infoCandle.getMaxima() - infoCandle.getMinima()) * 1.618) + infoCandle.getMaxima());
 
-			} else if (entrada == Entrada.VENDA) {
+			} else if (entrada == EntradaEnum.VENDA) {
 
 				return Math.abs(((infoCandle.getMaxima() - infoCandle.getMinima()) * 1.618) - infoCandle.getMinima());
 
@@ -3254,14 +3255,14 @@ public class RedeNeural implements NeuralNetListener {
 		return null;
 	}
 
-	private static Double calculaPrecoSegundoAlvoFibonacci(InfoCandle infoCandle, Entrada entrada) {
+	private static Double calculaPrecoSegundoAlvoFibonacci(InfoCandle infoCandle, EntradaEnum entrada) {
 
 		if (infoCandle != null && entrada != null) {
-			if (entrada == Entrada.COMPRA) {
+			if (entrada == EntradaEnum.COMPRA) {
 
 				return Math.abs(((infoCandle.getMaxima() - infoCandle.getMinima())) + infoCandle.getMaxima());
 
-			} else if (entrada == Entrada.VENDA) {
+			} else if (entrada == EntradaEnum.VENDA) {
 
 				return Math.abs(((infoCandle.getMaxima() - infoCandle.getMinima())) - infoCandle.getMinima());
 
@@ -3271,14 +3272,14 @@ public class RedeNeural implements NeuralNetListener {
 		return null;
 	}
 
-	private static Double calculaPrecoPrimeiroAlvoFibonacci(InfoCandle infoCandle, Entrada entrada) {
+	private static Double calculaPrecoPrimeiroAlvoFibonacci(InfoCandle infoCandle, EntradaEnum entrada) {
 
 		if (infoCandle != null && entrada != null) {
-			if (entrada == Entrada.COMPRA) {
+			if (entrada == EntradaEnum.COMPRA) {
 
 				return Math.abs((((infoCandle.getMaxima() - infoCandle.getMinima()) * 0.618) + infoCandle.getMaxima()));
 
-			} else if (entrada == Entrada.VENDA) {
+			} else if (entrada == EntradaEnum.VENDA) {
 
 				return Math.abs(((infoCandle.getMaxima() - infoCandle.getMinima()) * 0.618) - infoCandle.getMinima());
 
@@ -3358,21 +3359,21 @@ public class RedeNeural implements NeuralNetListener {
 				&& infoCandle.getMinima().compareTo(infoCandle.getAbertura()) == 0;
 	}
 
-	private static VariacaoPreco classificaVariacaoPreco(Double variacao) {
+	private static VariacaoPrecoEnum classificaVariacaoPreco(Double variacao) {
 
 		if (variacao > 1 && variacao < 2 || variacao.compareTo(1.0) == 0) {
-			return VariacaoPreco.ATE2VEZES;
+			return VariacaoPrecoEnum.ATE2VEZES;
 		} else if (variacao > 2 && variacao < 3 || variacao.compareTo(2.0) == 0) {
-			return VariacaoPreco.DE2A3VEZES;
+			return VariacaoPrecoEnum.DE2A3VEZES;
 		} else if (variacao > 3 && variacao < 4 || variacao.compareTo(3.0) == 0) {
-			return VariacaoPreco.DE3A4VEZES;
+			return VariacaoPrecoEnum.DE3A4VEZES;
 		} else if (variacao > 4 && variacao < 5 || variacao.compareTo(4.0) == 0) {
-			return VariacaoPreco.DE4A5VEZES;
+			return VariacaoPrecoEnum.DE4A5VEZES;
 		} else if (variacao > 5 || variacao.compareTo(5.0) == 0) {
-			return VariacaoPreco.MAIORQUE5VEZES;
+			return VariacaoPrecoEnum.MAIORQUE5VEZES;
 		}
 
-		return VariacaoPreco.NULL;
+		return VariacaoPrecoEnum.NULL;
 	}
 
 	private static Boolean validaMarubozuPelaVariacao(Double calculaVariacao) {
@@ -3394,11 +3395,11 @@ public class RedeNeural implements NeuralNetListener {
 
 		if (infoCandle != null) {
 
-			if (tipoCandle(infoCandle) == TipoCandle.NEGATIVO || tipoCandle(infoCandle) == TipoCandle.NEUTRO) {
+			if (tipoCandle(infoCandle) == TipoCandleEnum.NEGATIVO || tipoCandle(infoCandle) == TipoCandleEnum.NEUTRO) {
 
 				return variacao = Math.abs(((infoCandle.getMinima() / infoCandle.getMaxima()) - 1) * 100);
 
-			} else if (tipoCandle(infoCandle) == TipoCandle.POSITIVO) {
+			} else if (tipoCandle(infoCandle) == TipoCandleEnum.POSITIVO) {
 
 				return variacao = Math.abs(((infoCandle.getMaxima() / infoCandle.getMinima()) - 1) * 100);
 
@@ -3418,26 +3419,26 @@ public class RedeNeural implements NeuralNetListener {
 
 	private static boolean condicaoParaMartelo(InfoCandle infoCandle, Double pavioSuperior, Double pavioInferior) {
 		return pavioSuperior <= 10 && pavioInferior >= 67
-				&& tendenciaMediaCurta(infoCandle) == TendenciaMediaCurta.BAIXA;
+				&& tendenciaMediaCurta(infoCandle) == TendenciaMediaCurtaEnum.BAIXA;
 	}
 
-	private static TipoCandle tipoCandle(InfoCandle infoCandle) {
+	private static TipoCandleEnum tipoCandle(InfoCandle infoCandle) {
 
-		TipoCandle tipo;
+		TipoCandleEnum tipo;
 
 		if (infoCandle.getAbertura() < infoCandle.getFechamento()) {
-			tipo = TipoCandle.POSITIVO;
+			tipo = TipoCandleEnum.POSITIVO;
 			return tipo;
 		}
 		if (infoCandle.getAbertura() > infoCandle.getFechamento()) {
-			tipo = TipoCandle.NEGATIVO;
+			tipo = TipoCandleEnum.NEGATIVO;
 			return tipo;
 		}
 		if (infoCandle.getAbertura().compareTo(infoCandle.getFechamento()) == 0) {
-			tipo = TipoCandle.NEUTRO;
+			tipo = TipoCandleEnum.NEUTRO;
 			return tipo;
 		}
-		tipo = TipoCandle.NULL;
+		tipo = TipoCandleEnum.NULL;
 		return tipo;
 	}
 
@@ -3481,21 +3482,21 @@ public class RedeNeural implements NeuralNetListener {
 
 	}
 
-	private static TendenciaMediaCurta tendenciaMediaCurta(InfoCandle infoCandle) {
+	private static TendenciaMediaCurtaEnum tendenciaMediaCurta(InfoCandle infoCandle) {
 		// Tendencia das medias de 8 e 20
 
-		TendenciaMediaCurta tendencia;
+		TendenciaMediaCurtaEnum tendencia;
 
 		if (infoCandle.getPrecoMedia20() != null) {
 
 			if (infoCandle.getPrecoMedia8() > infoCandle.getPrecoMedia20()) {
-				tendencia = TendenciaMediaCurta.ALTA;
+				tendencia = TendenciaMediaCurtaEnum.ALTA;
 				return tendencia;
 			} else if (infoCandle.getPrecoMedia8() < infoCandle.getPrecoMedia20()) {
-				tendencia = TendenciaMediaCurta.BAIXA;
+				tendencia = TendenciaMediaCurtaEnum.BAIXA;
 				return tendencia;
 			} else if (infoCandle.getPrecoMedia8().compareTo(infoCandle.getPrecoMedia20()) == 0) {
-				tendencia = TendenciaMediaCurta.NEUTRA;
+				tendencia = TendenciaMediaCurtaEnum.NEUTRA;
 				return tendencia;
 			}
 		}
@@ -3517,59 +3518,59 @@ public class RedeNeural implements NeuralNetListener {
 		return false;
 	}
 
-	private static PavioSuperior classificaPavioSuperior(Double pavioSuperior) {
+	private static PavioSuperiorEnum classificaPavioSuperior(Double pavioSuperior) {
 
 		if (pavioSuperior == 0) {
-			return PavioSuperior.SEMPAVIO;
+			return PavioSuperiorEnum.SEMPAVIO;
 		} else if (pavioSuperior > 0 && pavioSuperior <= 5) {
-			return PavioSuperior.PAVIO5PORCENTO;
+			return PavioSuperiorEnum.PAVIO5PORCENTO;
 		} else if (pavioSuperior > 5 && pavioSuperior <= 10) {
-			return PavioSuperior.PAVIO10PORCENTO;
+			return PavioSuperiorEnum.PAVIO10PORCENTO;
 		} else if (pavioSuperior > 10 && pavioSuperior <= 33) {
-			return PavioSuperior.PAVIO33PORCENTO;
+			return PavioSuperiorEnum.PAVIO33PORCENTO;
 		} else if (pavioSuperior > 33 && pavioSuperior <= 40) {
-			return PavioSuperior.PAVIO40PORCENTO;
+			return PavioSuperiorEnum.PAVIO40PORCENTO;
 		} else if (pavioSuperior > 40 && pavioSuperior <= 67) {
-			return PavioSuperior.PAVIO67PORCENTO;
+			return PavioSuperiorEnum.PAVIO67PORCENTO;
 		} else if (pavioSuperior > 67 && pavioSuperior <= 80) {
-			return PavioSuperior.PAVIO80PORCENTO;
+			return PavioSuperiorEnum.PAVIO80PORCENTO;
 		} else if (pavioSuperior > 80 && pavioSuperior <= 90) {
-			return PavioSuperior.PAVIO90PORCENTO;
+			return PavioSuperiorEnum.PAVIO90PORCENTO;
 		} else if (pavioSuperior > 90 && pavioSuperior <= 95) {
-			return PavioSuperior.PAVIO95PORCENTO;
+			return PavioSuperiorEnum.PAVIO95PORCENTO;
 		} else if (pavioSuperior > 95 && pavioSuperior.compareTo(100.0) == 0 || pavioSuperior.compareTo(100.0) == -1) {
-			return PavioSuperior.PAVIO100PORCENTO;
+			return PavioSuperiorEnum.PAVIO100PORCENTO;
 		}
 
-		return PavioSuperior.NULL;
+		return PavioSuperiorEnum.NULL;
 
 	}
 
-	private static PavioInferior classificaPavioInferior(Double pavioInferior) {
+	private static PavioInferiorEnum classificaPavioInferior(Double pavioInferior) {
 
 		if (pavioInferior.compareTo(0.0) == 0) {
-			return PavioInferior.SEMPAVIO;
+			return PavioInferiorEnum.SEMPAVIO;
 		} else if (pavioInferior > 0 && pavioInferior <= 5) {
-			return PavioInferior.PAVIO5PORCENTO;
+			return PavioInferiorEnum.PAVIO5PORCENTO;
 		} else if (pavioInferior > 5 && pavioInferior <= 10) {
-			return PavioInferior.PAVIO10PORCENTO;
+			return PavioInferiorEnum.PAVIO10PORCENTO;
 		} else if (pavioInferior > 10 && pavioInferior <= 33) {
-			return PavioInferior.PAVIO33PORCENTO;
+			return PavioInferiorEnum.PAVIO33PORCENTO;
 		} else if (pavioInferior > 33 && pavioInferior <= 40) {
-			return PavioInferior.PAVIO40PORCENTO;
+			return PavioInferiorEnum.PAVIO40PORCENTO;
 		} else if (pavioInferior > 40 && pavioInferior <= 67) {
-			return PavioInferior.PAVIO67PORCENTO;
+			return PavioInferiorEnum.PAVIO67PORCENTO;
 		} else if (pavioInferior > 67 && pavioInferior <= 80) {
-			return PavioInferior.PAVIO80PORCENTO;
+			return PavioInferiorEnum.PAVIO80PORCENTO;
 		} else if (pavioInferior > 80 && pavioInferior <= 90) {
-			return PavioInferior.PAVIO90PORCENTO;
+			return PavioInferiorEnum.PAVIO90PORCENTO;
 		} else if (pavioInferior > 90 && pavioInferior <= 95) {
-			return PavioInferior.PAVIO95PORCENTO;
+			return PavioInferiorEnum.PAVIO95PORCENTO;
 		} else if (pavioInferior > 95 && pavioInferior <= 100) {
-			return PavioInferior.PAVIO100PORCENTO;
+			return PavioInferiorEnum.PAVIO100PORCENTO;
 		}
 
-		return PavioInferior.NULL;
+		return PavioInferiorEnum.NULL;
 
 	}
 

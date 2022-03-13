@@ -1,7 +1,6 @@
 package br.iesb.indicador_analise_grafica.controller;
 
 import java.io.File;
-import java.io.IOException;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
 import java.time.LocalDate;
@@ -20,13 +19,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.iesb.indicador_analise.utils.Arquivo;
 import br.iesb.indicador_analise_grafica.Candle;
 import br.iesb.indicador_analise_grafica.InfoCandle;
 import br.iesb.indicador_analise_grafica.PapeisOperaveis;
+import br.iesb.indicador_analise_grafica.TreinamentoRedeNeural;
 import br.iesb.indicador_analise_grafica.controle.Controle;
 import br.iesb.indicador_analise_grafica.service.InfoCandleService;
 import br.iesb.indicador_analise_grafica.service.PapeisOperaveisService;
+import br.iesb.indicador_analise_grafica.util.Arquivo;
 
 @RestController
 @RequestMapping("/infocandle")
@@ -94,13 +94,8 @@ public class InfoCandleController {
 		Set<String> arquivosNaPasta = null;
 		
 		
-		try {
-			arquivosNaPasta = Arquivo.listFilesUsingDirectoryStream(directory);
-		}catch (IOException ex) {
-			System.out.println("Erro io exception");
-			System.out.println(ex.getMessage());
-			return "erro para trabalhar com arquivos";
-		}
+		
+		arquivosNaPasta = Arquivo.listFilesUsingDirectoryStream(directory);
 		
 		recuperaNovosInfoCandlesDeArquivo(ultimaLeitura, candlesPorPapel, directory, 
 				arquivosNaPasta, todosPapeisOperaveis);
@@ -126,6 +121,8 @@ public class InfoCandleController {
 		controle.setRodandoAtualizacaodiaria(false);
 		infocandleService.saveControle(controle);
 		System.out.println("Atualização diária terminou com sucesso 100%");
+		
+		TreinamentoRedeNeural.realizaTreinamentoProcurandoPadroesEmPapeisOperaveis(ultimaInsercao);
 		
 		return "terminou";
 		//List<Operacao> operacoes = OperacaoService.getOperacoes();

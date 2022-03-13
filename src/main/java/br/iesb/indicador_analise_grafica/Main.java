@@ -22,13 +22,16 @@ import br.iesb.indicador_analise_grafica.repository.MarubozuRepository;
 import br.iesb.indicador_analise_grafica.service.MarubozuService;
 import br.iesb.indicador_analise_grafica.service.OperacaoService;
 import br.iesb.indicador_analise_grafica_enum.PadroesEnum;
-import br.iesb.indicador_analise_grafica_enum.Perfil;
+import br.iesb.indicador_analise_grafica_enum.PavioInferiorEnum;
+import br.iesb.indicador_analise_grafica_enum.PavioSuperiorEnum;
+import br.iesb.indicador_analise_grafica_enum.PerfilEnum;
+import br.iesb.indicador_analise_grafica_enum.PrecoAcimaMedia200Enum;
+import lombok.Data;
 
 
 @SpringBootApplication
 public class Main {
 	
-
 	public static void main(String[] args) throws IOException, SQLException {
 		SpringApplication.run(Main.class, args);
 		
@@ -46,17 +49,21 @@ public class Main {
 		 * 1000F);
 		 */
 		
-		// primeira coisa procura todos padrões
-		//TreinamentoRedeNeural.realizaTreinamentoProcurandoPadroesEmPapeisOperaveis();
+		/** TODO CRIAR OPERACAO NO BANCO COMO ESTATÍSTICA ? OU COMO OPERAÇÃO  
+		 * OPERÁVEL x MERCADO ATIVO (em questão de continuidade do nome da ação)??   */
+		// primeira coisa procura todos padrões em papeis 'operaveis' (ativos e inativos)
+		//TreinamentoRedeNeural.realizaTreinamentoProcurandoPadroesEmPapeisOperaveis(null);
+		
 		
 		// segunda coisa é simular operações, onde deu stop e quais alvos
 		//TreinamentoRedeNeural.confereAlvosDasOperacoesPossiveis();
 
 		// terceira coisa a seguir a gente fala.... 
 		// RedeNeural.preenchendoEstatisticaEngolfo(perfil);
+		
 	}
 
-	private static void menu(Perfil perfil) {
+	private static void menu(PerfilEnum perfil) {
 		int opcaoDeMenu = -1;
 		do {
 			apresentarAsOpcoesDeMenu();
@@ -96,9 +103,9 @@ public class Main {
 		} while (opcaoDeMenu != 0);
 	}
 
-	private static Perfil selecionaPerfil() {
+	private static PerfilEnum selecionaPerfil() {
 		int valorDoPerfil = 0;
-		Perfil perfil;
+		PerfilEnum perfil;
 		
 		do{
 			opcoesParaPerfilEscritas();
@@ -112,19 +119,19 @@ public class Main {
 		
 	}
 
-	private static Perfil switchParaSelecionarPerfil(int valorDoPerfil) {
-		Perfil perfil;
+	private static PerfilEnum switchParaSelecionarPerfil(int valorDoPerfil) {
+		PerfilEnum perfil;
 		switch (valorDoPerfil) {
 		case 1:
-			perfil = Perfil.ARROJADO;
+			perfil = PerfilEnum.ARROJADO;
 			return perfil;
 			
 		case 2:
-			perfil = Perfil.MODERADO;
+			perfil = PerfilEnum.MODERADO;
 			return perfil;
 			
 		case 3:
-			perfil = Perfil.CONSERVADOR;
+			perfil = PerfilEnum.CONSERVADOR;
 			return perfil;
 			
 		default:

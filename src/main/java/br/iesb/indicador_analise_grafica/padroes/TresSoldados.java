@@ -3,8 +3,8 @@ package br.iesb.indicador_analise_grafica.padroes;
 import javax.persistence.*;
 
 import br.iesb.indicador_analise_grafica.Operacao;
-import br.iesb.indicador_analise_grafica_enum.PavioInferior;
-import br.iesb.indicador_analise_grafica_enum.PavioSuperior;;
+import br.iesb.indicador_analise_grafica_enum.PavioInferiorEnum;
+import br.iesb.indicador_analise_grafica_enum.PavioSuperiorEnum;;
 
 @Entity
 @Table(name="TRES_SOLDADOS")

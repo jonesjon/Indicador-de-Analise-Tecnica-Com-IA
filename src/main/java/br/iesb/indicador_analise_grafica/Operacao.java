@@ -11,7 +11,7 @@ import javax.persistence.*;
 
 import br.iesb.indicador_analise_grafica.padroes.Padrao;
 import br.iesb.indicador_analise_grafica.primary_key.OperacaoPK;
-import br.iesb.indicador_analise_grafica_enum.Entrada;
+import br.iesb.indicador_analise_grafica_enum.EntradaEnum;
 import br.iesb.indicador_analise_grafica_enum.PadroesEnum;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
@@ -55,7 +55,7 @@ public class Operacao {
 	
 	@Column(name="tipoEntrada")
 	@Enumerated(EnumType.STRING)
-	private Entrada tipoEntradaEnum = null;
+	private EntradaEnum tipoEntradaEnum = null;
 	
 	@Column(name="precoEntrada")
 	private Double precoEntrada;
@@ -150,11 +150,11 @@ public class Operacao {
 		this.start = start;
 	}
 
-	public Entrada getTipoEntrada() {
+	public EntradaEnum getTipoEntrada() {
 		return tipoEntradaEnum;
 	}
 
-	public void setTipoEntrada(Entrada tipoEntrada) {
+	public void setTipoEntrada(EntradaEnum tipoEntrada) {
 		this.tipoEntradaEnum = tipoEntrada;
 	}
 
